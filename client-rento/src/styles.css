@@ -1,0 +1,115 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+.rento-text {
+  color: #1858b8;
+}
+
+/* rooms page side filterbox border set to zero */
+.filter-box {
+  border: 0;
+}
+
+/* rooms page container border set to zero */
+.room-box {
+  border: 0;
+}
+
+/* removing active color for some navbar element */
+.remove-active.active {
+  background-color: #fff;
+}
+
+/* removing active hover color for some navbar element */
+.remove-active.active:hover {
+  background-color: #fff;
+}
+
+/* resizing rento logo image */
+#rento-logo {
+  width: 120px;
+  height: 60;
+}
+
+/* .container-fluid {
+  background-color: #cdedff;
+} */
+
+/* .nav-item.nav-menu.nav-link {
+  color: #1858b8;
+}
+
+.navbar-light .navbar-text {
+  color: #1858b8;
+} */
+
+/* custom bg color for navbar menu hover active */
+.nav-menu:hover {
+  border-radius: 5px 5px 5px 5px;
+  /* background-color: #d3cfcf; */
+  background-color: #91c4ff;
+}
+
+/* custom bg color for navbar active */
+.nav-item.nav-menu.nav-link.active {
+  color: white;
+  border-radius: 5px 5px 5px 5px;
+  /* background-color: #9d9b9b; */
+  background-color: #1858b8;
+}
+
+/* custom margin for navar right side elements*/
+@media screen and (min-width: 768px) {
+  .margin-lg-left {
+    margin-left: 20px;
+  }
+}
+
+/* custom style for button used in rento*/
+.rento-btn {
+  color: white;
+  background-color: #3f78ce;
+  border-radius: 25px 25px 25px 25px;
+  border-color: #3f78ce;
+}
+
+/* custom hover style for button used in rento*/
+.rento-btn:hover {
+  color: white;
+  background-color: #0f4eac;
+  border-color: #0f4eac;
+}
+
+/* custom style for danger button used in rento*/
+.rento-btn-danger {
+  color: white;
+  background-color: #df4a40;
+  border-radius: 25px 25px 25px 25px;
+  border-color: #df4a40;
+}
+
+/* custom hover style for button used in rento*/
+.rento-btn-danger :hover {
+  color: white;
+  background-color: #ac0f0f;
+  border-color: #ac0f0f;
+}
+
+/* input dropdown list width*/
+.dropdown-menu {
+  width: 87% !important;
+}
+
+/* image input style*/
+.img-upload-btn {
+  visibility: hidden;
+  position: absolute;
+  overflow: hidden;
+  width: 0px;
+  height: 0px;
+  border: none;
+  margin: 0;
+  padding: 0;
+}
