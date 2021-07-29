@@ -101,4 +101,16 @@ module.exports = {
 
     res.send("room deleted successfully");
   },
+
+  getTotalRoom: async (req, res) => {
+    const total = await Room.find().countDocuments();
+    res.send("" + total);
+  },
+
+  roomCreatedToday: async (req, res) => {
+    const data = await Room.find({
+      dateCreated: new Date().toISOString().slice(0, 10),
+    }).countDocuments();
+    res.send("" + data);
+  },
 };

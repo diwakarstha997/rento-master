@@ -40,9 +40,8 @@ module.exports = {
       user: req.user._id,
       room: req.params.id,
     });
-    console.log(application);
     if (!application) res.send(null);
-    return res.send(application);
+    else return res.send(application);
   },
 
   changeStatus: async (req, res) => {

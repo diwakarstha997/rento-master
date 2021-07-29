@@ -16,7 +16,6 @@ class RoomDetail extends Component {
     room: "",
     rooms: [],
     facilities: [],
-    existingApplication: "",
   };
 
   async componentDidMount() {
@@ -25,6 +24,7 @@ class RoomDetail extends Component {
       const { data: facilities } = await getFacilities();
       const { data: rooms } = await getRooms();
       this.setState({ room, rooms, facilities });
+      this.checkExistingApplication();
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
         window.location = "/not-found";
@@ -53,7 +53,6 @@ class RoomDetail extends Component {
   render() {
     const { room, existingApplication } = this.state;
     const user = auth.getCurrentUser();
-    if (user) this.checkExistingApplication();
     if (!room) return <h1 className="text-center">Loading</h1>;
     else
       return (

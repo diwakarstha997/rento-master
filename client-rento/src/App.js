@@ -6,7 +6,7 @@ import Home from "./components/static/home";
 import About from "./components/static/about";
 import Contacts from "./components/static/contacts";
 import NotFound from "./components/static/notFound";
-// import AdminLogin from "./components/admin/adminLogin";
+import AdminLogin from "./components/admin/adminLogin";
 import Login from "./components/accounts/login";
 import Register from "./components/accounts/register";
 import Logout from "./components/accounts/logout";
@@ -19,6 +19,7 @@ import TenantApplications from "./components/tenant/applications";
 import { getCurrentUser } from "./services/authService";
 import ProtectedRoute from "./components/common/protectedRoute";
 import ApplicationDetail from "./components/tenant/applicationDetail";
+import AdminDashboard from "./components/admin/adminDashboard";
 class App extends Component {
   render() {
     const user = getCurrentUser();
@@ -29,7 +30,13 @@ class App extends Component {
         {/* Guest Routes */}
         {!user && (
           <React.Fragment>
-            <Route path="/" component={NavBar} />
+            <Switch>
+              <Route
+                path="/admin"
+                render={(props) => <NavBar {...props} userType="Admin" />}
+              />
+              <Route path="/" component={NavBar} />
+            </Switch>
             <Switch>
               <Route path="/" exact component={Home} />
               <Route path="/register" component={Register} />
@@ -39,6 +46,8 @@ class App extends Component {
 
               <Route exact path="/rooms" component={Rooms} />
               <Route path="/rooms/:id" component={RoomDetail} />
+
+              <Route path="/admin" component={AdminLogin} />
 
               <ProtectedRoute
                 path="/RoomOwner/MyRooms"
@@ -65,7 +74,13 @@ class App extends Component {
               <Route path="/not-found" component={NotFound} />
               <Redirect to="/not-found" />
             </Switch>
-            <Route path="/" component={Footer} />
+            <Switch>
+              <Route
+                path="/Admin"
+                render={(props) => <Footer {...props} userType="Admin" />}
+              />
+              <Route path="/" component={Footer} />
+            </Switch>
           </React.Fragment>
         )}
 
@@ -131,17 +146,21 @@ class App extends Component {
         <Redirect to="/not-found" /> */}
 
         {/* Admin Routes */}
-        {/* <Route
-            path="/admin"
-            render={(props) => <NavBar {...props} userType="Admin" />}
-          />
-          <Switch>
-            <Route path="/admin" component={AdminLogin} />
-          </Switch>
-          <Route
-            path="/Admin"
-            render={(props) => <Footer {...props} userType="Admin" />}
-          /> */}
+        {user && user.userRole === "Admin" && (
+          <React.Fragment>
+            <Route
+              path="/admin"
+              render={(props) => <NavBar {...props} userType="Admin" />}
+            />
+            <Switch>
+              <Route path="/Admin/dashboard" component={AdminDashboard} />
+            </Switch>
+            <Route
+              path="/Admin"
+              render={(props) => <Footer {...props} userType="Admin" />}
+            />
+          </React.Fragment>
+        )}
       </React.Fragment>
     );
   }

@@ -17,10 +17,10 @@ class AdminLogin extends Form {
   doSubmit = async () => {
     try {
       const { data } = this.state;
-      await auth.login(data.email, data.password);
+      await auth.adminLogin(data.email, data.password);
 
       const { state } = this.props.location;
-      window.location = state ? state.from.pathname : "/";
+      window.location = state ? state.from.pathname : "/admin/dashboard";
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
@@ -49,8 +49,8 @@ class AdminLogin extends Form {
               </p>
             )}
             <form onSubmit={this.handleSubmit} className="mt-3">
-              {this.renderInput("email", "Email", "mb-3")}
-              {this.renderInput("password", "Password", "mb-4", "password")}
+              {this.renderInput("email", "Email", "text", "autoFocus")}
+              {this.renderInput("password", "Password", "password")}
               {this.renderButton("Login")}
             </form>
           </div>

@@ -29,10 +29,20 @@ export async function saveRoom(data) {
   return http.post(apiEndpoint + "/", data);
 }
 
+export function roomsCreatedToday() {
+  return http.get(apiEndpoint + "/createdToday");
+}
+
+export function getTotalRooms() {
+  return http.get(apiEndpoint + "/getTotal");
+}
+
 const rooms = {
   getRooms,
   getRoomsByUser,
   saveRoom,
+  getTotalRooms,
+  roomsCreatedToday,
 };
 
 export default rooms;

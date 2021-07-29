@@ -6,4 +6,7 @@ const router = express.Router();
 router.post("/add", Facility.insert);
 router.get("/", Facility.read);
 
+router.put("/edit/:id", Facility.edit);
+router.delete("/delete/:id", Facility.delete);
+
 module.exports = router;

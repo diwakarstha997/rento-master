@@ -10,7 +10,7 @@ class NavBar extends Component {
     return (
       <React.Fragment>
         <div className="mx-lg-5 mx-md-4">
-          {((userType || !userType) && (
+          {(((userType && userType !== "Admin") || !userType) && (
             <nav className="navbar navbar-light navbar-expand-md navigation-clean-button">
               <NavLink
                 className="remove-active navbar-brand"

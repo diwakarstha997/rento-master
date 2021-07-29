@@ -28,6 +28,15 @@ export async function login(userRole, email, password) {
   }
 }
 
+export async function adminLogin(email, password) {
+  const { data: jwt } = await http.post(apiEndpoint + "/adminLogin", {
+    email,
+    password,
+  });
+  console.log("test" + jwt);
+  localStorage.setItem(tokenKey, jwt);
+}
+
 export function loginWithJwt(jwt) {
   return localStorage.setItem(tokenKey, jwt);
 }
@@ -51,6 +60,7 @@ function getJwt() {
 
 const auth = {
   login,
+  adminLogin,
   loginWithJwt,
   logout,
   getCurrentUser,

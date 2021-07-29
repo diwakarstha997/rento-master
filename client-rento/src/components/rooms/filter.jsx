@@ -20,7 +20,7 @@ class Filter extends Component {
             handleSelect={this.props.handleSelect}
           />
         </div>
-        <hr />
+        {/* <hr />
         <label htmlFor="location">Price:</label>
         <div className="form-group mt-2 row">
           <div className="col-6">
@@ -29,7 +29,7 @@ class Filter extends Component {
           <div className="col-6">
             <input name="price" id="maxPrice" className="form-control"></input>
           </div>
-        </div>
+        </div> */}
         <hr />
       </React.Fragment>
     );

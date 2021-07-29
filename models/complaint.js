@@ -14,7 +14,7 @@ const complaintSchema = new mongoose.Schema({
   },
   dateSubmitted: {
     type: Date,
-    default: Date.now(),
+    default: new Date().toISOString().slice(0, 10),
   },
 });
 

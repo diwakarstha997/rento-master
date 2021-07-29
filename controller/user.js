@@ -59,6 +59,40 @@ module.exports = {
     const token = user.generateAuthToken();
     res.send(token);
   },
+
+  adminLogin: async (req, res) => {
+    req.body.userRole = "Admin";
+    const { error } = validateLogin(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let user = await User.findOne({
+      userRole: "Admin",
+      email: req.body.email,
+    });
+    if (!user) return res.status(400).send("Invalid Email/ Password1!!");
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword)
+      return res.status(400).send("Invalid Email/ Password2!!");
+
+    const token = user.generateAuthToken();
+    res.send(token);
+  },
+
+  getTotalUser: async (req, res) => {
+    const total = await User.find().countDocuments();
+    res.send("" + total);
+  },
+  userCreatedToday: async (req, res) => {
+    const data = await User.find({
+      dateCreated: new Date().toISOString().slice(0, 10),
+    }).countDocuments();
+    res.send("" + data);
+  },
+
   verify: async (req, res) => {
     await User.updateOne({ _id: req.body.userId }, { verified: true });
     res.send("user verified");

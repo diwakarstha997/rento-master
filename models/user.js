@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema({
   },
   dateCreated: {
     type: Date,
-    default: Date.now(),
+    default: new Date().toISOString().slice(0, 10),
   },
   verified: {
     type: Boolean,
