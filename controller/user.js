@@ -20,7 +20,7 @@ module.exports = {
         "email",
         "password",
         "phone",
-        "role",
+        "userRole",
         "userTag",
       ])
     );
@@ -40,7 +40,13 @@ module.exports = {
     const { error } = validateLogin(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
-    let user = await User.findOne({ email: req.body.email });
+    // if (req.body.userRole !== "Tenant" && req.body.userRole !== "RoomOwner")
+    //   return res.status(400).send("Invalid Email/ Password!!");
+
+    let user = await User.findOne({
+      userRole: req.body.userRole,
+      email: req.body.email,
+    });
     if (!user) return res.status(400).send("Invalid Email/ Password!!");
 
     const validPassword = await bcrypt.compare(

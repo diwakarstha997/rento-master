@@ -5,6 +5,7 @@ const auth = require("../middleware/auth");
 const router = express.Router();
 
 router.post("/", auth, Application.insert);
+router.get("/:id", auth, Application.find);
 router.post("/status", Application.changeStatus);
 // router.get("/MyApplications", Application.findByUser);
 // router.get("/", Application.findByRoom);

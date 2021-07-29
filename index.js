@@ -8,6 +8,7 @@ const user = require("./routes/user");
 const room = require("./routes/room");
 // const image = require("./routes/image");
 const application = require("./routes/application");
+const complaint = require("./routes/complaint");
 const error = require("./middleware/error");
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/auth", auth);
 app.use("/api/user", user);
 app.use("/api/room", room);
 app.use("/api/application", application);
+app.use("/api/complaint", complaint);
 
 //error handler middleware
 app.use(error);

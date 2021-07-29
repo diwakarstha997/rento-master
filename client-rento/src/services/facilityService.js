@@ -7,7 +7,7 @@ export function getFacilities() {
 }
 
 export function addFacility(facility) {
-  return http.get(apiEndpoint + "/add", facility);
+  return http.post(apiEndpoint + "/add", facility);
 }
 
 const facility = {

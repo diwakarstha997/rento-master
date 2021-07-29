@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    minlength: 5,
+    minlength: 3,
     maxlength: 255,
   },
   email: {
@@ -26,11 +26,14 @@ const userSchema = new mongoose.Schema({
     maxlength: 255,
   },
   phone: { type: String, required: true, minlength: 10, maxlength: 10 },
-  role: {
+  userRole: {
     type: String,
     required: true,
-    enum: ["Admin", "Staff", "User"],
-    default: "User",
+    enum: ["Admin", "Tenant", "RoomOwner"],
+  },
+  dateCreated: {
+    type: Date,
+    default: Date.now(),
   },
   verified: {
     type: Boolean,
@@ -39,14 +42,18 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.methods.generateAuthToken = function () {
-  return jwt.sign({ _id: this._id, role: this.role }, "rentoUserSecretKey");
+  return jwt.sign(
+    { _id: this._id, userRole: this.userRole },
+    "rentoUserSecretKey"
+  );
 };
 
 const User = mongoose.model("User", userSchema);
 
 function validateRegister(user) {
   const schema = Joi.object({
-    name: Joi.string().min(5).max(255).required(),
+    userRole: Joi.required(),
+    name: Joi.string().min(3).max(255).required(),
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(255).required(),
     phone: Joi.string().min(10).max(10).required(),
@@ -56,6 +63,7 @@ function validateRegister(user) {
 
 function validateLogin(user) {
   const schema = Joi.object({
+    userRole: Joi.required(),
     email: Joi.string().min(5).max(255).required(),
     password: Joi.string().min(5).max(255).required(),
   });

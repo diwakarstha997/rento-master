@@ -1,28 +1,48 @@
 const { Application, validateApplication } = require("../models/application");
+const { Room } = require("../models/room");
 
 module.exports = {
   insert: async (req, res) => {
     const { error } = validateApplication(req.body);
     if (!error) return res.status(400).send("Invalid Data");
 
-    const checkApplication = Application.findOne({
+    const checkApplication = await Application.findOne({
       user: req.user._id,
       room: req.body.roomId,
     });
-    if (checkApplication) return res.status(400).send("Invalid Request");
+    console.log("submittedApplication", checkApplication);
+    if (checkApplication)
+      return res.status(400).send("Application Already Submitted");
+
+    console.log(req.body.roomId);
+    const checkRoom = await Room.findOne({
+      _id: req.body.roomId,
+    });
+    if (!checkRoom) return res.status(400).send("Room Doesnot Exist!!!");
 
     const application = new Application({
       user: req.user._id,
       room: req.body.roomId,
-      sourceOfIncome: req.body.sourceOfIncome,
+      occupation: req.body.sourceOfIncome,
       monthlyIncome: req.body.monthlyIncome,
       emegencyContact: req.body.emegencyContact,
       previousLocation: req.body.Location,
-      previousMovedInDate: req.body.movedInDate,
-      reasonToLeave: req.body.reasonToLeave,
+      reasonToLeavePreviousLocation: req.body.reasonToLeavePreviousLocation,
+      additionalComments: req.body.additionalComments,
     });
     await application.save();
     res.send("application created successfully");
+  },
+
+  find: async (req, res) => {
+    console.log(req.params);
+    const application = await Application.findOne({
+      user: req.user._id,
+      room: req.params.id,
+    });
+    console.log(application);
+    if (!application) res.send(null);
+    return res.send(application);
   },
 
   changeStatus: async (req, res) => {

@@ -28,6 +28,10 @@ const roomSchema = new mongoose.Schema({
     enum: ["Active", "Inactive", "Blocked"],
     default: "Inactive",
   },
+  dateCreated: {
+    type: Date,
+    default: Date.now(),
+  },
   datePublished: {
     type: Date,
   },
