@@ -19,17 +19,21 @@ const roomSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    min: 150,
+    min: 15,
     max: 500,
   },
   status: {
     type: String,
     required: true,
     enum: ["Active", "Inactive", "Blocked"],
-    default: "Inactive",
+    default: "Active",
   },
   datePublished: {
     type: Date,
+  },
+  dateCreated: {
+    type: Date,
+    default: new Date().toISOString().slice(0, 10),
   },
 });
 
@@ -43,7 +47,7 @@ function validateRoom(room) {
     location: Joi.string().min(3).max(255).required(),
     monthlyRent: Joi.number().min(100).max(1000000).required(),
     squareFeet: Joi.number().min(10).max(1000000).required(),
-    description: Joi.string().min(150).max(500).required(),
+    description: Joi.string().min(10).max(500).required(),
     image: Joi.required(),
   });
   return schema.validate(room);

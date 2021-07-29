@@ -42,6 +42,27 @@ module.exports = {
 
     let user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(400).send("Invalid Email/ Password!!");
+    if (user.role !== "User")
+      return res.status(400).send("Invalid Email/ Password!!");
+
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword)
+      return res.status(400).send("Invalid Email/ Password!!");
+
+    const token = user.generateAuthToken();
+    res.send(token);
+  },
+  adminLogin: async (req, res) => {
+    const { error } = validateLogin(req.body);
+    if (error) return res.status(400).send(error.details[0].message);
+
+    let user = await User.findOne({ email: req.body.email });
+    if (!user) return res.status(400).send("Invalid Email/ Password!!");
+    if (user.role !== "Admin")
+      return res.status(400).send("Invalid Email/ Password!!");
 
     const validPassword = await bcrypt.compare(
       req.body.password,
@@ -56,5 +77,15 @@ module.exports = {
   verify: async (req, res) => {
     await User.updateOne({ _id: req.body.userId }, { verified: true });
     res.send("user verified");
+  },
+  getTotal: async (req, res) => {
+    const total = await User.find().countDocuments();
+    res.send("" + total);
+  },
+  createdToday: async (req, res) => {
+    const data = await User.find({
+      dateCreated: new Date().toISOString().slice(0, 10),
+    }).countDocuments();
+    res.send("" + data);
   },
 };

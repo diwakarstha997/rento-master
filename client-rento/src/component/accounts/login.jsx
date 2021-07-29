@@ -48,8 +48,8 @@ class Login extends Form {
               </p>
             )}
             <form onSubmit={this.handleSubmit} className="mt-3">
-              {this.renderInput("email", "Email", "mb-3")}
-              {this.renderInput("password", "Password", "mb-4", "password")}
+              {this.renderInput("email", "Email", "text", "autoFocus")}
+              {this.renderInput("password", "Password", "password")}
               {this.renderButton("Login")}
             </form>
 

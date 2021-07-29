@@ -10,10 +10,32 @@ module.exports = {
       icon: req.body.icon,
     });
     await facility.save();
-    res.send(facility);
+    res.status(200).send("Facility " + facility.name + " succesfully added");
   },
+
   read: async (req, res) => {
     const facilities = await Facility.find();
     res.send(facilities);
+  },
+
+  delete: async (req, res) => {
+    const facility = await Facility.findByIdAndDelete({ _id: req.params.id });
+    if (!facility) return res.status(404).send("Facility Already Deleted");
+
+    // const result = await Room.findByIdAndDelete({ _id: req.params.id });
+    // facility.delete();
+    // res.send(facility);
+    res.status(201).send(facility);
+  },
+  edit: async (req, res) => {
+    let facility = await Facility.findById(req.params.id);
+    if (!facility) return res.status(404).send("Facility not Found");
+
+    facility.set({
+      name: req.body.name,
+      icon: req.body.icon,
+    });
+    await facility.save();
+    res.status(200).send(facility.name + "was editted");
   },
 };

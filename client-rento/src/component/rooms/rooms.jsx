@@ -14,6 +14,7 @@ class Rooms extends Component {
   async componentDidMount() {
     const { data: rooms } = await getRooms();
     this.setState({ rooms });
+    console.log(this.state.rooms);
   }
 
   handleRoomClick = (roomId) => {

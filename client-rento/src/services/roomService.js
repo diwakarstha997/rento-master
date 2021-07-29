@@ -6,6 +6,10 @@ export function getRooms() {
   return http.get(apiEndpoint);
 }
 
+export function roomsCreatedToday() {
+  return http.get(apiEndpoint + "/createdToday");
+}
+
 export function getRoomById(roomId) {
   return http.get(apiEndpoint + "/" + roomId);
 }
@@ -29,10 +33,16 @@ export async function saveRoom(data) {
   return http.post(apiEndpoint + "/", data);
 }
 
+export function getTotalRooms() {
+  return http.get(apiEndpoint + "/getTotal");
+}
+
 const rooms = {
   getRooms,
   getRoomsByUser,
   saveRoom,
+  getTotalRooms,
+  roomsCreatedToday,
 };
 
 export default rooms;

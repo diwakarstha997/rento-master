@@ -86,7 +86,7 @@ class Form extends Component {
     if (e.currentTarget.value.length > 7) e.preventDefault();
   };
 
-  renderInput(name, label, type = "text") {
+  renderInput(name, label, type = "text", autoFocus = "") {
     const { data, errors } = this.state;
 
     return (
@@ -97,6 +97,7 @@ class Form extends Component {
         value={data[name]}
         onChange={this.handleChange}
         error={errors[name]}
+        autoFocus={autoFocus}
       />
     );
   }
@@ -151,6 +152,16 @@ class Form extends Component {
     return (
       <button
         className={`btn d-flex d-xl-flex m-auto px-4 rento-btn ${classes}`}
+      >
+        {label}
+      </button>
+    );
+  }
+  renderModalButton(label, classes, onClick) {
+    return (
+      <button
+        className={`btn d-flex d-xl-flex m-auto px-4 rento-btn ${classes}`}
+        onClick={onClick}
       >
         {label}
       </button>

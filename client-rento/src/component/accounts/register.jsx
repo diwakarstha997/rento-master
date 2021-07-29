@@ -1,7 +1,7 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "../common/form";
-import * as userService from "../../services/userService";
+import user from "../../services/userService";
 import auth from "../../services/authService";
 
 class Register extends Form {
@@ -70,10 +70,10 @@ class Register extends Form {
 
   doSubmit = async () => {
     try {
-      const response = await userService.register(this.state.data);
+      const response = await user.register(this.state.data);
       console.log("we are here", response.headers);
       auth.loginWithJwt(response.headers["x-auth-token"]);
-      window.location = "/rento/rooms";
+      window.location = "/RoomOwner/MyRooms";
     } catch (ex) {
       console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
@@ -96,11 +96,15 @@ class Register extends Form {
             </div>
 
             <form onSubmit={this.handleSubmit} className="mt-3">
-              {this.renderInput("name", "Name", "mb-3")}
-              {this.renderInput("email", "Email", "mb-3")}
-              {this.renderInput("phone", "Phone", "mb-3")}
-              {this.renderInput("password", "Password", "mb-3")}
-              {this.renderInput("confirm_password", "Confirm Password", "mb-4")}
+              {this.renderInput("name", "Name", "text", "autoFocus")}
+              {this.renderInput("email", "Email")}
+              {this.renderInput("phone", "Phone")}
+              {this.renderInput("password", "Password", "password")}
+              {this.renderInput(
+                "confirm_password",
+                "Confirm Password",
+                "password"
+              )}
               {this.renderButton("Register")}
             </form>
 

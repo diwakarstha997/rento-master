@@ -10,3 +10,19 @@ export async function register(user) {
     phone: user.phone,
   });
 }
+
+export function getTotalUsers() {
+  return http.get(apiEndpoint + "/getTotal");
+}
+
+export function usersCreatedToday() {
+  return http.get(apiEndpoint + "/createdToday");
+}
+
+const user = {
+  register,
+  getTotalUsers,
+  usersCreatedToday,
+};
+
+export default user;

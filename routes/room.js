@@ -9,6 +9,8 @@ const validateId = require("../middleware/validateObjectId");
 const router = express.Router();
 
 router.get("/", Room.read);
+router.get("/getTotal", Room.getTotal);
+router.get("/createdToday", Room.createdToday);
 router.get("/:id", Room.findById);
 router.get("/roomowner/myrooms", [auth], Room.findByUser);
 

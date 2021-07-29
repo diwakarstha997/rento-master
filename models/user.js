@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  dateCreated: {
+    type: Date,
+    default: new Date().toISOString().slice(0, 10),
+  },
 });
 
 userSchema.methods.generateAuthToken = function () {

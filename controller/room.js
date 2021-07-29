@@ -8,10 +8,8 @@ module.exports = {
     // await upload(req, res);
 
     // const { error } = validateRoom(req.body);
-    let error = false;
-    console.log(error);
-    if (error) return res.status(400).send(error.details[0].message);
-    console.log(req.body);
+
+    // if (error) return res.status(400).send(error.details[0].message);
 
     const user = await User.findById(req.user._id);
     const roomCount = await Room.find({
@@ -100,5 +98,17 @@ module.exports = {
     room.delete();
 
     res.send("room deleted successfully");
+  },
+
+  getTotal: async (req, res) => {
+    const total = await Room.find().countDocuments();
+    res.send("" + total);
+  },
+
+  createdToday: async (req, res) => {
+    const data = await Room.find({
+      dateCreated: new Date().toISOString().slice(0, 10),
+    }).countDocuments();
+    res.send("" + data);
   },
 };

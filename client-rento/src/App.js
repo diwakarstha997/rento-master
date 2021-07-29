@@ -14,6 +14,9 @@ import RoomDetail from "./component/rooms/roomDetail";
 import Dashboard from "./component/roomOwner/dashboard";
 import RoomForm from "./component/roomOwner/rooms/roomForm";
 import Message from "./component/roomOwner/messages/message";
+import AdminLogin from "./component/admin/adminLogin";
+import FacilityAdd from "./component/admin/facilityAdd";
+import AdminDashboard from "./component/admin/adminDashboard";
 
 class App extends Component {
   render() {
@@ -24,12 +27,20 @@ class App extends Component {
             path="/RoomOwner"
             render={(props) => <NavBar {...props} userType="RoomOwner" />}
           />
+          <Route
+            path="/admin"
+            render={(props) => <NavBar {...props} userType="admin" />}
+          />
           <Route path="/" component={NavBar} />
         </Switch>
         <Switch>
           <Route path="/RoomOwner/MyRooms" component={Dashboard} />
           <Route path="/RoomOwner/messages" component={Message} />
           <Route path="/RoomOwner/rooms/new" component={RoomForm} />
+
+          <Route path="/Admin/login" component={AdminLogin} />
+          <Route path="/Admin/dashboard" component={AdminDashboard} />
+          <Route path="/Admin/FacilityAdd" component={FacilityAdd} />
 
           <Route path="/" exact component={Home} />
           <Route path="/register" component={Register} />

@@ -7,10 +7,26 @@ module.exports = {
       totalWard: req.body.totalWard,
     });
     await city.save();
-    res.send(city);
+    res.send(city.name + " has beed sucessfully added");
   },
   read: async (req, res) => {
     const cities = await City.find();
     res.send(cities);
+  },
+  delete: async (req, res) => {
+    const cities = await City.findByIdAndDelete({ _id: req.params.id });
+    if (!cities) return res.status(404).send("City Already Deleted");
+    res.status(201).send(cities);
+  },
+  edit: async (req, res) => {
+    let cities = await City.findById(req.params.id);
+    if (!cities) return res.status(404).send("City not Found");
+
+    cities.set({
+      name: req.body.name,
+      totalWard: req.body.totalWard,
+    });
+    await cities.save();
+    res.status(200).send(cities.name + " was editted");
   },
 };

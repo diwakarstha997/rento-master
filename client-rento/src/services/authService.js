@@ -12,6 +12,14 @@ export async function login(email, password) {
   console.log(jwt);
   localStorage.setItem(tokenKey, jwt);
 }
+export async function adminLogin(email, password) {
+  const { data: jwt } = await http.post(apiEndpoint + "/adminLogin", {
+    email,
+    password,
+  });
+  console.log("test" + jwt);
+  localStorage.setItem(tokenKey, jwt);
+}
 
 export function loginWithJwt(jwt) {
   return localStorage.setItem(tokenKey, jwt);
@@ -39,6 +47,7 @@ const auth = {
   loginWithJwt,
   logout,
   getCurrentUser,
+  adminLogin,
 };
 
 export default auth;
