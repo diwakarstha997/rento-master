@@ -33,6 +33,10 @@ export function roomsCreatedToday() {
   return http.get(apiEndpoint + "/createdToday");
 }
 
+export function getOwnerRoomDetail(roomId) {
+  return http.get(apiEndpoint + "/roomOwner/" + roomId);
+}
+
 export function getTotalRooms() {
   return http.get(apiEndpoint + "/getTotal");
 }

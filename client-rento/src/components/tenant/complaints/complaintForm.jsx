@@ -1,8 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
 import { Modal } from "react-bootstrap";
-import Forms from "../common/form";
-import complaint from "../../services/complaintService";
+import Forms from "../../common/form";
+import complaint from "../../../services/complaintService";
 
 class ComplaintForm extends Forms {
   state = {

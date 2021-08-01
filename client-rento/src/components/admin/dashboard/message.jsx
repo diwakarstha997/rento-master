@@ -5,7 +5,7 @@ class Message extends Component {
     return (
       <React.Fragment>
         {this.props.message && (
-          <div className="alert alert-success" role="alert">
+          <div className="alert alert-success admin-alert" role="alert">
             {this.props.message}
             {this.props.status === 201 && (
               <button

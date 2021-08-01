@@ -4,8 +4,8 @@ import RoomCard from "./roomCard";
 import { getRoomById, getRooms } from "../../services/roomService";
 import { getFacilities } from "../../services/facilityService";
 import auth from "../../services/authService";
-import ApplicationForm from "../tenant/applicationForm";
-import ComplaintForm from "../tenant/complaintForm";
+import ApplicationForm from "../tenant/applications/applicationForm";
+import ComplaintForm from "../tenant/complaints/complaintForm";
 import { Link } from "react-router-dom";
 import { checkExistingApplication } from "../../services/applicationService";
 
@@ -189,9 +189,12 @@ class RoomDetail extends Component {
                     )}
                   </div>
 
-                  <div className="col-lg-8 col-md-8">
+                  <div
+                    className="col-lg-8 col-md-8"
+                    style={{ overflowWrap: "break-word" }}
+                  >
                     <h1>Overview</h1>
-                    <p>{room.description}</p>
+                    {room.description}
                   </div>
                 </div>
               </div>

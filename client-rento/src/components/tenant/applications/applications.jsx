@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ApplicationTable from "./applicationsTable";
-import { getRoomOwnerApplications } from "./../../../services/applicationService";
+import { getTenantApplications } from "./../../../services/applicationService";
 
 class Applications extends Component {
   state = {
@@ -21,7 +21,7 @@ class Applications extends Component {
   };
 
   async componentDidMount() {
-    const { data: applications } = await getRoomOwnerApplications();
+    const { data: applications } = await getTenantApplications();
     console.log(applications);
     this.setState({ applications });
   }
@@ -54,6 +54,11 @@ class Applications extends Component {
                 <li className="text-dark mx-2">
                   <a className="text-dark" href="/">
                     Approved
+                  </a>
+                </li>
+                <li className="text-dark mx-2">
+                  <a className="text-dark" href="/">
+                    Canceled/Rejected
                   </a>
                 </li>
               </ul>

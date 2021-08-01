@@ -71,22 +71,25 @@ class Dashboard extends Component {
             </ul>
           </div>
           <div className="my-2 col-lg col-md d-flex justify-content-lg-start justify-content-md-start justify-content-center">
-            <Search value={searchQuery} onChange={this.handleSearch} />
+            <Search
+              value={searchQuery}
+              placeHolder="Enter City/Location"
+              onChange={this.handleSearch}
+            />
           </div>
         </div>
         <div style={{ margin: "0 5% 0 5%" }}>
           {(sortedRooms.length === 0 && (
             <h5 className="ml-4 mb-5 ">There are no rooms to show</h5>
-          )) ||
-            (`Showing ${sortedRooms.lenth} rooms` && (
-              <React.Fragment>
-                <RoomTable
-                  rooms={sortedRooms}
-                  sortColumn={sortColumn}
-                  onSort={this.handleSort}
-                />
-
-                {/* <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
+          )) || (
+            <React.Fragment>
+              <p className="ml-4 mb-3 ">Showing {sortedRooms.length} Rooms</p>
+              <RoomTable
+                rooms={sortedRooms}
+                sortColumn={sortColumn}
+                onSort={this.handleSort}
+              />
+              {/* <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
                   <Pagination
                     itemsCount="100"
                     pageSize="10"
@@ -94,8 +97,8 @@ class Dashboard extends Component {
                     onPageChange={this.handlePageChange}
                   />
                 </div> */}
-              </React.Fragment>
-            ))}
+            </React.Fragment>
+          )}
         </div>
       </div>
     );

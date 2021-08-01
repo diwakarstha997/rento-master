@@ -156,10 +156,7 @@ class Form extends Component {
 
   renderModalButton(label, classes, onClick) {
     return (
-      <button
-        className={`btn d-flex d-xl-flex m-auto px-4 rento-btn ${classes}`}
-        onClick={onClick}
-      >
+      <button className={`btn px-4 mx-1 ${classes}`} onClick={onClick}>
         {label}
       </button>
     );

@@ -15,12 +15,20 @@ import RoomDetail from "./components/rooms/roomDetail";
 import Dashboard from "./components/roomOwner/dashboard";
 import RoomForm from "./components/roomOwner/rooms/roomForm";
 import RoomOwnerApplications from "./components/roomOwner/applications/applications";
-import TenantApplications from "./components/tenant/applications";
+import TenantApplications from "./components/tenant/applications/applications";
 import { getCurrentUser } from "./services/authService";
 import ProtectedRoute from "./components/common/protectedRoute";
-import ApplicationDetail from "./components/tenant/applicationDetail";
+import ApplicationDetail from "./components/tenant/applications/applicationDetail";
 import AdminDashboard from "./components/admin/adminDashboard";
+import OwnerRoomDetail from "./components/roomOwner/rooms/roomDetail";
 class App extends Component {
+  state = { toggled: true };
+  handleToggle = () => {
+    let toggled;
+    if (!this.state.toggled) toggled = true;
+    else toggled = false;
+    this.setState({ toggled: toggled });
+  };
   render() {
     const user = getCurrentUser();
     console.log(user);
@@ -47,7 +55,8 @@ class App extends Component {
               <Route exact path="/rooms" component={Rooms} />
               <Route path="/rooms/:id" component={RoomDetail} />
 
-              <Route path="/admin" component={AdminLogin} />
+              <Route path="/admin/login" component={AdminLogin} />
+              <Redirect exact from="/admin" to="/admin/login" />
 
               <ProtectedRoute
                 path="/RoomOwner/MyRooms"
@@ -99,6 +108,7 @@ class App extends Component {
                 path="/RoomOwner/applications"
                 component={RoomOwnerApplications}
               />
+              <Route path="/RoomOwner/room/:id" component={OwnerRoomDetail} />
               <Route path="/RoomOwner/rooms/new" component={RoomForm} />
 
               <Route path="/RoomOwner/not-found" component={NotFound} />
@@ -150,10 +160,31 @@ class App extends Component {
           <React.Fragment>
             <Route
               path="/admin"
-              render={(props) => <NavBar {...props} userType="Admin" />}
+              render={(props) => (
+                <NavBar
+                  {...props}
+                  handleToggle={this.handleToggle}
+                  userType="Admin"
+                />
+              )}
             />
             <Switch>
-              <Route path="/Admin/dashboard" component={AdminDashboard} />
+              <Route
+                path="/adminLogout"
+                render={(props) => <Logout {...props} user="Admin" />}
+              />
+              <Route
+                path="/Admin/dashboard"
+                render={(props) => (
+                  <AdminDashboard {...props} toggled={this.state.toggled} />
+                )}
+              />
+
+              <Redirect exact from="/" to="/Admin/dashboard" />
+              <Redirect exact from="/admin" to="/Admin/dashboard" />
+
+              <Route path="/Admin/not-found" component={NotFound} />
+              <Redirect to="/Admin/not-found" />
             </Switch>
             <Route
               path="/Admin"

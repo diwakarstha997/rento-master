@@ -8,7 +8,9 @@ class RoomTable extends Component {
       path: "roomNumber",
       label: "Room No.",
       visibility: true,
-      content: (room) => <Link to={`/movies/${room._id}`}>{room.roomTag}</Link>,
+      content: (room) => (
+        <Link to={`/Roomowner/room/${room._id}`}>{room.roomTag}</Link>
+      ),
     },
     { path: "city", visibility: true, label: "City" },
     { path: "location", visibility: true, label: "Location" },
@@ -16,20 +18,26 @@ class RoomTable extends Component {
     {
       key: "delete",
       visibility: true,
-      content: (movie) => (
+      content: (room) => (
         <React.Fragment>
           <div className="text-center">
             <button
-              onClick={() => this.props.onDelete(movie._id)}
+              onClick={() => this.props.onDelete(room._id)}
               className="btn btn-primary btn-sm"
             >
               Edit
             </button>
             <button
-              onClick={() => this.props.onDelete(movie._id)}
+              onClick={() => this.props.onDelete(room._id)}
               className="btn btn-danger btn-sm ml-2"
             >
               Delete
+            </button>
+            <button
+              // onClick={() => this.props.onDelete(room._id)}
+              className="btn btn-success btn-sm ml-2"
+            >
+              Publish
             </button>
           </div>
         </React.Fragment>

@@ -5,7 +5,7 @@ import TableHeader from "./tableHeader";
 const Table = ({ columns, sortColumn, onSort, data }) => {
   return (
     <div style={{ overflowX: "auto" }}>
-      <table id="movies" className="table">
+      <table className="table">
         <TableHeader
           columns={columns}
           sortColumn={sortColumn}

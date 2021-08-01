@@ -34,46 +34,52 @@ class NavBar extends Component {
                 <ul className="nav navbar-nav mr-auto">
                   {(userType === "RoomOwner" && (
                     <React.Fragment>
-                      <a
+                      <NavLink
                         className="nav-item nav-menu nav-link"
                         exact
-                        href="/RoomOwner/MyRooms"
+                        to="/RoomOwner/MyRooms"
                       >
                         My Rooms
-                      </a>
-                      <a
+                      </NavLink>
+                      <NavLink
                         className="nav-item nav-menu nav-link"
-                        href="/RoomOwner/applications"
+                        to="/RoomOwner/applications"
                       >
                         APPLICATIONS
-                      </a>
+                      </NavLink>
                     </React.Fragment>
                   )) ||
                     (userType === "Tenant" && (
                       <React.Fragment>
-                        <a className="nav-item nav-menu nav-link" href="/rooms">
-                          FIND ROOM
-                        </a>
-
-                        <a
+                        <NavLink
                           className="nav-item nav-menu nav-link"
-                          href="/MyApplications"
+                          to="/rooms"
+                        >
+                          FIND ROOM
+                        </NavLink>
+
+                        <NavLink
+                          className="nav-item nav-menu nav-link"
+                          to="/MyApplications"
                         >
                           APPLICATIONS
-                        </a>
+                        </NavLink>
                       </React.Fragment>
                     )) || (
                       <React.Fragment>
-                        <a
+                        <NavLink
                           className="nav-item nav-menu nav-link"
                           exact
-                          href="/"
+                          to="/"
                         >
                           HOME
-                        </a>
-                        <a className="nav-item nav-menu nav-link" href="/rooms">
+                        </NavLink>
+                        <NavLink
+                          className="nav-item nav-menu nav-link"
+                          to="/rooms"
+                        >
                           FIND ROOM
-                        </a>
+                        </NavLink>
                         <NavLink
                           className="nav-item nav-menu nav-link"
                           to="/about"
@@ -125,12 +131,18 @@ class NavBar extends Component {
                         className="navbar-text margin-lg-left remove-active"
                         href="/user/profile"
                       >
-                        Name
+                        <span>
+                          <i className="fa fa-user pr-2"></i>
+                        </span>
+                        {user.name}
                       </a>
                       <a
                         className="navbar-text margin-lg-left remove-active"
                         href="/logout"
                       >
+                        <span>
+                          <i className="fa fa-sign-out pr-2"></i>
+                        </span>
                         Logout
                       </a>
                     </React.Fragment>
@@ -138,16 +150,72 @@ class NavBar extends Component {
                 </span>
               </div>
             </nav>
-          )) || (
-            <nav className="navbar navbar-light navbar-expand-md navigation-clean-button d-flex justify-content-center">
-              <NavLink
-                className="remove-active navbar-brand"
-                to={userType === "Admin" ? "/admin" : "/"}
+          )) ||
+            (userType === "Admin" && (
+              <nav
+                className={`navbar navbar-light navbar-expand-md navigation-clean-button
+                  ${!user ? "d-flex justify-content-center" : ""}`}
               >
-                <img id="rento-logo" src={logo} alt="Rento" />
-              </NavLink>
-            </nav>
-          )}
+                {(!user && (
+                  <NavLink
+                    className="remove-active navbar-brand"
+                    to="/Admin/login"
+                  >
+                    <img id="rento-logo" src={logo} alt="Rento" />
+                  </NavLink>
+                )) ||
+                  (user && (
+                    <React.Fragment>
+                      <NavLink
+                        className="remove-active navbar-brand"
+                        to="/Admin/dashboard"
+                      >
+                        <img id="rento-logo" src={logo} alt="Rento" />
+                      </NavLink>
+                      <button
+                        id="menu-toggle"
+                        onClick={this.props.handleToggle}
+                        className="mr-auto"
+                      >
+                        <span class="navbar-toggler-icon"></span>
+                      </button>
+                      <button
+                        data-toggle="collapse"
+                        className="navbar-toggler"
+                        data-target="#navcol-1"
+                      >
+                        <span className="sr-only">Toggle navigation</span>
+                        <span className="navbar-toggler-icon"></span>
+                      </button>
+                      <div
+                        className="collapse navbar-collapse d-lg-flex justify-content-lg-center"
+                        id="navcol-1"
+                      >
+                        <span className="navbar-nav ml-auto">
+                          <a
+                            className="navbar-text margin-lg-left remove-active"
+                            href="/user/profile"
+                          >
+                            <span>
+                              <i className="fa fa-user pr-2"></i>
+                            </span>
+                            Admin
+                          </a>
+                          <a
+                            className="navbar-text margin-lg-left remove-active"
+                            href="/adminLogout"
+                          >
+                            <span>
+                              <i className="fa fa-sign-out pr-2"></i>
+                            </span>
+                            Logout
+                          </a>
+                        </span>
+                      </div>
+                    </React.Fragment>
+                  ))}
+              </nav>
+            ))}
         </div>
       </React.Fragment>
     );

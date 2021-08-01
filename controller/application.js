@@ -15,17 +15,25 @@ module.exports = {
       return res.status(400).send("Application Already Submitted");
 
     console.log(req.body.roomId);
-    const checkRoom = await Room.findOne({
+    const room = await Room.findOne({
       _id: req.body.roomId,
     });
-    if (!checkRoom) return res.status(400).send("Room Doesnot Exist!!!");
+    if (!room) return res.status(400).send("Room Doesnot Exist!!!");
+
+    const applicationTag =
+      room.roomTag +
+      (await Application.find({
+        user: req.user._id,
+      }).countsDocument());
 
     const application = new Application({
+      applicationTag: applicationTag,
       user: req.user._id,
+      roomOwner: room.user,
       room: req.body.roomId,
-      occupation: req.body.sourceOfIncome,
+      occupation: req.body.occupation,
       monthlyIncome: req.body.monthlyIncome,
-      emegencyContact: req.body.emegencyContact,
+      emergencyContact: req.body.emergencyContact,
       previousLocation: req.body.Location,
       reasonToLeavePreviousLocation: req.body.reasonToLeavePreviousLocation,
       additionalComments: req.body.additionalComments,
@@ -34,14 +42,69 @@ module.exports = {
     res.send("application created successfully");
   },
 
-  find: async (req, res) => {
-    console.log(req.params);
-    const application = await Application.findOne({
+  findByRoomId: async (req, res) => {
+    await Application.findOne({
       user: req.user._id,
       room: req.params.id,
-    });
-    if (!application) res.send(null);
-    else return res.send(application);
+    })
+      .populate({ path: "room", select: "_id" })
+      .populate({ path: "room", select: "roomTag" })
+      .exec((err, application) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(application);
+          res.send(application);
+        }
+      });
+  },
+
+  findByApplicationId: async (req, res) => {
+    await Application.findOne({
+      user: req.user._id,
+      _id: req.params.id,
+    })
+      .populate({ path: "room", select: "_id" })
+      .populate({ path: "room", select: "roomTag" })
+      .exec((err, application) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(application);
+          res.send(application);
+        }
+      });
+  },
+
+  findTenantApplications: async (req, res) => {
+    await Application.find({
+      user: req.user._id,
+    })
+      .populate({ path: "room", select: "_id" })
+      .populate({ path: "room", select: "roomTag" })
+      .exec((err, application) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(application);
+          res.send(application);
+        }
+      });
+  },
+
+  findRoomOwnerApplications: async (req, res) => {
+    const applications = await Application.find({
+      roomOwner: req.user._id,
+    })
+      .populate("room")
+      .exec((err, application) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(application);
+          res.send(application);
+        }
+      });
   },
 
   changeStatus: async (req, res) => {

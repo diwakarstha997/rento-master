@@ -60,8 +60,18 @@ class AddFacilityModal extends Form {
             <form onSubmit={this.handleSubmit} className="mt-3">
               {this.renderInput("name", "Facility Name", "text", "autoFocus")}
               {this.renderInput("icon", "Icon")}
-              {this.renderModalButton("Add", "", this.handleSubmits)}
-              {this.renderModalButton("Cancel", "", this.handleClose)}
+              <div className="text-center">
+                {this.renderModalButton(
+                  "Add",
+                  "btn-primary",
+                  this.handleSubmits
+                )}
+                {this.renderModalButton(
+                  "Cancel",
+                  "btn-danger",
+                  this.handleClose
+                )}
+              </div>
             </form>
           </Modal.Body>
         </Modal>

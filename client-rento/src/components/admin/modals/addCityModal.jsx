@@ -64,8 +64,18 @@ class AddCityModal extends Forms {
             <form onSubmit={this.handleSubmit} className="mt-3">
               {this.renderInput("name", "City Name", "text", "autoFocus")}
               {this.renderNumberInput("totalWard", "TotalWard")}
-              {this.renderModalButton("Add", "", this.handleSubmits)}
-              {this.renderModalButton("Cancel", "", this.handleClose)}
+              <div className="text-center">
+                {this.renderModalButton(
+                  "Add",
+                  "btn-primary",
+                  this.handleSubmits
+                )}
+                {this.renderModalButton(
+                  "Cancel",
+                  "btn-danger",
+                  this.handleClose
+                )}
+              </div>
             </form>
           </Modal.Body>
         </Modal>

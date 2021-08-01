@@ -82,8 +82,18 @@ class EditModal extends Form {
                 "autoFocus"
               )}
               {this.renderInput("value", `${this.props.vTag}`)}
-              {this.renderModalButton("Edit", "", this.handleSubmit)}
-              {this.renderModalButton("Cancel", "", this.handleClose)}
+              <div className="text-center">
+                {this.renderModalButton(
+                  "Add",
+                  "btn-primary",
+                  this.handleSubmits
+                )}
+                {this.renderModalButton(
+                  "Cancel",
+                  "btn-danger",
+                  this.handleClose
+                )}
+              </div>
             </form>
           </Modal.Body>
         </Modal>

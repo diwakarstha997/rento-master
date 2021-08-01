@@ -1,8 +1,8 @@
 import React from "react";
 import Joi from "joi-browser";
 import { Modal } from "react-bootstrap";
-import Forms from "../common/form";
-import application from "../../services/applicationService";
+import Forms from "../../common/form";
+import application from "../../../services/applicationService";
 
 class ApplicationForm extends Forms {
   state = {

@@ -135,16 +135,23 @@ class RoomForm extends Form {
   };
 
   handleFileChange = (e) => {
+    const fileCount = e.currentTarget.files.length;
+
     if (!e.currentTarget.files[0]) return;
     const { currentTarget: input } = e;
     const errors = { ...this.state.errors };
 
-    const errorMessage = this.validateProperty(input);
-    if (errorMessage) errors["image"] = errorMessage;
-    else delete errors["image"];
+    if (fileCount < 3) {
+      const errorMessage = this.validateProperty(input);
+      if (errorMessage) errors["image"] = errorMessage;
+      else delete errors["image"];
+    }
 
     const data = { ...this.state.data };
-    data["image"] = [...data["image"], e.currentTarget.files[0]];
+
+    for (let i = 0; i < fileCount; i++) {
+      data["image"] = [...data["image"], e.currentTarget.files[i]];
+    }
 
     this.setState({ data, errors });
   };
@@ -198,6 +205,7 @@ class RoomForm extends Form {
                     accept="image/png, image/gif, image/jpeg"
                     onChange={this.handleFileChange}
                     className="img-upload-btn"
+                    multiple
                   />
                   <label id="fileLabel">
                     {this.state.data.image.length > 0

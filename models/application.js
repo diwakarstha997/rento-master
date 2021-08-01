@@ -2,7 +2,9 @@ const mongoose = require("mongoose");
 const Joi = require("Joi");
 
 const applicationSchema = new mongoose.Schema({
+  applicationTag: String,
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  roomOwner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   room: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
   occupation: String,
   monthlyIncome: Number,
@@ -13,8 +15,8 @@ const applicationSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ["Draft", "Submitted", "Approved", "Rejected"],
-    default: "Draft",
+    enum: ["Submitted", "Approved", "Rejected"],
+    default: "Submitted",
   },
   dateSubmitted: {
     type: Date,
