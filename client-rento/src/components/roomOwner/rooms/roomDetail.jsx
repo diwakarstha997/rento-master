@@ -19,7 +19,7 @@ class OwnerRoomDetail extends Component {
     if (!roomData) return <h3>Loading</h3>;
     return (
       <div className="d-flex justify-content-center">
-        <h3>Room Detail of Room {roomData.room.roomTag}</h3>
+        <h3>Room Detail of Room No.: {roomData.roomTag}</h3>
       </div>
     );
   }

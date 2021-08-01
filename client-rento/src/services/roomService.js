@@ -34,7 +34,7 @@ export function roomsCreatedToday() {
 }
 
 export function getOwnerRoomDetail(roomId) {
-  return http.get(apiEndpoint + "/roomOwner/" + roomId);
+  return http.get(apiEndpoint + "/" + roomId);
 }
 
 export function getTotalRooms() {
@@ -45,6 +45,7 @@ const rooms = {
   getRooms,
   getRoomsByUser,
   saveRoom,
+  getOwnerRoomDetail,
   getTotalRooms,
   roomsCreatedToday,
 };
