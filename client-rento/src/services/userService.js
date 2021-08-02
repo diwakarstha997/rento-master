@@ -13,6 +13,10 @@ export async function register(user) {
   });
 }
 
+export function getProfileData() {
+  return http.get(apiEndpoint);
+}
+
 export function getTotalUsers() {
   return http.get(apiEndpoint + "/getTotal");
 }
@@ -23,6 +27,7 @@ export function usersCreatedToday() {
 
 const user = {
   register,
+  getProfileData,
   getTotalUsers,
   usersCreatedToday,
 };

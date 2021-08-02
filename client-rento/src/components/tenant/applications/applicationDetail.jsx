@@ -19,7 +19,120 @@ class ApplicationDetail extends Component {
     if (!applicationData) return <h3>Loading</h3>;
     return (
       <div className="d-flex justify-content-center">
-        <h3>Your Application Detail to Room{applicationData.room.roomTag}</h3>
+        <div className="col-lg-6 col-md-8">
+          <h3 className="text-center">
+            Application Detail to Room{" "}
+            <a href={"/rooms/" + applicationData.room._id}>
+              {applicationData.room.roomTag}
+            </a>
+          </h3>
+          <div
+            className="card shadow mt-3 px-5"
+            style={{ backgroundColor: "rgb(227, 238, 255)" }}
+          >
+            <div className="card-body">
+              <div className="row mt-4">
+                <div className="col-lg col-md">
+                  <label htmlFor="dateSubmitted">Date Submitted:</label>
+                </div>
+                <div className="col-lg col-md">
+                  <p>
+                    {new Date(applicationData.dateSubmitted).getFullYear() +
+                      "-" +
+                      new Date(applicationData.dateSubmitted).getMonth() +
+                      "-" +
+                      new Date(applicationData.dateSubmitted).getDate()}
+                  </p>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="row">
+                <div className="col-lg col-md">
+                  <label htmlFor="occupation">Occupation:</label>
+                </div>
+                <div className="col-lg col-md">
+                  <p>{applicationData.occupation}</p>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="row">
+                <div className="col-lg col-md">
+                  <label htmlFor="emergencyContact">Emergency Contact:</label>
+                </div>
+                <div className="col-lg col-md">
+                  <p>{applicationData.emergencyContact}</p>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="row">
+                <div className="col-lg col-md">
+                  <label htmlFor="monthlyIncome">Monthly Income:</label>
+                </div>
+                <div className="col-lg col-md">
+                  <p>{applicationData.monthlyIncome}</p>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="row">
+                <div className="col-lg col-md">
+                  <label htmlFor="monthlyIncome">Monthly Income:</label>
+                </div>
+                <div className="col-lg col-md">
+                  <p>{applicationData.monthlyIncome}</p>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="row">
+                <div className="col-lg col-md">
+                  <label htmlFor="previousLocation">Previous Location:</label>
+                </div>
+                <div className="col-lg col-md">
+                  <p>{applicationData.previousLocation}</p>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="row">
+                <div className="col-lg col-md">
+                  <label htmlFor="reasonToLeavePreviousLocation">
+                    Reason To Leave Previous Location:
+                  </label>
+                </div>
+                <div className="col-lg col-md">
+                  <p>{applicationData.reasonToLeavePreviousLocation}</p>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="row">
+                <div className="col-lg col-md">
+                  <label htmlFor="status">Status:</label>
+                </div>
+                <div className="col-lg col-md">
+                  <p>{applicationData.status}</p>
+                </div>
+              </div>
+
+              <hr />
+
+              <div className="text-right">
+                <button className="btn rento-btn">Edit</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }

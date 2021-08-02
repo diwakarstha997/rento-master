@@ -82,6 +82,14 @@ module.exports = {
     res.send(token);
   },
 
+  fetchUserData: async (req, res) => {
+    const userData = await User.findOne({
+      userRole: req.user.userRole,
+      _id: req.user._id,
+    }).select("-password");
+    res.send(userData);
+  },
+
   getTotalUser: async (req, res) => {
     const total = await User.find().countDocuments();
     res.send("" + total);

@@ -10,7 +10,7 @@ class ApplicationForm extends Forms {
     data: {
       occupation: "",
       monthlyIncome: "",
-      emegencyContact: "",
+      emergencyContact: "",
       previousLocation: "",
       reasonToLeavePreviousLocation: "",
       additionalComments: "",
@@ -21,7 +21,7 @@ class ApplicationForm extends Forms {
   schema = {
     occupation: Joi.string().required().label("Occupation"),
     monthlyIncome: Joi.number().required().label("Monthly Income"),
-    emegencyContact: Joi.string()
+    emergencyContact: Joi.string()
       .min(10)
       .max(10)
       .required()
@@ -85,7 +85,7 @@ class ApplicationForm extends Forms {
             ])}
             {this.renderNumberInput("monthlyIncome", "Monthly Income")}
             {this.renderNumberInput(
-              "emegencyContact",
+              "emergencyContact",
               "Emergency Contact",
               false,
               9

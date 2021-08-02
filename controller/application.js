@@ -22,9 +22,10 @@ module.exports = {
 
     const applicationTag =
       room.roomTag +
+      "-" +
       (await Application.find({
         user: req.user._id,
-      }).countsDocument());
+      }).countDocuments());
 
     const application = new Application({
       applicationTag: applicationTag,
@@ -34,7 +35,7 @@ module.exports = {
       occupation: req.body.occupation,
       monthlyIncome: req.body.monthlyIncome,
       emergencyContact: req.body.emergencyContact,
-      previousLocation: req.body.Location,
+      previousLocation: req.body.previousLocation,
       reasonToLeavePreviousLocation: req.body.reasonToLeavePreviousLocation,
       additionalComments: req.body.additionalComments,
     });
