@@ -15,7 +15,11 @@ class ConfirmDelete extends Component {
       <React.Fragment>
         <Button
           type="button"
-          className="btn-sm btn-danger float-right mx-3 mb-2"
+          className={
+            this.props.className
+              ? this.props.className
+              : "btn-sm btn-danger float-right mx-3 mb-2 "
+          }
           onClick={this.handleShow}
         >
           Delete

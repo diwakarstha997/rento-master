@@ -10,6 +10,14 @@ export function getRoomById(roomId) {
   return http.get(apiEndpoint + "/" + roomId);
 }
 
+export function deleteRoom(roomId) {
+  return http.delete(apiEndpoint + "/deleteRoom/" + roomId);
+}
+
+export function publishRoom(roomId) {
+  return http.put(apiEndpoint + "/publishRoom/" + roomId);
+}
+
 export function getRoomsByUser() {
   return http.get(apiEndpoint + "/roomowner/myrooms");
 }
@@ -27,6 +35,27 @@ export async function saveRoom(data) {
     imageCount++;
   });
   return http.post(apiEndpoint + "/", data);
+}
+
+export function updateRoom(
+  roomId,
+  city,
+  location,
+  wardNumber,
+  // facility,
+  monthlyRent,
+  squareFeet,
+  description
+) {
+  return http.put(apiEndpoint + "/" + roomId, {
+    city,
+    location,
+    wardNumber,
+    // facility,
+    monthlyRent,
+    squareFeet,
+    description,
+  });
 }
 
 export function roomsCreatedToday() {
@@ -48,6 +77,9 @@ const rooms = {
   getOwnerRoomDetail,
   getTotalRooms,
   roomsCreatedToday,
+  deleteRoom,
+  publishRoom,
+  updateRoom,
 };
 
 export default rooms;

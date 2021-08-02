@@ -2,15 +2,23 @@ import React, { Component } from "react";
 import _ from "lodash";
 import Search from "./../common/search";
 // import Pagination from "../common/pagination";
-import { getRoomsByUser } from "../../services/roomService";
+import rooms from "../../services/roomService";
 import RoomTable from "./rooms/roomsTable";
+import Message from "../admin/dashboard/message";
 
 class Dashboard extends Component {
   state = {
     rooms: [],
+    message: "",
+    status: "",
     searchQuery: "",
     sortColumn: { path: "roomNumber", order: "asc" },
   };
+
+  async componentDidMount() {
+    const { data: userRooms } = await rooms.getRoomsByUser();
+    this.setState({ rooms: userRooms });
+  }
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
@@ -23,11 +31,32 @@ class Dashboard extends Component {
     });
   };
 
-  async componentDidMount() {
-    const { data: rooms } = await getRoomsByUser();
-    console.log(rooms);
-    this.setState({ rooms });
-  }
+  handleMessage = async (m) => {
+    const { data: userRooms } = await rooms.getRoomsByUser();
+    this.setState({ message: m.data, status: m.status, rooms: userRooms });
+  };
+
+  doDelete = async (e) => {
+    try {
+      const { status, data } = await rooms.deleteRoom(e.target.value);
+
+      const { data: userRooms } = await rooms.getRoomsByUser();
+      this.setState({ rooms: userRooms });
+
+      this.setState({ message: data, status });
+    } catch (ex) {}
+  };
+
+  onPublish = async (v) => {
+    try {
+      const { status, data } = await rooms.publishRoom(v);
+
+      const { data: userRooms } = await rooms.getRoomsByUser();
+      this.setState({ rooms: userRooms });
+
+      this.setState({ message: data, status });
+    } catch (ex) {}
+  };
 
   render() {
     const { rooms, searchQuery, sortColumn } = this.state;
@@ -79,6 +108,7 @@ class Dashboard extends Component {
           </div>
         </div>
         <div style={{ margin: "0 5% 0 5%" }}>
+          <Message message={this.state.message} status={this.state.status} />
           {(sortedRooms.length === 0 && (
             <h5 className="ml-4 mb-5 ">There are no rooms to show</h5>
           )) || (
@@ -88,6 +118,9 @@ class Dashboard extends Component {
                 rooms={sortedRooms}
                 sortColumn={sortColumn}
                 onSort={this.handleSort}
+                doDelete={this.doDelete}
+                onPublish={this.onPublish}
+                handleMessage={this.handleMessage}
               />
               {/* <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
                   <Pagination

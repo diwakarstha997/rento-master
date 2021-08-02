@@ -19,7 +19,6 @@ const roomSchema = new mongoose.Schema({
   description: {
     type: String,
     required: true,
-    min: 150,
     max: 500,
   },
   status: {
@@ -47,7 +46,7 @@ function validateRoom(room) {
     location: Joi.string().min(3).max(255).required(),
     monthlyRent: Joi.number().min(100).max(1000000).required(),
     squareFeet: Joi.number().min(10).max(1000000).required(),
-    description: Joi.string().min(150).max(500).required(),
+    description: Joi.string().max(500).required(),
     image: Joi.required(),
   });
   return schema.validate(room);

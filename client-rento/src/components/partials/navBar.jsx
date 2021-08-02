@@ -129,7 +129,11 @@ class NavBar extends Component {
                     <React.Fragment>
                       <a
                         className="navbar-text margin-lg-left remove-active"
-                        href="/user/profile"
+                        href={
+                          userType === "RoomOwner"
+                            ? "/RoomOwner/profile"
+                            : "/profile"
+                        }
                       >
                         <span>
                           <i className="fa fa-user pr-2"></i>
@@ -177,7 +181,7 @@ class NavBar extends Component {
                         onClick={this.props.handleToggle}
                         className="mr-auto"
                       >
-                        <span class="navbar-toggler-icon"></span>
+                        <span className="navbar-toggler-icon"></span>
                       </button>
                       <button
                         data-toggle="collapse"
@@ -194,7 +198,7 @@ class NavBar extends Component {
                         <span className="navbar-nav ml-auto">
                           <a
                             className="navbar-text margin-lg-left remove-active"
-                            href="/user/profile"
+                            href="/Admin/profile"
                           >
                             <span>
                               <i className="fa fa-user pr-2"></i>

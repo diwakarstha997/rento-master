@@ -21,6 +21,8 @@ import ProtectedRoute from "./components/common/protectedRoute";
 import ApplicationDetail from "./components/tenant/applications/applicationDetail";
 import AdminDashboard from "./components/admin/adminDashboard";
 import OwnerRoomDetail from "./components/roomOwner/rooms/roomDetail";
+import Profile from "./components/accounts/profile/profile";
+
 class App extends Component {
   state = { toggled: true };
   handleToggle = () => {
@@ -103,6 +105,7 @@ class App extends Component {
             <Switch>
               <Route path="/logout" component={Logout} />
 
+              <Route path="/RoomOwner/profile" component={Profile} />
               <Route exact path="/RoomOwner/MyRooms" component={Dashboard} />
               <Route
                 path="/RoomOwner/applications"
@@ -132,6 +135,8 @@ class App extends Component {
             />
             <Switch>
               <Route path="/logout" component={Logout} />
+
+              <Route path="/profile" component={Profile} />
 
               <Route exact path="/rooms" component={Rooms} />
               <Route path="/rooms/:id" component={RoomDetail} />
@@ -173,6 +178,8 @@ class App extends Component {
                 path="/adminLogout"
                 render={(props) => <Logout {...props} user="Admin" />}
               />
+              <Route path="/Admin/profile" component={Profile} />
+
               <Route
                 path="/Admin/dashboard"
                 render={(props) => (

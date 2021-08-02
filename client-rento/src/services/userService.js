@@ -13,6 +13,24 @@ export async function register(user) {
   });
 }
 
+export function getProfileData() {
+  return http.get(apiEndpoint);
+}
+
+export function editProfileData(id, name, email, phone) {
+  return http.put(apiEndpoint + "/editProfile", { id, name, email, phone });
+}
+
+export function changePassword(id, userRole, password, password1, password2) {
+  return http.put(apiEndpoint + "/changePassword", {
+    id,
+    userRole,
+    password,
+    password1,
+    password2,
+  });
+}
+
 export function getTotalUsers() {
   return http.get(apiEndpoint + "/getTotal");
 }
@@ -23,8 +41,11 @@ export function usersCreatedToday() {
 
 const user = {
   register,
+  getProfileData,
   getTotalUsers,
   usersCreatedToday,
+  editProfileData,
+  changePassword,
 };
 
 export default user;

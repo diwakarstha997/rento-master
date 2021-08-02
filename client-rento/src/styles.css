@@ -3,6 +3,25 @@
   text-align: center;
 }
 
+/* custom color rento*/
+.rento-color {
+  color: white;
+  background-color: #1f83d4;
+  border-color: #1f83d4;
+}
+
+.rento-color-active {
+  color: white;
+  background-color: #0f4eac;
+  border-color: #0f4eac;
+}
+
+.rento-color:hover {
+  color: white;
+  background-color: #0f4eac;
+  border-color: #0f4eac;
+}
+
 .rento-text {
   color: #1858b8;
 }
@@ -120,6 +139,7 @@
 
 #menu-toggle {
   border-color: rgb(176, 203, 243);
+  /* border-color:rgb(227, 238, 255); */
   background-color: #fff;
 }
 
