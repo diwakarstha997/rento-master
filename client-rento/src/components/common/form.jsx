@@ -16,7 +16,9 @@ class Form extends Component {
     let { error } = Joi.validate(this.state.data, this.schema, options);
 
     const customErrors = this.customValidate();
+    if (!error) error = { details: [] };
     if (customErrors) error.details.push(...customErrors.details);
+    if (error.details.length === 0) error = null;
 
     if (!error) return null;
 

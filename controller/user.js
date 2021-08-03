@@ -1,6 +1,12 @@
 const { User, validateRegister, validateLogin } = require("../models/user");
+const upload = require("../middleware/upload");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
+
+const fs = require("fs");
+const { promisify } = require("util");
+
+const unlinkAsync = promisify(fs.unlink);
 
 module.exports = {
   insert: async (req, res) => {
@@ -36,6 +42,26 @@ module.exports = {
       .header("access-control-expose-headers", "x-auth-token")
       .send(_.pick(user, ["_id", "name", "email", "token"]));
   },
+
+  uploadDocument: async (req, res) => {
+    const user = await User.findOne({ _id: req.user._id });
+    if (!user) res.status(404).send("User Not Found");
+
+    if (user.documentImagePath)
+      await unlinkAsync("client-rento/public/" + user.documentImagePath);
+
+    await upload(req, res);
+    documentPath = req.customPath + req.files[0].filename;
+
+    user.set({
+      documentImagePath: documentPath,
+    });
+    await user.save();
+
+    console.log(documentPath);
+    res.send(documentPath);
+  },
+
   login: async (req, res) => {
     const { error } = validateLogin(req.body);
     if (error) return res.status(400).send(error.details[0].message);

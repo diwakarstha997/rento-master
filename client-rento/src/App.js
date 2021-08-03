@@ -98,14 +98,19 @@ class App extends Component {
         {/* RoomOwner Routes */}
         {user && user.userRole === "RoomOwner" && (
           <React.Fragment>
-            <Route
-              path="/RoomOwner"
-              render={(props) => <NavBar {...props} userType="RoomOwner" />}
-            />
+            <Route path="/RoomOwner" component={NavBar} />
             <Switch>
               <Route path="/logout" component={Logout} />
 
+              <Route
+                exact
+                path="/RoomOwner/profile/verify"
+                render={(props) => (
+                  <Profile {...props} active="verifyIdentity" />
+                )}
+              />
               <Route path="/RoomOwner/profile" component={Profile} />
+
               <Route exact path="/RoomOwner/MyRooms" component={Dashboard} />
               <Route
                 path="/RoomOwner/applications"
@@ -129,14 +134,19 @@ class App extends Component {
         {/* Tenant Routes */}
         {user && user.userRole === "Tenant" && (
           <React.Fragment>
-            <Route
-              path="/"
-              render={(props) => <NavBar {...props} userType="Tenant" />}
-            />
+            <Route path="/" component={NavBar} />
             <Switch>
               <Route path="/logout" component={Logout} />
 
-              <Route path="/profile" component={Profile} />
+              <Route
+                exact
+                path="/profile/verify"
+                render={(props) => (
+                  <Profile {...props} active="verifyIdentity" />
+                )}
+              />
+
+              <Route exact path="/profile" component={Profile} />
 
               <Route exact path="/rooms" component={Rooms} />
               <Route path="/rooms/:id" component={RoomDetail} />

@@ -78,10 +78,16 @@ class Register extends Form {
 
   doSubmit = async () => {
     try {
-      const response = await userService.register(this.state.data);
+      const { data } = this.state;
+      const response = await userService.register(data);
       console.log("we are here", response.headers);
       auth.loginWithJwt(response.headers["x-auth-token"]);
-      window.location = "/rooms";
+
+      let dest = "/";
+      if (data.userRole === "Tenant") dest = "/";
+      else if (data.userRole === "RoomOwner") dest = "/RoomOwner/MyRooms";
+
+      window.location = dest;
     } catch (ex) {
       console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {

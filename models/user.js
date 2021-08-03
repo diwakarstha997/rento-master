@@ -25,6 +25,7 @@ const userSchema = new mongoose.Schema({
     minlength: 8,
     maxlength: 255,
   },
+  documentImagePath: String,
   phone: { type: String, required: true, minlength: 10, maxlength: 10 },
   userRole: {
     type: String,
@@ -43,7 +44,12 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.generateAuthToken = function () {
   return jwt.sign(
-    { _id: this._id, name: this.name, userRole: this.userRole },
+    {
+      _id: this._id,
+      name: this.name,
+      userRole: this.userRole,
+      verified: this.verified,
+    },
     "rentoUserSecretKey"
   );
 };

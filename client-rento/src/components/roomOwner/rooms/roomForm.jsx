@@ -113,8 +113,9 @@ class RoomForm extends Form {
       data.facility = [...data.facility, e.currentTarget.value];
       console.log(`${e.currentTarget.value} is added`);
     } else {
-      data.facility = facility.filter((f) => f.name !== e.currentTarget.value);
+      data.facility = facility.filter((f) => f !== e.currentTarget.value);
       console.log(`${e.currentTarget.value} is removed`);
+      console.log(data.facility);
     }
 
     this.setState({ data });

@@ -25,6 +25,12 @@ export function usersCreatedToday() {
   return http.get(apiEndpoint + "/createdToday");
 }
 
+export function documentUpload(fileData) {
+  let document = new FormData();
+  document.append("file", fileData.image);
+  return http.post(apiEndpoint + "/documentUpload", document);
+}
+
 const user = {
   register,
   getProfileData,

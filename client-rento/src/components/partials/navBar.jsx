@@ -10,11 +10,15 @@ class NavBar extends Component {
     return (
       <React.Fragment>
         <div className="mx-lg-5 mx-md-4">
-          {(((userType && userType !== "Admin") || !userType) && (
+          {(((!userType && !user) || (user && user.userRole !== "Admin")) && (
             <nav className="navbar navbar-light navbar-expand-md navigation-clean-button">
               <NavLink
                 className="remove-active navbar-brand"
-                to={userType ? "/RoomOwner/MyRooms" : "/"}
+                to={
+                  user && user.userRole === "RoomOwner"
+                    ? "/RoomOwner/MyRooms"
+                    : "/"
+                }
               >
                 <img id="rento-logo" src={logo} alt="Rento" />
               </NavLink>
@@ -32,7 +36,7 @@ class NavBar extends Component {
                 id="navcol-1"
               >
                 <ul className="nav navbar-nav mr-auto">
-                  {(userType === "RoomOwner" && (
+                  {(user && user.userRole === "RoomOwner" && (
                     <React.Fragment>
                       <NavLink
                         className="nav-item nav-menu nav-link"
@@ -49,7 +53,7 @@ class NavBar extends Component {
                       </NavLink>
                     </React.Fragment>
                   )) ||
-                    (userType === "Tenant" && (
+                    (user && user.userRole === "Tenant" && (
                       <React.Fragment>
                         <NavLink
                           className="nav-item nav-menu nav-link"
@@ -130,7 +134,7 @@ class NavBar extends Component {
                       <a
                         className="navbar-text margin-lg-left remove-active"
                         href={
-                          userType === "RoomOwner"
+                          user.userRole === "RoomOwner"
                             ? "/RoomOwner/profile"
                             : "/profile"
                         }
@@ -221,6 +225,24 @@ class NavBar extends Component {
               </nav>
             ))}
         </div>
+        {user && user.userRole !== "Admin" && user.verified === false && (
+          <div className="d-flex justify-content-center mx-auto my-3 alert alert-danger text-center admin-alert">
+            <p className="my-auto">
+              Your identity is not verified. Please{" "}
+              <a
+                className="text-danger"
+                href={
+                  user.userRole === "Tenant"
+                    ? "/profile/verify"
+                    : "/RoomOwner/profile/verify"
+                }
+              >
+                Click here
+              </a>{" "}
+              to verify
+            </p>
+          </div>
+        )}
       </React.Fragment>
     );
   }

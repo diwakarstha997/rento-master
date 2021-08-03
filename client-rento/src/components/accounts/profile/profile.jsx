@@ -1,18 +1,32 @@
 import React, { Component } from "react";
+import { getCurrentUser } from "../../../services/authService";
 import ChangePassword from "./changePassword";
 import EditProfile from "./editProfile";
 import PreviewProfile from "./previewProfile";
+import VerifyIdentity from "./verifyIdentity";
 
 class Profile extends Component {
   state = {
     active: "preview",
   };
 
-  handleActive = (path) => {
+  componentDidMount() {
+    if (this.props.active === "verifyIdentity")
+      this.setState({ active: "verifyIdentity" });
+  }
+
+  handleActive = async (path) => {
+    const user = await getCurrentUser();
     this.setState({ active: path });
+    this.props.history.push(
+      (user.userRole === "RoomOwner" && "/RoomOwner/profile") ||
+        (user.userRole === "Admin" && "/Admin/profile") ||
+        (user.userRole === "Tenant" && "/profile")
+    );
   };
 
   render() {
+    const user = getCurrentUser();
     if (this.state.profileData) console.log(this.state.profileData.name);
     return (
       <React.Fragment>
@@ -28,7 +42,7 @@ class Profile extends Component {
           >
             <div className="my-2 col-lg col-md d-flex justify-content-lg-start justify-content-md-start justify-content-center">
               <ul className="nav" style={{ listStyleType: "none" }}>
-                <li className="mx-1">
+                <li className="m-1">
                   <button
                     className={`btn btn-sm ${
                       this.state.active === "preview"
@@ -40,7 +54,7 @@ class Profile extends Component {
                     Preview
                   </button>
                 </li>
-                <li className="text-dark mx-1">
+                <li className="text-dark m-1">
                   <button
                     className={`btn btn-sm ${
                       this.state.active === "edit"
@@ -52,7 +66,7 @@ class Profile extends Component {
                     Edit
                   </button>
                 </li>
-                <li className="text-dark mx-1">
+                <li className="text-dark m-1">
                   <button
                     className={`btn btn-sm ${
                       this.state.active === "changePassword"
@@ -64,6 +78,25 @@ class Profile extends Component {
                     Change Password
                   </button>
                 </li>
+                {user.userRole !== "Admin" && (
+                  <li className="text-dark m-1">
+                    <a
+                      className={`btn btn-sm ${
+                        this.state.active === "verifyIdentity"
+                          ? "rento-color-active"
+                          : "rento-color"
+                      }`}
+                      href={
+                        user.userRole === "RoomOwner"
+                          ? "/RoomOwner/profile/verify"
+                          : "/profile/verify"
+                      }
+                      // onClick={() => this.handleActive("verifyIdentity")}
+                    >
+                      Verify Identity
+                    </a>
+                  </li>
+                )}
               </ul>
             </div>
           </div>
@@ -72,7 +105,9 @@ class Profile extends Component {
               <PreviewProfile handleActive={this.handleActive} />
             )) ||
               (this.state.active === "edit" && <EditProfile />) ||
-              (this.state.active === "changePassword" && <ChangePassword />)}
+              (this.state.active === "changePassword" && <ChangePassword />) ||
+              (user.userRole !== "Admin" &&
+                this.state.active === "verifyIdentity" && <VerifyIdentity />)}
           </div>
         </div>
       </React.Fragment>

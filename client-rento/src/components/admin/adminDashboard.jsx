@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import Index from "./dashboard/index";
 import Facility from "./dashboard/facility";
 import Location from "./dashboard/location";
+import Users from "./dashboard/users";
 
 class AdminDashboard extends Component {
   state = {
@@ -41,12 +42,20 @@ class AdminDashboard extends Component {
               >
                 Facility
               </li>
+              <li
+                style={{ cursor: "pointer" }}
+                className="list-group-item"
+                onClick={() => this.onSidebarSelect("users")}
+              >
+                Verify Users
+              </li>
             </ul>
           </div>
           <div>
             <Index sidebarSelect={this.state.sidebarSelect} />
             <Location sidebarSelect={this.state.sidebarSelect} />
             <Facility sidebarSelect={this.state.sidebarSelect} />
+            <Users sidebarSelect={this.state.sidebarSelect} />
           </div>
         </div>
       </React.Fragment>

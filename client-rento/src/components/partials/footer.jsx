@@ -27,7 +27,7 @@ const Footer = ({ userType }) => {
             </a>
           </div>
         </div>
-        {!userType && (
+        {!user && (
           <div className="mt-3">
             <ul
               className="d-lg-flex d-md-flex d-sm-flex m-auto justify-content-center text-center pr-5"
@@ -43,23 +43,22 @@ const Footer = ({ userType }) => {
                   Find Room
                 </a>
               </li>
-              {!user && (
-                <li className=" mx-2">
-                  <Link
-                    className="text-secondary"
-                    to={{
-                      pathname: "/login",
-                      state: {
-                        from: "/RoomOwner/MyRooms",
-                        message: "Login to List Room",
-                        role: "RoomOwner",
-                      },
-                    }}
-                  >
-                    List Room
-                  </Link>
-                </li>
-              )}
+
+              <li className=" mx-2">
+                <Link
+                  className="text-secondary"
+                  to={{
+                    pathname: "/login",
+                    state: {
+                      from: "/RoomOwner/MyRooms",
+                      message: "Login to List Room",
+                      role: "RoomOwner",
+                    },
+                  }}
+                >
+                  List Room
+                </Link>
+              </li>
               <li className="mx-2">
                 <a className="text-secondary" href="/about">
                   About
