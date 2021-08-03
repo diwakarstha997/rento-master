@@ -2,16 +2,16 @@ import React, { Component } from "react";
 
 class Message extends Component {
   render() {
+    console.log(this.props.message);
     return (
       <React.Fragment>
         {this.props.message && (
           <div
-            className={`text-center
-              ${
-                this.props.status === 201 || this.props.status === 202
-                  ? "alert alert-danger admin-alert"
-                  : "alert alert-success admin-alert"
-              }`}
+            className={`text-center ${
+              this.props.status === 201 || this.props.status === 202
+                ? "alert alert-danger admin-alert"
+                : "alert alert-success admin-alert"
+            }`}
             role="alert"
           >
             {this.props.message}

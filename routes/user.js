@@ -15,6 +15,8 @@ router.post(
 
 router.get("/", [auth], User.fetchUserData);
 
+router.put("/changePassword", User.changePassword);
+router.put("/editProfile", User.editProfileData);
 router.get("/getTotal", [auth], User.getTotalUser);
 router.get("/createdToday", [auth], User.userCreatedToday);
 

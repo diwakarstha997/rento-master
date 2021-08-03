@@ -74,14 +74,16 @@ module.exports = {
 
   update: async (req, res) => {
     //Update rooms
+    console.log(req.params.id);
     const room = await Room.findById({ _id: req.params.id });
     if (!room) return res.status(404).send("Room Doesn't Exists");
 
     room.set({
-      user: req.user._id,
+      city: req.body.city,
       location: req.body.location,
-      facility: re.body.facilities,
-      monthlyRent: req.body.price,
+      wardNumber: req.body.wardNumber,
+      facility: req.body.facility,
+      monthlyRent: req.body.monthlyRent,
       squareFeet: req.body.squareFeet,
       description: req.body.description,
     });
@@ -99,7 +101,7 @@ module.exports = {
     // const result = await Room.findByIdAndDelete({ _id: req.params.id });
     room.delete();
 
-    res.send("room deleted successfully");
+    res.status(202).send("Room deleted successfully");
   },
 
   getTotalRoom: async (req, res) => {
@@ -112,5 +114,24 @@ module.exports = {
       dateCreated: new Date().toISOString().slice(0, 10),
     }).countDocuments();
     res.send("" + data);
+  },
+
+  publish: async (req, res) => {
+    const room = await Room.findById({ _id: req.params.id });
+    if (!room) return res.status(404).send("Room Doesn't Exists");
+
+    if (room.status === "Inactive") {
+      room.set({
+        status: "Active",
+      });
+      await room.save();
+      res.send("Room was published successfully");
+    } else {
+      room.set({
+        status: "Inactive",
+      });
+      await room.save();
+      res.status(202).send("Room was hidden successfully");
+    }
   },
 };

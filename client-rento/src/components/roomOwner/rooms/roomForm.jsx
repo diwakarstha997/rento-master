@@ -53,7 +53,7 @@ class RoomForm extends Form {
       .max(10000000)
       .required()
       .label("Square Feet"),
-    description: Joi.string().min(150).max(500).required().label("Description"),
+    description: Joi.string().max(500).required().label("Description"),
     image: Joi.label("Image"),
     imagePath: Joi,
   };

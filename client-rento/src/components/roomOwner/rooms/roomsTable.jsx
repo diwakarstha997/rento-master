@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Table from "../../common/table";
+import ConfirmDelete from "../../common/confirmDelete";
+import EditRoom from "../modal/editRoomModal";
 
 class RoomTable extends Component {
   columns = [
@@ -21,24 +23,27 @@ class RoomTable extends Component {
       content: (room) => (
         <React.Fragment>
           <div className="text-center">
-            <button
-              onClick={() => this.props.onDelete(room._id)}
-              className="btn btn-primary btn-sm"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => this.props.onDelete(room._id)}
+            <EditRoom edit={room} handleMessage={this.props.handleMessage} />
+            <ConfirmDelete
+              value={room._id}
+              onClick={this.props.doDelete}
               className="btn btn-danger btn-sm ml-2"
-            >
-              Delete
-            </button>
-            <button
-              // onClick={() => this.props.onDelete(room._id)}
-              className="btn btn-success btn-sm ml-2"
-            >
-              Publish
-            </button>
+            />
+            {room.status === "Inactive" ? (
+              <button
+                onClick={() => this.props.onPublish(room._id)}
+                className="btn btn-success btn-sm ml-2"
+              >
+                Publish
+              </button>
+            ) : (
+              <button
+                onClick={() => this.props.onPublish(room._id)}
+                className="btn btn-danger btn-sm ml-2"
+              >
+                Hide
+              </button>
+            )}
           </div>
         </React.Fragment>
       ),

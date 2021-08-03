@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { getCurrentUser } from "../../../services/authService";
 import ChangePassword from "./changePassword";
 import EditProfile from "./editProfile";
+import Message from "./message";
 import PreviewProfile from "./previewProfile";
 import VerifyIdentity from "./verifyIdentity";
 
 class Profile extends Component {
   state = {
     active: "preview",
+    message: "",
   };
 
   componentDidMount() {
@@ -16,13 +18,18 @@ class Profile extends Component {
   }
 
   handleActive = async (path) => {
-    const user = await getCurrentUser();
     this.setState({ active: path });
+    this.setState({ message: "" });
+    const user = await getCurrentUser();
     this.props.history.push(
       (user.userRole === "RoomOwner" && "/RoomOwner/profile") ||
         (user.userRole === "Admin" && "/Admin/profile") ||
         (user.userRole === "Tenant" && "/profile")
     );
+  };
+
+  setMessage = (m) => {
+    this.setState({ message: m });
   };
 
   render() {
@@ -100,12 +107,25 @@ class Profile extends Component {
               </ul>
             </div>
           </div>
+          <div className=" d-flex justify-content-center">
+            <Message message={this.state.message} status="200" />
+          </div>
           <div style={{ margin: "0 5% 0 5%" }}>
             {(this.state.active === "preview" && (
               <PreviewProfile handleActive={this.handleActive} />
             )) ||
-              (this.state.active === "edit" && <EditProfile />) ||
-              (this.state.active === "changePassword" && <ChangePassword />) ||
+              (this.state.active === "edit" && (
+                <EditProfile
+                  handleActive={this.handleActive}
+                  message={this.setMessage}
+                />
+              )) ||
+              (this.state.active === "changePassword" && (
+                <ChangePassword
+                  handleActive={this.handleActive}
+                  message={this.setMessage}
+                />
+              )) ||
               (user.userRole !== "Admin" &&
                 this.state.active === "verifyIdentity" && <VerifyIdentity />)}
           </div>

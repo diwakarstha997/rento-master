@@ -70,14 +70,12 @@ class VerifyIdentity extends Form {
 
   doSubmit = async () => {
     try {
-      const { data } = await documentUpload(this.state.data);
-      //   console.log(data);
-      window.scrollTo(0, 0);
+      await documentUpload(this.state.data);
       this.setState({
-        databaseImage: data,
         message:
           "Document Uploaded SuccessFully. Document will be reviewed and verified",
       });
+      window.scrollTo(0, 0);
     } catch (ex) {
       console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {

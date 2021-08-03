@@ -22,7 +22,8 @@ router.post(
 router.post("/", [auth], Room.insert);
 
 router.post("/status", [auth], Room.updatePublishStatus);
-router.put("/:id", [auth, validateId], Room.update);
-router.delete("/:id", [auth, validateId], Room.delete);
+router.put("/:id", [auth], Room.update);
+router.put("/publishRoom/:id", [auth, validateId], Room.publish);
+router.delete("/deleteRoom/:id", [auth, validateId], Room.delete);
 
 module.exports = router;

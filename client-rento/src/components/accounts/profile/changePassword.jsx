@@ -1,6 +1,7 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "../../common/form";
+import user from "../../../services/userService";
 
 class ChangePassword extends Form {
   state = {
@@ -18,6 +19,28 @@ class ChangePassword extends Form {
     confirmNewPassword: Joi.string().required().label("Confirm New Password"),
   };
 
+  async componentDidMount() {
+    const { data } = await user.getProfileData();
+    this.setState({ userRole: data.userRole, id: data._id });
+  }
+
+  doSubmit = async () => {
+    try {
+      const { data, id, userRole } = this.state;
+      const value = await user.changePassword(
+        id,
+        userRole,
+        data.currentPassword,
+        data.newPassword,
+        data.confirmNewPassword
+      );
+      this.props.handleActive("preview");
+      this.props.message(value.data);
+    } catch (ex) {
+      console.log(ex);
+    }
+  };
+
   render() {
     return (
       <div className="d-flex justify-content-center">
@@ -28,13 +51,15 @@ class ChangePassword extends Form {
             style={{ backgroundColor: "rgb(227, 238, 255)" }}
           >
             <div className="card-body">
-              {this.renderInput("currentPassword", "Current Password")}
-              {this.renderInput("newPassword", "New Password")}
-              {this.renderInput("confirmNewPassword", "Confirm New Password")}
+              <form onSubmit={this.handleSubmit}>
+                {this.renderInput("currentPassword", "Current Password")}
+                {this.renderInput("newPassword", "New Password")}
+                {this.renderInput("confirmNewPassword", "Confirm New Password")}
 
-              <div className="text-right">
-                <button className="btn rento-btn">Save</button>
-              </div>
+                <div className="text-right">
+                  <button className="btn rento-btn">Save</button>
+                </div>
+              </form>
             </div>
           </div>
         </div>

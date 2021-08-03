@@ -131,4 +131,52 @@ module.exports = {
     await User.updateOne({ _id: req.body.userId }, { verified: true });
     res.send("user verified");
   },
+
+  changePassword: async (req, res) => {
+    let user = await User.findOne({
+      userRole: req.body.userRole,
+      _id: req.body.id,
+    });
+    if (!user) return res.status(400).send("Invalid Email/ Password!!");
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
+    );
+    if (!validPassword)
+      return res.status(400).send("Invalid Email/ Password!!");
+
+    if (req.body.password1 === req.body.password)
+      return res
+        .status(400)
+        .send("Old Password cannot be same as new Password");
+
+    if (req.body.password1 !== req.body.password2)
+      return res.status(400).send("Passwords Dont Match");
+
+    user.set({
+      password: req.body.password1,
+    });
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
+
+    await user.save();
+    res.send("Password Chaged Succesfully");
+  },
+
+  fetchUserData: async (req, res) => {
+    const userData = await User.findOne({
+      userRole: req.user.userRole,
+      _id: req.user._id,
+    }).select("-password");
+    res.send(userData);
+  },
+
+  editProfileData: async (req, res) => {
+    const value = await User.updateOne(
+      { _id: req.body.id },
+      { name: req.body.name, email: req.body.email, phone: req.body.phone }
+    );
+    res.send("Profile Updated");
+  },
 };
