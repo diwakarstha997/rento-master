@@ -92,6 +92,18 @@ class EditRoom extends Forms {
 
     this.setState({ data });
     console.log(this.state.data.facility);
+
+    // const { facility } = this.state.data;
+
+    // console.log(facility.filter((f) => f === e.currentTarget.value).length);
+  };
+
+  handleChecked = (e) => {
+    const { facility } = this.state.data;
+
+    const checked = facility.filter((f) => f === e);
+    if (checked.length === 1) return true;
+    else return false;
   };
 
   doSubmit = async () => {
@@ -166,6 +178,7 @@ class EditRoom extends Forms {
                         name={facility.name}
                         value={facility.name}
                         onClick={this.handleFacilityClick}
+                        defaultChecked={this.handleChecked(facility.name)}
                       />
                       <label htmlFor="water">{facility.name}</label>
                     </div>
