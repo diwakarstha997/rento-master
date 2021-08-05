@@ -156,9 +156,13 @@ class App extends Component {
                 path="/MyApplications"
                 component={TenantApplications}
               />
-              <Route path="/MyApplications/:id" component={ApplicationDetail} />
-
-              <Redirect from="/" to="/rooms" />
+              {user.verified && (
+                <Route
+                  path="/MyApplications/:id"
+                  component={ApplicationDetail}
+                />
+              )}
+              <Redirect exact from="/" to="/rooms" />
 
               <Route path="/not-found" component={NotFound} />
               <Redirect to="/not-found" />

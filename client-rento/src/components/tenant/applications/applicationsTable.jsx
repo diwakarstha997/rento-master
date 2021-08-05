@@ -17,11 +17,13 @@ class ApplicationTable extends Component {
       path: "room.roomTag",
       label: "Room No.",
       visibility: true,
-      content: (application) => (
-        <a href={`/rooms/${application.room._id}`}>
-          {application.room.roomTag}
-        </a>
-      ),
+      content: (application) =>
+        (application.room && (
+          <a href={`/rooms/${application.room._id}`}>
+            {application.room.roomTag}
+          </a>
+        )) ||
+        "Room removed or unlisted",
     },
     {
       key: "emergencyContact",

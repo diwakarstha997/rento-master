@@ -124,7 +124,7 @@ class RoomForm extends Form {
   doSubmit = async () => {
     try {
       await saveRoom(this.state.data);
-      window.location.replace("/RoomOwner/MyRooms");
+      window.location = "/RoomOwner/MyRooms";
     } catch (ex) {
       console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
@@ -142,17 +142,36 @@ class RoomForm extends Form {
     const { currentTarget: input } = e;
     const errors = { ...this.state.errors };
 
-    if (fileCount < 3) {
-      const errorMessage = this.validateProperty(input);
-      if (errorMessage) errors["image"] = errorMessage;
-      else delete errors["image"];
-    }
-
     const data = { ...this.state.data };
 
     for (let i = 0; i < fileCount; i++) {
-      data["image"] = [...data["image"], e.currentTarget.files[i]];
+      if (data["image"].length > 9) break;
+      if (
+        e.currentTarget.files[i].type === "image/jpeg" ||
+        e.currentTarget.files[i].type === "image/png"
+      ) {
+        data["image"] = [...data["image"], e.currentTarget.files[i]];
+      }
+      console.log(e.currentTarget.files[i]);
     }
+
+    if (fileCount === 1 || data["image"].length < 3) {
+      const errorMessage = this.validateProperty(input);
+      if (errorMessage) errors["image"] = errorMessage;
+      else delete errors["image"];
+    } else delete errors["image"];
+
+    this.setState({ data, errors });
+  };
+
+  handleFileDelete = (imageName) => {
+    const errors = { ...this.state.errors };
+    const data = { ...this.state.data };
+    data["image"] = data["image"].filter((img) => img.name !== imageName);
+
+    if (data["image"].length < 3) {
+      errors["image"] = "Please upload at least 3 image";
+    } else delete errors["image"];
 
     this.setState({ data, errors });
   };
@@ -192,10 +211,15 @@ class RoomForm extends Form {
 
               <div className="form-group">
                 <label htmlFor="image">Image</label>
+                <br />
+                <label className="text-danger" htmlFor="image">
+                  *Image must be JPG / PNG, *Only 10 image can be uploaded
+                </label>
                 <div className="form-group">
                   <button
                     type="button"
                     onClick={(e) => this.inputElement.click()}
+                    className="mr-2"
                   >
                     Choose File
                   </button>
@@ -203,7 +227,7 @@ class RoomForm extends Form {
                     ref={(input) => (this.inputElement = input)}
                     type="file"
                     name="image"
-                    accept="image/png, image/gif, image/jpeg"
+                    accept="image/png, image/jpeg"
                     onChange={this.handleFileChange}
                     className="img-upload-btn"
                     multiple
@@ -220,16 +244,35 @@ class RoomForm extends Form {
                   )}
                 </div>
               </div>
-              <div>
+              <div className="row">
                 {this.state.data.image.map((img) => (
-                  <li key={img.name}>{img.name}</li>
+                  <div
+                    className="m-2 p-2 rounded shadow col-lg-2 col-md-2 col-8"
+                    style={{ position: "relative" }}
+                  >
+                    <img
+                      src={URL.createObjectURL(img)}
+                      alt={img.name}
+                      className="room-form-img img-fluid"
+                      style={{ position: "block" }}
+                    />
+                    <i
+                      className="room-form-img-trash text-danger fa fa-trash pt-3"
+                      style={{
+                        position: "absolute",
+                        left: "86%",
+                        bottom: "70%",
+                      }}
+                      onClick={() => this.handleFileDelete(img.name)}
+                    ></i>
+                  </div>
                 ))}
               </div>
 
               <button className="btn rento-btn btn-primary">Save</button>
               <button
                 type="button"
-                className="btn rento-btn-danger btn-danger"
+                className="btn rento-btn-danger btn-danger ml-2"
                 onClick={() => this.props.history.replace("/RoomOwner/MyRooms")}
               >
                 Cancel

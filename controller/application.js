@@ -65,13 +65,20 @@ module.exports = {
       user: req.user._id,
       _id: req.params.id,
     })
-      .populate({ path: "room", select: "_id" })
-      .populate({ path: "room", select: "roomTag" })
+      .populate({
+        path: "room",
+        match: { status: "Active" },
+        select: "_id roomTag",
+      })
       .exec((err, application) => {
         if (err) {
           console.log(err);
+          if (!application)
+            return res.status(404).send("Application not Found");
         } else {
           console.log(application);
+          if (!application)
+            return res.status(404).send("Application not Found");
           res.send(application);
         }
       });
@@ -81,8 +88,12 @@ module.exports = {
     await Application.find({
       user: req.user._id,
     })
-      .populate({ path: "room", select: "_id" })
-      .populate({ path: "room", select: "roomTag" })
+      .sort("-dateSubmitted")
+      .populate({
+        path: "room",
+        match: { status: "Active" },
+        select: "_id roomTag",
+      })
       .exec((err, application) => {
         if (err) {
           console.log(err);
@@ -97,6 +108,7 @@ module.exports = {
     const applications = await Application.find({
       roomOwner: req.user._id,
     })
+      .sort("-dateSubmitted")
       .populate("room")
       .exec((err, application) => {
         if (err) {

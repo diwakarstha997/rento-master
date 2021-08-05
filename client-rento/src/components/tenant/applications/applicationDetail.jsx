@@ -7,24 +7,32 @@ class ApplicationDetail extends Component {
   };
 
   async componentDidMount() {
-    const { data: applicationData } = await application.findApplication(
-      this.props.match.params.id
-    );
-    this.setState({ applicationData });
+    try {
+      const { data: applicationData } = await application.findApplication(
+        this.props.match.params.id
+      );
+      this.setState({ applicationData });
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        window.location = "/not-found";
+        console.log(ex.response);
+      }
+    }
   }
 
   render() {
     const { applicationData } = this.state;
-    console.log(applicationData);
-    if (!applicationData) return <h3>Loading</h3>;
+    if (!applicationData) return null;
     return (
       <div className="d-flex justify-content-center">
         <div className="col-lg-6 col-md-8">
           <h3 className="text-center">
             Application Detail to Room{" "}
-            <a href={"/rooms/" + applicationData.room._id}>
-              {applicationData.room.roomTag}
-            </a>
+            {applicationData.room && (
+              <a href={"/rooms/" + applicationData.room._id}>
+                {applicationData.room.roomTag}
+              </a>
+            )}
           </h3>
           <div
             className="card shadow mt-3 px-5"
@@ -36,13 +44,7 @@ class ApplicationDetail extends Component {
                   <label htmlFor="dateSubmitted">Date Submitted:</label>
                 </div>
                 <div className="col-lg col-md">
-                  <p>
-                    {new Date(applicationData.dateSubmitted).getFullYear() +
-                      "-" +
-                      new Date(applicationData.dateSubmitted).getMonth() +
-                      "-" +
-                      new Date(applicationData.dateSubmitted).getDate()}
-                  </p>
+                  <p>{applicationData.dateSubmitted.substring(0, 10)}</p>
                 </div>
               </div>
 
@@ -127,9 +129,11 @@ class ApplicationDetail extends Component {
 
               <hr />
 
-              <div className="text-right">
-                <button className="btn rento-btn">Edit</button>
-              </div>
+              {applicationData.room && (
+                <div className="text-right">
+                  <button className="btn rento-btn">Edit</button>
+                </div>
+              )}
             </div>
           </div>
         </div>

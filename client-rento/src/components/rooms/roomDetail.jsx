@@ -112,78 +112,88 @@ class RoomDetail extends Component {
                             </Link>
                           </React.Fragment>
                         )) ||
-                          (existingApplication && (
-                            <React.Fragment>
-                              {existingApplication.status !== "Approved" && (
-                                <a
-                                  className="btn btn-primary mr-2"
-                                  href={
-                                    "/MyApplications/" + existingApplication._id
+                          (user &&
+                            user.verified === true &&
+                            ((existingApplication && (
+                              <React.Fragment>
+                                {existingApplication.status !== "Approved" && (
+                                  <a
+                                    className="btn btn-primary mr-2"
+                                    href={
+                                      "/MyApplications/" +
+                                      existingApplication._id
+                                    }
+                                  >
+                                    View Application
+                                  </a>
+                                )}
+
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() =>
+                                    this.handleModalChange(true, "Complaint")
                                   }
                                 >
-                                  View Application
-                                </a>
-                              )}
-
-                              <button
-                                className="btn btn-danger"
-                                onClick={() =>
-                                  this.handleModalChange(true, "Complaint")
-                                }
-                              >
-                                Report
-                              </button>
-                              {user && (
-                                <ComplaintForm
-                                  show={this.state.complaintModalState}
-                                  roomId={room._id}
-                                  handleClose={() =>
-                                    this.handleModalChange(false, "Complaint")
+                                  Report
+                                </button>
+                                {user && (
+                                  <ComplaintForm
+                                    show={this.state.complaintModalState}
+                                    roomId={room._id}
+                                    handleClose={() =>
+                                      this.handleModalChange(false, "Complaint")
+                                    }
+                                  />
+                                )}
+                              </React.Fragment>
+                            )) || (
+                              <React.Fragment>
+                                <button
+                                  className="btn btn-primary mr-2"
+                                  onClick={() =>
+                                    this.handleModalChange(true, "Application")
                                   }
-                                />
-                              )}
-                            </React.Fragment>
-                          )) || (
-                            <React.Fragment>
-                              <button
-                                className="btn btn-primary mr-2"
-                                onClick={() =>
-                                  this.handleModalChange(true, "Application")
-                                }
-                              >
-                                Apply
-                                {this.state.existingApplication &&
-                                  this.state.existingApplication._id}
-                              </button>
+                                >
+                                  Apply
+                                  {this.state.existingApplication &&
+                                    this.state.existingApplication._id}
+                                </button>
 
-                              {user && (
-                                <ApplicationForm
-                                  show={this.state.applicationModalState}
-                                  roomId={room._id}
-                                  handleClose={() =>
-                                    this.handleModalChange(false, "Application")
-                                  }
-                                />
-                              )}
+                                {user && (
+                                  <ApplicationForm
+                                    show={this.state.applicationModalState}
+                                    roomId={room._id}
+                                    handleClose={() =>
+                                      this.handleModalChange(
+                                        false,
+                                        "Application"
+                                      )
+                                    }
+                                  />
+                                )}
 
-                              <button
-                                className="btn btn-danger"
-                                onClick={() =>
-                                  this.handleModalChange(true, "Complaint")
-                                }
-                              >
-                                Report
-                              </button>
-                              {user && (
-                                <ComplaintForm
-                                  show={this.state.complaintModalState}
-                                  roomId={room._id}
-                                  handleClose={() =>
-                                    this.handleModalChange(false, "Complaint")
+                                <button
+                                  className="btn btn-danger"
+                                  onClick={() =>
+                                    this.handleModalChange(true, "Complaint")
                                   }
-                                />
-                              )}
-                            </React.Fragment>
+                                >
+                                  Report
+                                </button>
+                                {user && (
+                                  <ComplaintForm
+                                    show={this.state.complaintModalState}
+                                    roomId={room._id}
+                                    handleClose={() =>
+                                      this.handleModalChange(false, "Complaint")
+                                    }
+                                  />
+                                )}
+                              </React.Fragment>
+                            ))) || (
+                            <div className="text-danger alert-danger p-2">
+                              Please Verify Identity to Apply/Report
+                            </div>
                           )}
                       </div>
                     )}
@@ -191,7 +201,9 @@ class RoomDetail extends Component {
 
                   <div
                     className="col-lg-8 col-md-8"
-                    style={{ overflowWrap: "break-word" }}
+                    style={{
+                      overflowWrap: "break-word",
+                    }}
                   >
                     <h1>Overview</h1>
                     {room.description}

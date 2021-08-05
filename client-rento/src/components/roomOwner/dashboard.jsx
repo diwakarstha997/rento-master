@@ -6,6 +6,7 @@ import rooms from "../../services/roomService";
 // import { getRoomsByUser } from "../../services/roomService";
 import RoomTable from "./rooms/roomsTable";
 import Message from "../admin/dashboard/message";
+import { getCurrentUser } from "./../../services/authService";
 
 class Dashboard extends Component {
   state = {
@@ -50,12 +51,20 @@ class Dashboard extends Component {
 
   onPublish = async (v) => {
     try {
-      const { status, data } = await rooms.publishRoom(v);
+      const user = await getCurrentUser();
+      if (user.verified === true) {
+        const { status, data } = await rooms.publishRoom(v);
 
-      const { data: userRooms } = await rooms.getRoomsByUser();
-      this.setState({ rooms: userRooms });
+        const { data: userRooms } = await rooms.getRoomsByUser();
+        this.setState({ rooms: userRooms });
 
-      this.setState({ message: data, status });
+        this.setState({ message: data, status });
+      } else {
+        this.setState({
+          message: "Please Verify Identity to Publish Room",
+          status: 202,
+        });
+      }
     } catch (ex) {}
   };
 

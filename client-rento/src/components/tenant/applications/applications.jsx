@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import ApplicationTable from "./applicationsTable";
 import { getTenantApplications } from "./../../../services/applicationService";
+import { getCurrentUser } from "./../../../services/authService";
 
 class Applications extends Component {
   state = {
@@ -21,9 +22,12 @@ class Applications extends Component {
   };
 
   async componentDidMount() {
-    const { data: applications } = await getTenantApplications();
-    console.log(applications);
-    this.setState({ applications });
+    const user = getCurrentUser();
+    if (user.verified === true) {
+      const { data: applications } = await getTenantApplications();
+      console.log(applications);
+      this.setState({ applications });
+    }
   }
 
   render() {
