@@ -138,20 +138,20 @@ module.exports = {
       _id: req.body.id,
     });
     if (!user) return res.status(400).send("Invalid Email/ Password!!");
+
     const validPassword = await bcrypt.compare(
       req.body.password,
       user.password
     );
-    if (!validPassword)
-      return res.status(400).send("Invalid Email/ Password!!");
+    if (!validPassword) return res.status(401).send("Incorrect Old Password");
 
     if (req.body.password1 === req.body.password)
       return res
         .status(400)
-        .send("Old Password cannot be same as new Password");
+        .send("New Password cannot be same as old Password");
 
     if (req.body.password1 !== req.body.password2)
-      return res.status(400).send("Passwords Dont Match");
+      return res.status(400).send("Passwords Doesnot Match");
 
     user.set({
       password: req.body.password1,

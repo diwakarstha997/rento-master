@@ -88,7 +88,6 @@ class Form extends Component {
 
   renderInput(name, label, type = "text", autoFocus = "") {
     const { data, errors } = this.state;
-    console.log(name);
 
     return (
       <Input

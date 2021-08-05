@@ -58,7 +58,7 @@ class Login extends Form {
       this.componentDidMount();
     return (
       <div className="py-5" style={{ backgroundColor: "#e9ecef" }}>
-        <div className="py-3 mx-auto justify-content-center bg-light col-xl-3 col-lg-4 col-md-5 col-sm-6 col-12">
+        <div className="shadow py-3 mx-auto justify-content-center bg-light col-xl-3 col-lg-4 col-md-5 col-sm-6 col-12">
           <div className="my-5 mx-xl-5 mx-lg-3 mx-md-3 mx-2">
             <i className="fa fa-lock d-flex justify-content-center m-auto fa-3x mt-4 rento-text text-center"></i>
             {this.props.location.state && (

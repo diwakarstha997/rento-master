@@ -101,7 +101,7 @@ class Register extends Form {
   render() {
     return (
       <div className="py-5" style={{ backgroundColor: "#e9ecef" }}>
-        <div className="py-3 mx-auto justify-content-center bg-light col-xl-5 col-lg-6 col-md-7 col-sm-8 col-12">
+        <div className="shadow py-3 mx-auto justify-content-center bg-light col-xl-5 col-lg-6 col-md-7 col-sm-8 col-12">
           <div className="my-5 mx-xl-5 mx-lg-3 mx-md-3 mx-2">
             <div className="mt-3">
               <h5 className="text-center">
