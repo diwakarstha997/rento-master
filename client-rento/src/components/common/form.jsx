@@ -163,6 +163,22 @@ class Form extends Component {
       </button>
     );
   }
+  renderDisabledInput(name, label, type = "text", autoFocus = "") {
+    const { data, errors } = this.state;
+
+    return (
+      <Input
+        type={type}
+        name={name}
+        label={label}
+        value={data[name]}
+        onChange={this.handleChange}
+        error={errors[name]}
+        autoFocus={autoFocus}
+        disabled
+      />
+    );
+  }
 }
 
 export default Form;

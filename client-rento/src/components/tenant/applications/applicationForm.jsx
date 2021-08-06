@@ -78,11 +78,7 @@ class ApplicationForm extends Forms {
             <Modal.Title>Room Application Form</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {this.renderSelect("occupation", "Occupation", [
-              { _id: "", name: "", default: "Select Occupation" },
-              { _id: 1, name: "Accountant" },
-              { _id: 2, name: "Student" },
-            ])}
+            {this.renderInput("occupation", "Occupation")}
             {this.renderNumberInput("monthlyIncome", "Monthly Income")}
             {this.renderNumberInput(
               "emergencyContact",

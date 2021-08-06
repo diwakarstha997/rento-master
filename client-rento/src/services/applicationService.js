@@ -25,10 +25,46 @@ export function findApplication(applicationId) {
   return http.get(apiEndpoint + "/application/" + applicationId);
 }
 
+export function cancelApplication(applicationId) {
+  return http.put(apiEndpoint + "/cancel/" + applicationId);
+}
+
+export function editApplication(
+  applicationId,
+  occupation,
+  monthlyIncome,
+  emergencyContact,
+  previousLocation,
+  reasonToLeavePreviousLocation,
+  additionalComments
+) {
+  return http.put(apiEndpoint + "/edit/" + applicationId, {
+    occupation,
+    monthlyIncome,
+    emergencyContact,
+    previousLocation,
+    reasonToLeavePreviousLocation,
+    additionalComments,
+  });
+}
+
+export function applicationApprove(applicationId) {
+  return http.put(apiEndpoint + "/approve/" + applicationId);
+}
+
+export function applicationReject(applicationId) {
+  return http.put(apiEndpoint + "/reject/" + applicationId);
+}
+
 const application = {
   save,
   checkExistingApplication,
   findApplication,
+  editApplication,
+  getTenantApplications,
+  cancelApplication,
+  applicationApprove,
+  applicationReject,
 };
 
 export default application;

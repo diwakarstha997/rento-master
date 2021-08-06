@@ -29,6 +29,8 @@ class RoomDetail extends Component {
       if (ex.response && ex.response.status === 404)
         window.location = "/not-found";
     }
+    const user = auth.getCurrentUser();
+    console.log(user);
   }
 
   checkExistingApplication = async () => {

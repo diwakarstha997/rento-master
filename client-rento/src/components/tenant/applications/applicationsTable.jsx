@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import ConfirmDelete from "../../common/confirmDelete";
 import Table from "../../common/table";
+import Contact from "../modal/contact";
+import EditModal from "../modal/editModal";
 
 class ApplicationTable extends Component {
   columns = [
@@ -48,18 +51,24 @@ class ApplicationTable extends Component {
       content: (application) => (
         <React.Fragment>
           <div className="text-center">
-            <button
-              onClick={() => this.props.onDelete(application._id)}
-              className="btn btn-primary btn-sm"
-            >
-              Edit
-            </button>
-            <button
-              onClick={() => this.props.onDelete(application._id)}
-              className="btn btn-danger btn-sm ml-2"
-            >
-              Cancel
-            </button>
+            {application.contactNo && (
+              <Contact contact={application.contactNo} />
+            )}
+            <EditModal
+              edit={application}
+              lable={application.status}
+              tab={this.props.tab}
+              handleMessage={this.props.handleMessage}
+            />
+            {application.status === "Submitted" ? (
+              <ConfirmDelete
+                cancel={"cancel"}
+                onClick={this.props.handleCancel}
+                value={application._id}
+              />
+            ) : (
+              ""
+            )}
           </div>
         </React.Fragment>
       ),
@@ -75,7 +84,6 @@ class ApplicationTable extends Component {
 
   render() {
     const { applications, sortColumn, onSort } = this.props;
-    console.log(applications);
     return (
       <Table
         columns={this.columns}

@@ -15,13 +15,14 @@ const applicationSchema = new mongoose.Schema({
   status: {
     type: String,
     required: true,
-    enum: ["Submitted", "Approved", "Rejected"],
+    enum: ["Submitted", "Approved", "Rejected", "Cancelled"],
     default: "Submitted",
   },
   dateSubmitted: {
     type: Date,
     default: new Date().toISOString().slice(0, 10),
   },
+  contactNo: Number,
 });
 
 const Application = mongoose.model("Application", applicationSchema);

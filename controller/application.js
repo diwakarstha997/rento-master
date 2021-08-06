@@ -1,5 +1,6 @@
 const { Application, validateApplication } = require("../models/application");
 const { Room } = require("../models/room");
+const { User } = require("../models/user");
 
 module.exports = {
   insert: async (req, res) => {
@@ -107,6 +108,7 @@ module.exports = {
   findRoomOwnerApplications: async (req, res) => {
     const applications = await Application.find({
       roomOwner: req.user._id,
+      status: { $ne: "Cancelled" },
     })
       .sort("-dateSubmitted")
       .populate("room")
@@ -129,6 +131,78 @@ module.exports = {
 
     await Application.updateMany({ _id: req.body.id }, data);
     res.send("application updated successfully");
+  },
+  edit: async (req, res) => {
+    const { error } = validateApplication(req.body);
+    if (!error) return res.status(400).send("Invalid Data");
+
+    const application = await Application.findOne({
+      _id: req.params.id,
+    });
+
+    application.set({
+      status: "Submitted",
+      occupation: req.body.occupation,
+      monthlyIncome: req.body.monthlyIncome,
+      emergencyContact: req.body.emergencyContact,
+      previousLocation: req.body.previousLocation,
+      reasonToLeavePreviousLocation: req.body.reasonToLeavePreviousLocation,
+      additionalComments: req.body.additionalComments,
+    });
+
+    await application.save();
+
+    res.status(200).send("Application was editted");
+  },
+
+  cancel: async (req, res) => {
+    const application = await Application.findOne({
+      _id: req.params.id,
+    });
+
+    application.set({
+      status: "Cancelled",
+    });
+
+    await application.save();
+
+    res
+      .status(200)
+      .send(application.applicationTag + " Application was cancelled");
+  },
+  reject: async (req, res) => {
+    const application = await Application.findOne({
+      _id: req.params.id,
+    });
+
+    application.set({
+      status: "Rejected",
+    });
+
+    await application.save();
+
+    res
+      .status(200)
+      .send(application.applicationTag + " Application was Rejected");
+  },
+
+  approve: async (req, res) => {
+    const application = await Application.findOne({
+      _id: req.params.id,
+    });
+
+    const user = await User.findOne({ _id: application.roomOwner });
+    if (!user) res.send("505");
+    console.log(user.name, user.phone);
+    application.set({
+      status: "Approved",
+      contactNo: user.phone,
+    });
+    await application.save();
+
+    res
+      .status(200)
+      .send(application.applicationTag + " Application was Approved");
   },
   //   findByUser: "finds user specific application",
   //   findByRoom: "finds all application",
