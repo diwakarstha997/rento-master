@@ -1,6 +1,5 @@
 import React from "react";
 import { Carousel } from "react-bootstrap";
-import img from "../../assets/images/rento-resize.png";
 
 const ModifiedCarousel = ({ items }) => {
   return (

@@ -3,6 +3,11 @@ const upload = require("../middleware/upload");
 const _ = require("lodash");
 const { User } = require("../models/user");
 
+const fs = require("fs");
+const { promisify } = require("util");
+
+const unlinkAsync = promisify(fs.unlink);
+
 module.exports = {
   insert: async (req, res) => {
     // await upload(req, res);
@@ -56,11 +61,55 @@ module.exports = {
     res.send(rooms);
   },
 
-  findById: async (req, res) => {
+  optionalUpload: async (req, res) => {
+    await upload(req, res);
+    const room = await Room.findById(req.params.id);
+    if (!room) return res.status(404).send("File not Found");
+
+    let path = [...room.image];
+    req.files.forEach((item) => path.push(req.customPath + item.filename));
+    room.set({
+      image: path,
+    });
+    const roomData = await room.save();
+
+    res.send(roomData);
+  },
+
+  optionalDelete: async (req, res) => {
+    const room = await Room.findById(req.params.id);
+    if (!room) return res.status(404).send("File not Found");
+
+    const imageToDelete = room.image.filter(
+      (img) => img === req.body.imagePath
+    );
+    if (!imageToDelete) return res.status(400).send("Invalid Request");
+
+    if (req.body.imagePath)
+      await unlinkAsync("client-rento/public/" + req.body.imagePath);
+
+    let images = room.image.filter((img) => img !== req.body.imagePath);
+
+    room.set({
+      image: images,
+    });
+    const roomData = await room.save();
+
+    res.send(roomData);
+  },
+
+  findByIdForTenant: async (req, res) => {
     const room = await Room.findById(req.params.id);
     if (!room) return res.status(404).send("File not Found");
 
     if (room.status !== "Active") return res.status(404).send("File not Found");
+
+    res.send(room);
+  },
+
+  findByIdForRoomOwner: async (req, res) => {
+    const room = await Room.findOne({ _id: req.params.id, user: req.user._id });
+    if (!room) return res.status(404).send("File not Found");
 
     res.send(room);
   },

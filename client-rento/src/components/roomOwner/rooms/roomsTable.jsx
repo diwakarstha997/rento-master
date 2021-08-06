@@ -2,9 +2,27 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Table from "../../common/table";
 import ConfirmDelete from "../../common/confirmDelete";
+// import EditRoom from "../modal/editRoomModal";
 import EditRoom from "../modal/editRoomModal";
 
 class RoomTable extends Component {
+  state = {
+    path: "",
+    editModalState: false,
+  };
+
+  handleModalChange = (state, path = "") => {
+    if (!state) {
+      this.setState({ path, editModalState: false });
+    } else {
+      this.setState({ path, editModalState: true });
+    }
+  };
+
+  handleEditClick = (room) => {
+    this.setState({ room });
+    this.handleModalChange(true);
+  };
   columns = [
     {
       path: "roomNumber",
@@ -23,7 +41,22 @@ class RoomTable extends Component {
       content: (room) => (
         <React.Fragment>
           <div className="text-center">
-            <EditRoom edit={room} handleMessage={this.props.handleMessage} />
+            <i
+              className="fa fa-pencil-square-o pt-2 btn btn-primary"
+              style={{
+                cursor: "pointer",
+              }}
+              onClick={() => this.handleModalChange(true, room._id)}
+            >
+              {" "}
+              Edit
+            </i>
+            <EditRoom
+              data={room}
+              show={this.state.editModalState && this.state.path === room._id}
+              handleClose={() => this.handleModalChange(false)}
+            />
+            {/* <EditRoom edit={room} /> */}
             <ConfirmDelete
               value={room._id}
               onClick={this.props.doDelete}
@@ -61,12 +94,21 @@ class RoomTable extends Component {
     const { rooms, sortColumn, onSort } = this.props;
     console.log(rooms);
     return (
-      <Table
-        columns={this.columns}
-        data={rooms}
-        sortColumn={sortColumn}
-        onSort={onSort}
-      />
+      <React.Fragment>
+        <Table
+          columns={this.columns}
+          data={rooms}
+          sortColumn={sortColumn}
+          onSort={onSort}
+        />
+        {/* {this.state.editModalState && (
+          <EditRoom
+            data={this.state.room}
+            show={this.state.editModalState}
+            handleClose={() => this.handleModalChange(false)}
+          />
+        )} */}
+      </React.Fragment>
     );
   }
 }

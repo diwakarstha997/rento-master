@@ -11,14 +11,21 @@ const router = express.Router();
 router.get("/", Room.read);
 router.get("/getTotal", Room.getTotalRoom);
 router.get("/createdToday", Room.roomCreatedToday);
-router.get("/:id", Room.findById);
+router.get("/:id", Room.findByIdForTenant);
 router.get("/roomowner/myrooms", [auth], Room.findByUser);
+router.get("/RoomOwner/:id", [auth], Room.findByIdForRoomOwner);
 
 router.post(
   "/image/upload",
   [auth, setImagePath("user_assets/room/")],
   Image.upload
 );
+router.post(
+  "/image/optionalUpload/:id",
+  [auth, setImagePath("user_assets/room/")],
+  Room.optionalUpload
+);
+router.post("/image/optionalDelete/:id", [auth], Room.optionalDelete);
 router.post("/", [auth], Room.insert);
 
 router.post("/status", [auth], Room.updatePublishStatus);

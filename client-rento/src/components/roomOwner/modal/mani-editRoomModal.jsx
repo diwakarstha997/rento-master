@@ -8,6 +8,7 @@ import rooms from "../../../services/roomService";
 
 class EditRoom extends Forms {
   state = {
+    show: false,
     data: {
       city: "",
       wardNumber: "",
@@ -21,6 +22,12 @@ class EditRoom extends Forms {
     cities: [],
     facilities: [],
   };
+  async componentDidMount() {
+    const { data } = await getCities();
+    const { data: facilities } = await getFacilities();
+    const cities = [{ _id: "", name: "", default: "Select City" }, ...data];
+    this.setState({ cities, facilities });
+  }
 
   schema = {
     city: Joi.string().required().label("City"),
@@ -71,28 +78,6 @@ class EditRoom extends Forms {
     return error;
   };
 
-  async componentDidMount() {
-    const { data } = await getCities();
-    const { data: facilities } = await getFacilities();
-    const cities = [{ _id: "", name: "", default: "Select City" }, ...data];
-    if (!this.populateRoom()) this.props.handleClose();
-    this.setState({ cities, facilities });
-  }
-
-  populateRoom = () => {
-    const { data: roomData } = this.props;
-    if (!roomData) return false;
-    const data = { ...this.state.data };
-    data.city = roomData.city;
-    data.wardNumber = roomData.wardNumber;
-    data.location = roomData.location;
-    data.facility = roomData.facility;
-    data.monthlyRent = roomData.monthlyRent;
-    data.squareFeet = roomData.squareFeet;
-    data.description = roomData.description;
-    this.setState({ data });
-  };
-
   handleFacilityClick = (e) => {
     const data = { ...this.state.data };
     const facility = [...data.facility];
@@ -107,6 +92,10 @@ class EditRoom extends Forms {
 
     this.setState({ data });
     console.log(this.state.data.facility);
+
+    // const { facility } = this.state.data;
+
+    // console.log(facility.filter((f) => f === e.currentTarget.value).length);
   };
 
   handleChecked = (e) => {
@@ -118,32 +107,51 @@ class EditRoom extends Forms {
   };
 
   doSubmit = async () => {
-    const { data: roomData } = this.state;
+    const { data: value } = this.state;
+    console.log(this.props.edit._id);
     const data = await rooms.updateRoom(
-      this.props.data._id,
-      roomData.city,
-      roomData.location,
-      roomData.wardNumber,
-      roomData.facility,
-      roomData.monthlyRent,
-      roomData.squareFeet,
-      roomData.description
+      this.props.edit._id,
+      value.city,
+      value.location,
+      value.wardNumber,
+      value.facility,
+      value.monthlyRent,
+      value.squareFeet,
+      value.description
     );
-    // this.props.handleMessage(data);
-    this.props.handleClose();
+    this.props.handleMessage(data);
+    this.setState({ show: false });
   };
 
-  handleModalClose = () => {
-    this.componentDidMount();
-    this.props.handleClose();
+  handleClose = () => this.setState({ show: false });
+
+  handleShow = () => {
+    const { edit } = this.props;
+    let data = this.state.data;
+    data.city = edit.city;
+    data.wardNumber = edit.wardNumber;
+    data.location = edit.location;
+    data.facility = edit.facility;
+    data.monthlyRent = edit.monthlyRent;
+    data.squareFeet = edit.squareFeet;
+    data.description = edit.description;
+    this.setState({ data, show: true });
   };
 
   render() {
-    const { show, handleClose } = this.props;
-    if (!this.state.data) return "";
+    const { show } = this.state;
+
     return (
-      <React.Fragment>
-        <Modal show={show} onHide={this.handleModalClose}>
+      <>
+        <Button
+          type="button"
+          className="btn btn-primary btn-sm"
+          onClick={this.handleShow}
+        >
+          Edit
+        </Button>
+
+        <Modal show={show} onHide={this.handleClose}>
           <Modal.Header closeButton>
             <Modal.Title>Edit Room</Modal.Title>
           </Modal.Header>
@@ -178,19 +186,21 @@ class EditRoom extends Forms {
                   ))}
                 </div>
 
-                <button className="btn rento-btn btn-primary">Save</button>
-                <button
-                  type="button"
-                  className="btn rento-btn-danger btn-danger"
-                  onClick={this.handleModalClose}
-                >
-                  Cancel
-                </button>
+                {this.renderModalButton(
+                  "Edit",
+                  "btn-primary",
+                  this.handleSubmits
+                )}
+                {this.renderModalButton(
+                  "Cancel",
+                  "btn-danger",
+                  this.handleClose
+                )}
               </div>
             </form>
           </Modal.Body>
         </Modal>
-      </React.Fragment>
+      </>
     );
   }
 }

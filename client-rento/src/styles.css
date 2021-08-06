@@ -174,3 +174,11 @@
   cursor: pointer;
   font-size: 20px;
 }
+
+.room-detail-img-add:hover {
+  font-size: 20px;
+}
+
+.room-detail-edit:hover {
+  font-size: 20px;
+}

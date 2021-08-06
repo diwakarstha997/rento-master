@@ -34,7 +34,7 @@ export function roomsCreatedToday() {
 }
 
 export function getOwnerRoomDetail(roomId) {
-  return http.get(apiEndpoint + "/" + roomId);
+  return http.get(apiEndpoint + "/RoomOwner/" + roomId);
 }
 
 export function getTotalRooms() {
@@ -70,6 +70,19 @@ export function updateRoom(
   });
 }
 
+export function optionalImageUpload(images, roomId) {
+  console.log(images);
+  let imagesData = new FormData();
+  images.forEach((item) => imagesData.append("file", item));
+  return http.post(apiEndpoint + "/image/optionalUpload/" + roomId, imagesData);
+}
+
+export function optionalImageDelete(imagePath, roomId) {
+  return http.post(apiEndpoint + "/image/optionalDelete/" + roomId, {
+    imagePath,
+  });
+}
+
 const rooms = {
   getRooms,
   getRoomsByUser,
@@ -80,6 +93,7 @@ const rooms = {
   deleteRoom,
   publishRoom,
   updateRoom,
+  optionalImageUpload,
 };
 
 export default rooms;
