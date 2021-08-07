@@ -46,7 +46,18 @@ class Dashboard extends Component {
       this.setState({ rooms: userRooms });
 
       this.setState({ message: data, status });
-    } catch (ex) {}
+    } catch (ex) {
+      if (ex.response && ex.response.status === 404) {
+        this.setState({ rooms: "" });
+
+        const { data: userRooms } = await rooms.getRoomsByUser();
+        this.setState({ rooms: userRooms });
+        this.setState({
+          message: ex.response.data,
+          status: 202,
+        });
+      }
+    }
   };
 
   onPublish = async (v) => {

@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import Table from "../../common/table";
+import ConfirmDelete from "../../common/confirmDelete";
+import ApproveModal from "../modal/approveModal";
+import ViewApplicationModal from "../modal/viewApplicaion";
 
 class ApplicationTable extends Component {
   columns = [
@@ -35,18 +38,22 @@ class ApplicationTable extends Component {
       content: (application) => (
         <React.Fragment>
           <div className="text-center">
-            <button
-              onClick={() => this.props.onDelete(application._id)}
-              className="btn btn-primary btn-sm"
-            >
-              Approve
-            </button>
-            <button
-              onClick={() => this.props.onDelete(application._id)}
-              className="btn btn-danger btn-sm ml-2"
-            >
-              Reject
-            </button>
+            {application.status === "Submitted" ? (
+              <div>
+                <ViewApplicationModal edit={application} />
+                <ApproveModal
+                  value={application._id}
+                  onClick={this.props.onClick}
+                />
+                <ConfirmDelete
+                  reject={"reject"}
+                  value={application._id}
+                  onClick={this.props.handleReject}
+                />
+              </div>
+            ) : (
+              <ViewApplicationModal edit={application} />
+            )}
           </div>
         </React.Fragment>
       ),

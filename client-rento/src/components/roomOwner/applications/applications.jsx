@@ -1,13 +1,69 @@
 import React, { Component } from "react";
 import ApplicationTable from "./applicationsTable";
 import { getRoomOwnerApplications } from "./../../../services/applicationService";
+import { getCurrentUser } from "./../../../services/authService";
+import application from "./../../../services/applicationService";
 
 class Applications extends Component {
   state = {
+    active: "all",
     applications: [],
+    tableData: [],
     searchQuery: "",
     sortColumn: { path: "applicationNumber", order: "asc" },
+    submitted: "",
+    rejected: "",
+    approved: "",
+    message: "",
   };
+
+  async componentDidMount() {
+    const user = getCurrentUser();
+    if (user.verified === true) {
+      const { data: applications } = await getRoomOwnerApplications();
+      const submitted = applications.filter(
+        (d) => d.status === "Submitted"
+      ).length;
+      const rejected = applications.filter(
+        (d) => d.status === "Rejected"
+      ).length;
+      const approved = applications.filter(
+        (d) => d.status === "Approved"
+      ).length;
+      this.setState({
+        applications,
+        tableData: applications,
+        submitted,
+        rejected,
+        approved,
+      });
+    }
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevState.message !== this.state.message) {
+      const user = getCurrentUser();
+      if (user.verified === true) {
+        const { data: applications } = await getRoomOwnerApplications();
+        const submitted = applications.filter(
+          (d) => d.status === "Submitted"
+        ).length;
+        const rejected = applications.filter(
+          (d) => d.status === "Rejected"
+        ).length;
+        const approved = applications.filter(
+          (d) => d.status === "Approved"
+        ).length;
+        this.setState({
+          applications,
+          tableData: applications,
+          submitted,
+          rejected,
+          approved,
+        });
+      }
+    }
+  }
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
@@ -20,11 +76,47 @@ class Applications extends Component {
     });
   };
 
-  async componentDidMount() {
-    const { data: applications } = await getRoomOwnerApplications();
-    console.log(applications);
-    this.setState({ applications });
-  }
+  handleSelect = (v) => {
+    if (v === "all") {
+      this.setState({ active: v });
+      this.setState({ tableData: this.state.applications });
+    }
+    if (v === "pending") {
+      this.setState({ active: v });
+      let data = this.state.applications;
+      data = data.filter((d) => d.status === "Submitted");
+      this.setState({ tableData: data });
+      console.log(data);
+    }
+    if (v === "approved") {
+      this.setState({ active: v });
+      let data = this.state.applications;
+      data = data.filter((d) => d.status === "Approved");
+      this.setState({ tableData: data });
+      console.log(data);
+    }
+    if (v === "cancel") {
+      this.setState({ active: v });
+      let data = this.state.applications;
+      data = data.filter((d) => d.status === "Rejected");
+      this.setState({ tableData: data });
+      console.log(data);
+    }
+
+    console.log(this.state.active);
+  };
+
+  handleApprove = async (e) => {
+    const { data } = await application.applicationApprove(
+      e.currentTarget.value
+    );
+    this.setState({ message: data });
+  };
+
+  handleReject = async (e) => {
+    const { data } = await application.applicationReject(e.currentTarget.value);
+    this.setState({ message: data });
+  };
 
   render() {
     return (
@@ -42,35 +134,75 @@ class Applications extends Component {
             <div className="my-2 col-lg col-md d-flex justify-content-lg-start justify-content-md-start justify-content-center">
               <ul className="nav" style={{ listStyleType: "none" }}>
                 <li className=" mx-2">
-                  <a className="text-dark" href="/">
-                    All
-                  </a>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    className={
+                      this.state.active === "all"
+                        ? "text-dark font-weight-bold application-button"
+                        : "text-dark application-button"
+                    }
+                    onClick={() => this.handleSelect("all")}
+                  >
+                    All({this.state.applications.length})
+                  </div>
                 </li>
                 <li className="text-dark mx-2">
-                  <a className="text-dark" href="/">
-                    Pending
-                  </a>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    className={
+                      this.state.active === "pending"
+                        ? "text-dark font-weight-bold application-button"
+                        : "text-dark application-button"
+                    }
+                    onClick={() => this.handleSelect("pending")}
+                  >
+                    Pending({this.state.submitted})
+                  </div>
                 </li>
                 <li className="text-dark mx-2">
-                  <a className="text-dark" href="/">
-                    Approved
-                  </a>
+                  <div
+                    style={{ cursor: "pointer" }}
+                    className={
+                      this.state.active === "approved"
+                        ? "text-dark font-weight-bold application-button"
+                        : "text-dark application-button"
+                    }
+                    onClick={() => this.handleSelect("approved")}
+                  >
+                    Approved({this.state.approved})
+                  </div>
+                </li>
+                <li className="text-dark mx-2">
+                  <div
+                    style={{ cursor: "pointer" }}
+                    className={
+                      this.state.active === "cancel"
+                        ? "text-dark font-weight-bold application-button"
+                        : "text-dark application-button"
+                    }
+                    onClick={() => this.handleSelect("cancel")}
+                  >
+                    Canceled/Rejected({this.state.rejected})
+                  </div>
                 </li>
               </ul>
             </div>
           </div>
           <div style={{ margin: "0 5% 0 5%" }}>
-            {(this.state.applications.length === 0 && (
+            {(this.state.tableData.length === 0 && (
               <h5 className="ml-4 mb-5 ">There are no applications to show</h5>
             )) || (
               <React.Fragment>
                 <p className="ml-4 mb-3 ">
-                  Showing {this.state.applications.length} Applications
+                  Showing {this.state.tableData.length} Applications
                 </p>
                 <ApplicationTable
-                  applications={this.state.applications}
+                  applications={this.state.tableData}
                   sortColumn={this.state.sortColumn}
                   onSort={this.handleSort}
+                  onClick={this.handleApprove}
+                  handleReject={this.handleReject}
+                  lable={this.state.active}
                 />
               </React.Fragment>
             )}

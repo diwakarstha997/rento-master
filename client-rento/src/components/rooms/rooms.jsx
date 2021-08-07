@@ -15,6 +15,7 @@ class Rooms extends Component {
     rooms: [],
     searchedLocation: "",
     selectedFacilities: [],
+    maxPrice: 10000000,
     sortColumn: { sortPath: "None", sortOrder: "" },
   };
 
@@ -32,6 +33,10 @@ class Rooms extends Component {
     this.setState({
       searchedLocation: e.currentTarget.value,
     });
+  };
+
+  handlePriceChange = (e) => {
+    this.setState({ maxPrice: e.currentTarget.value });
   };
 
   handleFacilitySelect = (f) => {
@@ -93,17 +98,25 @@ class Rooms extends Component {
         );
   };
 
+  roomPriceFilter = (rooms) => {
+    if (!this.state.maxPrice) this.setState({ maxPrice: 10000000 });
+    return (rooms = rooms.filter(
+      (room) => room.monthlyRent <= this.state.maxPrice
+    ));
+  };
+
   getPageData = () => {
     const locationFilteredRooms = this.roomLocationFilter();
     const facilityFilteredRooms = this.roomFacilityFilter(
       locationFilteredRooms
     );
 
-    const filteredRoom = facilityFilteredRooms;
-    console.log(this.state.sortColumn);
-    console.log(filteredRoom);
+    const priceFilteredRooms = this.roomPriceFilter(facilityFilteredRooms);
+
+    const filteredRoom = priceFilteredRooms;
+    console.log(priceFilteredRooms);
     const sorted = _.orderBy(
-      facilityFilteredRooms,
+      filteredRoom,
       [this.state.sortColumn.sortPath],
       [this.state.sortColumn.sortOrder]
     );
@@ -142,7 +155,9 @@ class Rooms extends Component {
           <div className="filter-box col-lg-2 mb-3">
             <Filter
               items={this.state.facilities}
+              maxPrice={this.state.maxPrice}
               handleSelect={this.handleFacilitySelect}
+              handlePriceChange={this.handlePriceChange}
             />
           </div>
           <div className="room-box col-lg-8 mb-3">

@@ -2,6 +2,7 @@ const { Room, validateRoom } = require("../models/room");
 const upload = require("../middleware/upload");
 const _ = require("lodash");
 const { User } = require("../models/user");
+const { Application } = require("../models/application");
 
 const fs = require("fs");
 const { promisify } = require("util");
@@ -146,6 +147,13 @@ module.exports = {
     //delete rooms
     const room = await Room.findById({ _id: req.params.id });
     if (!room) return res.status(404).send("Room Already Deleted");
+
+    const approvedApplication = await Application.findOne({
+      room: room._id,
+      // status: "Approved",
+    });
+    if (approvedApplication)
+      return res.status(404).send("Room with applications can't be deleted ");
 
     // const result = await Room.findByIdAndDelete({ _id: req.params.id });
     room.delete();

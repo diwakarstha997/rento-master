@@ -15,4 +15,9 @@ router.get("/room/:id", auth, Application.findByRoomId);
 router.get("/application/:id", auth, Application.findByApplicationId);
 router.post("/status", Application.changeStatus);
 
+router.put("/edit/:id", auth, Application.edit);
+router.put("/cancel/:id", auth, Application.cancel);
+router.put("/reject/:id", auth, Application.reject);
+router.put("/approve/:id", auth, Application.approve);
+
 module.exports = router;

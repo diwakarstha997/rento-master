@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Modal } from "react-bootstrap";
 
-class ConfirmDelete extends Component {
+class ApproveModal extends Component {
   state = {
     show: false,
   };
@@ -15,44 +15,30 @@ class ConfirmDelete extends Component {
       <React.Fragment>
         <Button
           type="button"
-          className={
-            this.props.className
-              ? this.props.className
-              : " btn-danger btn-sm ml-2 "
-          }
+          className=" btn-success  btn-sm ml-2"
           onClick={this.handleShow}
         >
-          {this.props.reject
-            ? "Reject"
-            : this.props.cancel
-            ? "Cancel"
-            : "Delete"}
+          Approve
         </Button>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>
-              Confirm{" "}
-              {this.props.reject
-                ? "Reject"
-                : this.props.cancel
-                ? "Cancel"
-                : "Delete"}{" "}
-              ?
-            </Modal.Title>
+            <Modal.Title>Confirm Approve ? </Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            <p className="text-danger">
+              Are you sure you wint to approve this appilcation
+            </p>
+            <p className="text-danger">
+              Your contact details will be shared with tennant
+            </p>
             <Button
               type="button"
               className="btn-sm btn-danger  mx-2 "
               value={this.props.value}
               onClick={this.props.onClick}
             >
-              {this.props.reject
-                ? "Reject"
-                : this.props.cancel
-                ? "Cancel"
-                : "Delete"}
+              Approve
             </Button>
             <Button
               type="button"
@@ -68,4 +54,4 @@ class ConfirmDelete extends Component {
   }
 }
 
-export default ConfirmDelete;
+export default ApproveModal;
