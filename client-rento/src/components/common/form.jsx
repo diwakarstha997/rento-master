@@ -22,6 +22,8 @@ class Form extends Component {
 
     if (!error) return null;
 
+    console.log(error);
+
     const errors = {};
 
     for (let item of error.details) {
@@ -131,7 +133,7 @@ class Form extends Component {
     );
   }
 
-  renderSelect(name, label, options) {
+  renderSelect(name, label, options, handleSelect = "") {
     const { data, errors } = this.state;
 
     return (
@@ -142,6 +144,7 @@ class Form extends Component {
         value={data[name]}
         onChange={this.handleChange}
         error={errors[name]}
+        handleSelect={handleSelect}
       />
     );
   }

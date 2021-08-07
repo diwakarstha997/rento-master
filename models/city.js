@@ -9,6 +9,12 @@ const citySchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  map: {
+    lng: String,
+    lat: String,
+    zoom: String,
+    marker: Array,
+  },
 });
 
 const City = mongoose.model("City", citySchema);

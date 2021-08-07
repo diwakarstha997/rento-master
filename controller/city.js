@@ -5,6 +5,12 @@ module.exports = {
     const city = new City({
       name: req.body.name,
       totalWard: req.body.totalWard,
+      map: {
+        lng: req.body.lng,
+        lat: req.body.lat,
+        zoom: req.body.zoom,
+        marker: req.body.marker,
+      },
     });
     await city.save();
     res.send(city.name + " has beed sucessfully added");

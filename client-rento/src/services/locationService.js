@@ -6,8 +6,15 @@ export function getCities() {
   return http.get(apiEndpoint);
 }
 
-export function addCity(name, totalWard) {
-  return http.post(apiEndpoint + "/add", { name, totalWard });
+export function addCity(name, totalWard, lng, lat, zoom, marker) {
+  return http.post(apiEndpoint + "/add", {
+    name,
+    totalWard,
+    lng,
+    lat,
+    zoom,
+    marker,
+  });
 }
 
 export function editCity(id, name, totalWard) {

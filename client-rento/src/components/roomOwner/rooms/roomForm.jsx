@@ -6,6 +6,7 @@ import { saveRoom } from "../../../services/roomService";
 // import { getAllLocations } from "../../../services/location";
 // import { getAllFacilities } from "../../../services/facility";
 import Form from "../../common/form";
+import Map from "../../common/map";
 // import Input from "./../../common/input";
 
 class RoomForm extends Form {
@@ -14,6 +15,12 @@ class RoomForm extends Form {
     facilities: [],
     dataChildRef: {
       city: "wardNumber",
+    },
+    mapData: {
+      lng: 83.8532,
+      lat: 28.5168,
+      zoom: 5.93,
+      marker: "",
     },
     data: {
       city: "",
@@ -25,6 +32,10 @@ class RoomForm extends Form {
       squareFeet: "",
       description: "",
       image: [],
+      lat: "",
+      lng: "",
+      zoom: "",
+      marker: "",
       imagePath: [],
     },
     errors: {},
@@ -33,7 +44,15 @@ class RoomForm extends Form {
   async componentDidMount() {
     const { data } = await getCities();
     const { data: facilities } = await getFacilities();
-    const cities = [{ _id: "", name: "", default: "Select City" }, ...data];
+    const cities = [
+      {
+        _id: "",
+        name: "",
+        default: "Select City",
+        map: { lng: 83.8532, lat: 28.5168, zoom: 5.93 },
+      },
+      ...data,
+    ];
     this.setState({ cities, facilities });
   }
 
@@ -55,6 +74,10 @@ class RoomForm extends Form {
       .label("Square Feet"),
     description: Joi.string().max(500).required().label("Description"),
     image: Joi.label("Image"),
+    lat: Joi.string().required().label("Map"),
+    lng: Joi.string().required().label("Map"),
+    zoom: Joi.string().required().label("Map"),
+    marker: Joi.array().required().label("Map"),
     imagePath: Joi,
   };
 
@@ -176,13 +199,47 @@ class RoomForm extends Form {
     this.setState({ data, errors });
   };
 
+  handleSelect = () => {
+    const location = this.state.cities.filter(
+      (city) => city.name === this.state.data.city
+    );
+    console.log(location);
+    const mapData = { ...this.state.mapData };
+    mapData.lng = location[0]["map"].lng;
+    mapData.lat = location[0]["map"].lat;
+    mapData.zoom = location[0]["map"].zoom;
+    mapData.marker = "";
+
+    this.setState({ mapData });
+    this.setState({ mapRender: true });
+  };
+
+  handleMapClick = (lng, lat, zoom, marker) => {
+    console.log(lng, lat, zoom, marker);
+    const { data } = this.state;
+    data.lng = lng;
+    data.lat = lat;
+    data.zoom = zoom;
+    data.marker = [marker.lng, marker.lat];
+    this.setState({ data });
+  };
+
+  handleRenderControl = () => {
+    this.setState({ mapRender: false });
+  };
+
   render() {
     return (
       <React.Fragment>
         <div className="py-5" style={{ backgroundColor: "#e9ecef" }}>
           <form onSubmit={this.handleSubmit} encType="multipart/form-data">
             <div style={{ margin: "0 5% 0 5%" }}>
-              {this.renderSelect("city", "City", this.state.cities)}
+              {this.renderSelect(
+                "city",
+                "City",
+                this.state.cities,
+                this.handleSelect
+              )}
               {this.renderNumberInput(
                 "wardNumber",
                 "Ward No.",
@@ -268,6 +325,19 @@ class RoomForm extends Form {
                   </div>
                 ))}
               </div>
+              <div className="border border-dark">
+                <Map
+                  mapData={this.state.mapData}
+                  handleMapData={this.handleMapClick}
+                  renderControl={this.state.mapRender}
+                  handleRenderControl={this.handleRenderControl}
+                />
+              </div>
+              {this.state.errors.lat && (
+                <div className="alert alert-danger">
+                  {this.state.errors.lat}
+                </div>
+              )}
 
               <button className="btn rento-btn btn-primary">Save</button>
               <button

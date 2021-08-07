@@ -7,6 +7,7 @@ import rooms from "../../../services/roomService";
 import { getCurrentUser } from "./../../../services/authService";
 import Message from "../../admin/dashboard/message";
 import EditRoom from "../modal/editRoomModal";
+import Map from "../../common/map";
 
 class OwnerRoomDetail extends Component {
   state = {
@@ -14,14 +15,21 @@ class OwnerRoomDetail extends Component {
     facilities: [],
     message: "",
     editModalState: false,
+    mapData: "",
   };
 
   async componentDidMount() {
     const { data: roomData } = await room.getOwnerRoomDetail(
       this.props.match.params.id
     );
+    const mapData = {
+      lng: roomData.lng,
+      lat: roomData.lat,
+      zoom: roomData.zoom,
+      marker: roomData.marker,
+    };
     const { data: facilities } = await getFacilities();
-    this.setState({ roomData, facilities });
+    this.setState({ mapData, roomData, facilities });
   }
 
   handleImageUpload = async (e) => {
@@ -313,6 +321,9 @@ class OwnerRoomDetail extends Component {
               </div>
             )}
           </div>
+        </div>
+        <div className="border border-dark">
+          <Map mapData={this.state.mapData} editDisabled={true} />
         </div>
       </div>
     );

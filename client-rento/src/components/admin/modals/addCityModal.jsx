@@ -1,7 +1,8 @@
 import { Button, Modal } from "react-bootstrap";
 import Forms from "../../common/form";
-import Joi from "joi-browser";
+import Joi, { errors } from "joi-browser";
 import city from "../../../services/locationService";
+import Map from "../../common/map";
 
 class AddCityModal extends Forms {
   state = {
@@ -9,6 +10,10 @@ class AddCityModal extends Forms {
     data: {
       name: "",
       totalWard: "",
+      lat: "",
+      lng: "",
+      zoom: "",
+      marker: "",
     },
     errors: {},
   };
@@ -20,12 +25,24 @@ class AddCityModal extends Forms {
       .max(200)
       .required()
       .label("TotalWard"),
+    lat: Joi.string().required().label("Map"),
+    lng: Joi.string().required().label("Map"),
+    zoom: Joi.string().required().label("Map"),
+    marker: Joi.array().required().label("Map"),
   };
 
   doSubmit = async () => {
     try {
       const { data } = this.state;
-      const message = await city.addCity(data.name, data.totalWard);
+      console.log(data);
+      const message = await city.addCity(
+        data.name,
+        data.totalWard,
+        data.lng,
+        data.lat,
+        data.zoom,
+        data.marker
+      );
       this.props.message(message.data);
       this.props.status(200);
       this.setState({ show: false });
@@ -34,6 +51,10 @@ class AddCityModal extends Forms {
         let data = Object.assign({}, prevState.data);
         data.name = "";
         data.totalWard = "";
+        data.lng = "";
+        data.lat = "";
+        data.zoom = "";
+        data.marker = "";
         return { data };
       });
     } catch (ex) {}
@@ -41,7 +62,19 @@ class AddCityModal extends Forms {
 
   handleClose = () => this.setState({ show: false });
 
-  handleShow = () => this.setState({ show: true });
+  handleShow = () => {
+    this.setState({ show: true });
+  };
+
+  handleMapClick = (lng, lat, zoom, marker) => {
+    console.log(lng, lat, zoom, marker);
+    const { data } = this.state;
+    data.lng = lng;
+    data.lat = lat;
+    data.zoom = zoom;
+    data.marker = [marker.lng, marker.lat];
+    this.setState({ data });
+  };
 
   render() {
     const { show } = this.state;
@@ -64,6 +97,12 @@ class AddCityModal extends Forms {
             <form onSubmit={this.handleSubmit} className="mt-3">
               {this.renderInput("name", "City Name", "text", "autoFocus")}
               {this.renderNumberInput("totalWard", "TotalWard")}
+              <Map handleMapData={this.handleMapClick} />
+              {this.state.errors.lat && (
+                <div className="alert alert-danger">
+                  {this.state.errors.lat}
+                </div>
+              )}
               <div className="text-center">
                 {this.renderModalButton(
                   "Add",
