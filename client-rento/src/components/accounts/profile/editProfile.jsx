@@ -5,6 +5,7 @@ import user from "../../../services/userService";
 
 class EditProfile extends Form {
   state = {
+    message: "",
     data: {
       name: "",
       email: "",
@@ -41,32 +42,48 @@ class EditProfile extends Form {
       console.log(value.data);
       this.props.handleActive("preview");
       this.props.message(value.data);
-    } catch (ex) {}
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        const message = ex.response.data;
+        this.setState({ message });
+      }
+    }
   };
 
   render() {
     return (
-      <div className="d-flex justify-content-center">
-        <div className="col-lg-6 col-md-8">
-          <h3 className="text-center">Edit Profile</h3>
+      <React.Fragment>
+        {
           <div
-            className="card shadow mt-3 px-5"
-            style={{ backgroundColor: "rgb(227, 238, 255)" }}
+            className={`d-flex justify-content-center mx-auto my-3 ${
+              this.state.message && "alert alert-danger"
+            } text-center admin-alert`}
           >
-            <div className="card-body">
-              <form onSubmit={this.handleSubmit}>
-                {this.renderInput("name", "Name")}
-                {this.renderInput("email", "Email")}
-                {this.renderInput("phone", "Phone Number")}
+            {this.state.message}
+          </div>
+        }
+        <div className="d-flex justify-content-center">
+          <div className="col-lg-6 col-md-8">
+            <h3 className="text-center">Edit Profile</h3>
+            <div
+              className="card shadow mt-3 px-5"
+              style={{ backgroundColor: "rgb(227, 238, 255)" }}
+            >
+              <div className="card-body">
+                <form onSubmit={this.handleSubmit}>
+                  {this.renderInput("name", "Name")}
+                  {this.renderInput("email", "Email")}
+                  {this.renderInput("phone", "Phone Number")}
 
-                <div className="text-right">
-                  <button className="btn rento-btn">Save</button>
-                </div>
-              </form>
+                  <div className="text-right">
+                    <button className="btn rento-btn">Save</button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

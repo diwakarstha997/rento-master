@@ -7,15 +7,12 @@ mapboxgl.accessToken =
   "pk.eyJ1IjoiZGl3YWthcnN0aGEiLCJhIjoiY2txOTB1dDV4MDJmZjJ3cXRnYjNxMDdsNiJ9.D3ERSKhFGqa8t0VtnAmc6A";
 
 class Map extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      lng: 83.8532,
-      lat: 28.5168,
-      zoom: 5.93,
-      marker: this.props.mapData ? this.props.mapData.marker : null, //[85.32951549304369, 27.727570745537577],
-    };
-  }
+  state = {
+    lng: 83.8532,
+    lat: 28.5168,
+    zoom: 5.93,
+    marker: this.props.mapData ? this.props.mapData.marker : null, //[85.32951549304369, 27.727570745537577],
+  };
 
   componentDidMount() {
     // const { lng, lat, zoom } = this.state;
@@ -23,10 +20,8 @@ class Map extends Component {
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: this.props.mapData
-        ? [this.props.mapData.lng, this.props.mapData.lat]
-        : [83.8532, 28.5168],
-      zoom: this.props.mapData ? this.props.mapData.zoom : 5.93,
+      center: [this.props.mapData.lng, this.props.mapData.lat],
+      zoom: this.props.mapData.zoom,
       // center: [83.8532, 28.5168],
       // zoom: 5.93,
     });

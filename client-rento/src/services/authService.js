@@ -11,16 +11,17 @@ export async function login(userRole, email, password) {
   email = email.toLowerCase();
 
   //call to server api
-  const { data: jwt } = await http.post(apiEndpoint, {
+  const { data: tokens } = await http.post(apiEndpoint, {
     userRole,
     email,
     password,
   });
 
-  //check if userRole is User
-  const user = jwtDecode(jwt);
-  if (user.role !== "Admin") localStorage.setItem(tokenKey, jwt);
-  else {
+  const user = jwtDecode(tokens.token);
+  if (user.role !== "Admin") {
+    localStorage.setItem(tokenKey, tokens.token);
+    localStorage.setItem("uv_token", tokens.uv_token);
+  } else {
     let err = { response: { status: "", data: "" } };
     err.response.status = 400;
     err.response.data = "Invalid Email/ Password";
@@ -37,8 +38,9 @@ export async function adminLogin(email, password) {
   localStorage.setItem(tokenKey, jwt);
 }
 
-export function loginWithJwt(jwt) {
-  return localStorage.setItem(tokenKey, jwt);
+export function loginWithJwt(jwt, uv_jwt) {
+  localStorage.setItem(tokenKey, jwt);
+  localStorage.setItem("uv_token", uv_jwt);
 }
 
 export function logout() {

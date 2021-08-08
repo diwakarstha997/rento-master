@@ -5,6 +5,7 @@ const setImagePath = require("../middleware/imagePath");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 const validateId = require("../middleware/validateObjectId");
+const checkUserVerification = require("../middleware/checkUserVerification");
 
 const router = express.Router();
 
@@ -28,9 +29,13 @@ router.post(
 router.post("/image/optionalDelete/:id", [auth], Room.optionalDelete);
 router.post("/", [auth], Room.insert);
 
-router.post("/status", [auth], Room.updatePublishStatus);
+// router.post("/status", [auth], Room.updatePublishStatus);
 router.put("/:id", [auth], Room.update);
-router.put("/publishRoom/:id", [auth, validateId], Room.publish);
+router.put(
+  "/publishRoom/:id",
+  [auth, checkUserVerification, validateId],
+  Room.publish
+);
 router.delete("/deleteRoom/:id", [auth, validateId], Room.delete);
 
 module.exports = router;

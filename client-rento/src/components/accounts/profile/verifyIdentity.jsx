@@ -6,6 +6,7 @@ import { documentUpload, getProfileData } from "../../../services/userService";
 class VerifyIdentity extends Form {
   state = {
     databaseImage: "no image",
+    errorMessage: "",
     message: "",
     data: {
       image: "",
@@ -79,9 +80,8 @@ class VerifyIdentity extends Form {
     } catch (ex) {
       console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
-        const errors = { ...this.state.errors };
-        errors.email = ex.response.data;
-        this.setState({ errors });
+        const errorMessage = ex.response.data;
+        this.setState({ errorMessage });
       }
     }
   };
@@ -98,6 +98,13 @@ class VerifyIdentity extends Form {
             {this.state.message}
           </div>
         }
+        {this.state.errorMessage && (
+          <div
+            className={`d-flex justify-content-center mx-auto my-3 alert alert-danger`}
+          >
+            {this.state.errorMessage}
+          </div>
+        )}
         <div className="d-flex justify-content-center">
           <div className="col-lg-6 col-md-8">
             <h3 className="text-center">Verify Identity</h3>

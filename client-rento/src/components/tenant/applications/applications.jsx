@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ApplicationTable from "./applicationsTable";
 import application from "./../../../services/applicationService";
 import { getCurrentUser } from "./../../../services/authService";
+import { getUserVerificationData } from "../../../services/userService";
 
 class Applications extends Component {
   state = {
@@ -33,7 +34,11 @@ class Applications extends Component {
 
   async componentDidMount() {
     const user = getCurrentUser();
-    if (user.verified === true) {
+    let uv_data;
+    if (user) uv_data = getUserVerificationData();
+    console.log(user, uv_data);
+
+    if (uv_data.verified === true) {
       const { data: applications } = await application.getTenantApplications();
       const submitted = applications.filter(
         (d) => d.status === "Submitted"

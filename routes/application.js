@@ -1,11 +1,12 @@
 const express = require("express");
 const Application = require("../controller/application");
 const auth = require("../middleware/auth");
+const checkUserVerification = require("../middleware/checkUserVerification");
 
 const router = express.Router();
 
-router.post("/", auth, Application.insert);
-router.get("/TenantApplications", auth, Application.findTenantApplications);
+router.post("/", [auth, checkUserVerification], Application.insert);
+router.get("/TenantApplications", [auth], Application.findTenantApplications);
 router.get(
   "/RoomOwnerApplications",
   auth,

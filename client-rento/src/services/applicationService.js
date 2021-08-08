@@ -3,8 +3,8 @@ import http from "./httpService";
 const apiEndpoint = "/application";
 
 export function save(data, roomId) {
-  data.roomId = roomId;
-  return http.post(apiEndpoint, data);
+  const formData = { ...data, roomId: roomId };
+  return http.post(apiEndpoint, formData);
 }
 
 export function getTenantApplications() {

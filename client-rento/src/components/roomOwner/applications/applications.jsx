@@ -3,6 +3,7 @@ import ApplicationTable from "./applicationsTable";
 import { getRoomOwnerApplications } from "./../../../services/applicationService";
 import { getCurrentUser } from "./../../../services/authService";
 import application from "./../../../services/applicationService";
+import { getUserVerificationData } from "../../../services/userService";
 
 class Applications extends Component {
   state = {
@@ -19,7 +20,11 @@ class Applications extends Component {
 
   async componentDidMount() {
     const user = getCurrentUser();
-    if (user.verified === true) {
+    let uv_data;
+    if (user) uv_data = getUserVerificationData();
+    console.log(user, uv_data);
+
+    if (uv_data.verified === true) {
       const { data: applications } = await getRoomOwnerApplications();
       const submitted = applications.filter(
         (d) => d.status === "Submitted"
@@ -43,7 +48,11 @@ class Applications extends Component {
   async componentDidUpdate(prevProps, prevState) {
     if (prevState.message !== this.state.message) {
       const user = getCurrentUser();
-      if (user.verified === true) {
+      let uv_data;
+      if (user) uv_data = getUserVerificationData();
+      console.log(user, uv_data);
+
+      if (uv_data.verified === true) {
         const { data: applications } = await getRoomOwnerApplications();
         const submitted = applications.filter(
           (d) => d.status === "Submitted"

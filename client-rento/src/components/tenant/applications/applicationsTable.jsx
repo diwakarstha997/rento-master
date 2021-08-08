@@ -51,8 +51,11 @@ class ApplicationTable extends Component {
       content: (application) => (
         <React.Fragment>
           <div className="text-center">
-            {application.contactNo && (
-              <Contact contact={application.contactNo} />
+            {application.contactNo && application.room && (
+              <Contact
+                contact={application.contactNo}
+                roomId={application.room._id}
+              />
             )}
             <EditModal
               edit={application}

@@ -75,7 +75,7 @@ class Location extends Component {
                     <td>{l.name}</td>
                     <td>{l.totalWard}</td>
                     <td>
-                      <ConfirmDelete value={l._id} onClick={this.doDelete} />
+                      {/* <ConfirmDelete value={l._id} onClick={this.doDelete} /> */}
                       <EditModal
                         edit={l}
                         message={this.setMessage}

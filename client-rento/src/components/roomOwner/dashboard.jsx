@@ -7,6 +7,7 @@ import rooms from "../../services/roomService";
 import RoomTable from "./rooms/roomsTable";
 import Message from "../admin/dashboard/message";
 import { getCurrentUser } from "./../../services/authService";
+import { getUserVerificationData } from "../../services/userService";
 
 class Dashboard extends Component {
   state = {
@@ -63,7 +64,10 @@ class Dashboard extends Component {
   onPublish = async (v) => {
     try {
       const user = await getCurrentUser();
-      if (user.verified === true) {
+      let uv_data;
+      if (user) uv_data = getUserVerificationData();
+      console.log(user, uv_data);
+      if (uv_data.verified === true) {
         const { status, data } = await rooms.publishRoom(v);
 
         const { data: userRooms } = await rooms.getRoomsByUser();

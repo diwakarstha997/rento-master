@@ -15,6 +15,12 @@ router.post(
 
 router.get("/", [auth], User.fetchUserData);
 
+router.get("/activation/:id", User.activateEmail);
+
+router.get("/mailResend", [auth], User.mailResend);
+
+router.get("/checkUserVerification", [auth], User.checkUserVerification);
+
 router.put("/changePassword", User.changePassword);
 router.put("/editProfile", User.editProfileData);
 router.get("/getTotal", [auth], User.getTotalUser);

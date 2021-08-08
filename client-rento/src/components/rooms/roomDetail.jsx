@@ -8,6 +8,7 @@ import ApplicationForm from "../tenant/applications/applicationForm";
 import ComplaintForm from "../tenant/complaints/complaintForm";
 import { Link } from "react-router-dom";
 import { checkExistingApplication } from "../../services/applicationService";
+import { getUserVerificationData } from "../../services/userService";
 
 class RoomDetail extends Component {
   state = {
@@ -53,6 +54,9 @@ class RoomDetail extends Component {
   render() {
     const { room, existingApplication } = this.state;
     const user = auth.getCurrentUser();
+    let uv_data;
+    if (user) uv_data = getUserVerificationData();
+    console.log(user, uv_data);
     if (!room) return <h1 className="text-center">Loading</h1>;
     else
       return (
@@ -113,7 +117,7 @@ class RoomDetail extends Component {
                           </React.Fragment>
                         )) ||
                           (user &&
-                            user.verified === true &&
+                            uv_data.verified === true &&
                             ((existingApplication && (
                               <React.Fragment>
                                 {existingApplication.status !== "Approved" && (

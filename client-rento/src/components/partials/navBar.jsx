@@ -1,11 +1,29 @@
 import React, { Component } from "react";
 import { NavLink, Link } from "react-router-dom";
 import logo from "../../assets/images/rento-resize-2.png";
+import {
+  getUserVerificationData,
+  mailResend,
+} from "../../services/userService";
 import auth from "./../../services/authService";
 
 class NavBar extends Component {
+  state = {
+    message: "",
+  };
+
+  handleMailResend = async () => {
+    const { data } = await mailResend();
+    this.setState({
+      message: data ? "Mail send SuccessFully. Please Check your Mail" : "",
+    });
+  };
+
   render() {
     const user = auth.getCurrentUser();
+    let uv_data;
+    if (user) uv_data = getUserVerificationData();
+    console.log(user, uv_data);
     const userType = this.props.userType;
     return (
       <React.Fragment>
@@ -225,23 +243,46 @@ class NavBar extends Component {
               </nav>
             ))}
         </div>
-        {user && user.userRole !== "Admin" && user.verified === false && (
-          <div className="d-flex justify-content-center mx-auto my-3 alert alert-danger text-center admin-alert">
-            <p className="my-auto">
-              Your identity is not verified. Please{" "}
-              <a
-                className="text-danger"
-                href={
-                  user.userRole === "Tenant"
-                    ? "/profile/verify"
-                    : "/RoomOwner/profile/verify"
-                }
-              >
-                Click here
-              </a>{" "}
-              to verify
-            </p>
-          </div>
+        {user && user.userRole !== "Admin" && (
+          <React.Fragment>
+            {uv_data.isEmailActivated === false &&
+              ((this.state.message && (
+                <div className="d-flex justify-content-center mx-auto my-3 alert alert-success text-center admin-alert">
+                  <p className="my-auto">{this.state.message}</p>
+                </div>
+              )) || (
+                <div className="d-flex justify-content-center mx-auto my-3 alert alert-danger text-center admin-alert">
+                  <p className="my-auto">
+                    Please Activate Your Email Address{" "}
+                    <button
+                      className="btn btn-primary"
+                      onClick={this.handleMailResend}
+                    >
+                      Resend
+                    </button>{" "}
+                    verification
+                  </p>
+                </div>
+              ))}
+            {uv_data.verified === false && (
+              <div className="d-flex justify-content-center mx-auto my-3 alert alert-danger text-center admin-alert">
+                <p className="my-auto">
+                  Your identity is not verified. Please{" "}
+                  <a
+                    className="text-danger"
+                    href={
+                      user.userRole === "Tenant"
+                        ? "/profile/verify"
+                        : "/RoomOwner/profile/verify"
+                    }
+                  >
+                    Click there
+                  </a>{" "}
+                  to verify
+                </p>
+              </div>
+            )}
+          </React.Fragment>
         )}
       </React.Fragment>
     );

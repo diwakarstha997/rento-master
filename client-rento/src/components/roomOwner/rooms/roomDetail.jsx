@@ -8,6 +8,7 @@ import { getCurrentUser } from "./../../../services/authService";
 import Message from "../../admin/dashboard/message";
 import EditRoom from "../modal/editRoomModal";
 import Map from "../../common/map";
+import { getUserVerificationData } from "../../../services/userService";
 
 class OwnerRoomDetail extends Component {
   state = {
@@ -63,7 +64,11 @@ class OwnerRoomDetail extends Component {
   handleOnPublish = async (roomId) => {
     try {
       const user = await getCurrentUser();
-      if (user.verified === true) {
+      let uv_data;
+      if (user) uv_data = getUserVerificationData();
+      console.log(user, uv_data);
+
+      if (uv_data.verified === true) {
         const { status, data } = await rooms.publishRoom(roomId);
 
         const { data: roomData } = await rooms.getOwnerRoomDetail(roomId);

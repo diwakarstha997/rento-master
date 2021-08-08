@@ -7,6 +7,7 @@ import application from "../../../services/applicationService";
 class ApplicationForm extends Forms {
   state = {
     roomId: this.props.roomId,
+    message: "",
     data: {
       occupation: "",
       monthlyIncome: "",
@@ -41,6 +42,23 @@ class ApplicationForm extends Forms {
 
   componentDidMount() {}
 
+  handleModalClose = () => {
+    const data = { ...this.state.data };
+    data.occupation = "";
+    data.monthlyIncome = "";
+    data.emergencyContact = "";
+    data.previousLocation = "";
+    data.reasonToLeavePreviousLocation = "";
+    data.additionalComments = "";
+    this.setState({
+      roomId: this.props.roomId,
+      message: "",
+      data,
+      errors: {},
+    });
+    this.props.handleClose();
+  };
+
   doSubmit = async () => {
     try {
       await application.save(this.state.data, this.state.roomId);
@@ -48,9 +66,8 @@ class ApplicationForm extends Forms {
     } catch (ex) {
       console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
-        const errors = { ...this.state.errors };
-        errors.exception = ex.response.data;
-        this.setState({ errors });
+        const message = ex.response.data;
+        this.setState({ message });
       }
     }
   };
@@ -73,7 +90,7 @@ class ApplicationForm extends Forms {
 
     return (
       <React.Fragment>
-        <Modal show={show} onHide={handleClose}>
+        <Modal show={show} onHide={this.handleModalClose}>
           <Modal.Header closeButton>
             <Modal.Title>Room Application Form</Modal.Title>
           </Modal.Header>
@@ -92,10 +109,8 @@ class ApplicationForm extends Forms {
               "Reason To Leave Previous Location"
             )}
             {this.renderTextArea("additionalComments", "Additional Comments")}
-            {this.state.errors.exception && (
-              <div className="alert alert-danger">
-                {this.state.errors.exception}
-              </div>
+            {this.state.message && (
+              <div className="alert alert-danger">{this.state.message}</div>
             )}
           </Modal.Body>
           <Modal.Footer>
@@ -108,7 +123,7 @@ class ApplicationForm extends Forms {
             <button
               type="button"
               className="btn rento-btn-danger btn-danger"
-              onClick={handleClose}
+              onClick={this.handleModalClose}
             >
               Cancel
             </button>

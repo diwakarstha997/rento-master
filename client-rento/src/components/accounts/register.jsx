@@ -80,8 +80,11 @@ class Register extends Form {
     try {
       const { data } = this.state;
       const response = await userService.register(data);
-      console.log("we are here", response.headers);
-      auth.loginWithJwt(response.headers["x-auth-token"]);
+
+      auth.loginWithJwt(
+        response.headers["x-auth-token"],
+        response.data.uv_token
+      );
 
       let dest = "/";
       if (data.userRole === "Tenant") dest = "/";

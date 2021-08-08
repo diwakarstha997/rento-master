@@ -1,4 +1,5 @@
 import http from "./httpService";
+import jwtDecode from "jwt-decode";
 
 const apiEndpoint = "/user";
 
@@ -45,6 +46,28 @@ export function documentUpload(fileData) {
   return http.post(apiEndpoint + "/documentUpload", document);
 }
 
+export function activateEmail(activationToken) {
+  return http.get(apiEndpoint + "/activation/" + activationToken);
+}
+
+export async function checkUserVerification() {
+  const { data: jwt } = await http.get(apiEndpoint + "/checkUserVerification");
+  localStorage.setItem("uv_token", jwt);
+}
+
+export function getUserVerificationData() {
+  try {
+    const jwt = localStorage.getItem("uv_token");
+    return jwtDecode(jwt);
+  } catch (ex) {
+    return null;
+  }
+}
+
+export function mailResend() {
+  return http.get(apiEndpoint + "/mailResend");
+}
+
 const user = {
   register,
   getProfileData,
@@ -52,6 +75,10 @@ const user = {
   usersCreatedToday,
   editProfileData,
   changePassword,
+  activateEmail,
+  checkUserVerification,
+  getUserVerificationData,
+  mailResend,
 };
 
 export default user;

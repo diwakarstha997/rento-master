@@ -22,6 +22,11 @@ import ApplicationDetail from "./components/tenant/applications/applicationDetai
 import AdminDashboard from "./components/admin/adminDashboard";
 import OwnerRoomDetail from "./components/roomOwner/rooms/roomDetail";
 import Profile from "./components/accounts/profile/profile";
+import EmailActivate from "./components/accounts/emailActivate";
+import {
+  checkUserVerification,
+  getUserVerificationData,
+} from "./services/userService";
 
 class App extends Component {
   state = { toggled: true };
@@ -31,9 +36,23 @@ class App extends Component {
     else toggled = false;
     this.setState({ toggled: toggled });
   };
+
+  async componentDidMount() {
+    const user = getCurrentUser();
+    if (user) await checkUserVerification();
+  }
+
+  async componentDidUpdate() {
+    const user = getCurrentUser();
+    if (user) await checkUserVerification();
+  }
+
   render() {
     const user = getCurrentUser();
-    console.log(user);
+    let uv_data;
+    if (user) uv_data = getUserVerificationData();
+    // if (user && !uv_data) Logout("");
+    console.log("token", user, "uv_token", uv_data);
     return (
       <React.Fragment>
         {/* <Switch> */}
@@ -59,6 +78,8 @@ class App extends Component {
 
               <Route path="/admin/login" component={AdminLogin} />
               <Redirect exact from="/admin" to="/admin/login" />
+
+              <Route path="/activation/:id" component={EmailActivate} />
 
               <ProtectedRoute
                 path="/RoomOwner/MyRooms"
@@ -156,7 +177,7 @@ class App extends Component {
                 path="/MyApplications"
                 component={TenantApplications}
               />
-              {user.verified && (
+              {uv_data.verified && (
                 <Route
                   path="/MyApplications/:id"
                   component={ApplicationDetail}
