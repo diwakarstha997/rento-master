@@ -27,6 +27,8 @@ import {
   checkUserVerification,
   getUserVerificationData,
 } from "./services/userService";
+import ForgotPassword from "./components/accounts/forgetPassword";
+import InvalidToken from "./components/accounts/invalidToken";
 
 class App extends Component {
   state = { toggled: true };
@@ -80,6 +82,9 @@ class App extends Component {
               <Redirect exact from="/admin" to="/admin/login" />
 
               <Route path="/activation/:id" component={EmailActivate} />
+
+              <Route path="/forgotPassword/:id" component={ForgotPassword} />
+              <Route path="/not-confirmed" component={InvalidToken} />
 
               <ProtectedRoute
                 path="/RoomOwner/MyRooms"

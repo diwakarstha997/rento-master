@@ -10,7 +10,7 @@ const Select = ({ name, label, options, handleSelect, error, ...rest }) => {
         name={name}
         id={name}
         className="form-control"
-        onClick={() => handleSelect()}
+        onClick={handleSelect}
       >
         {options.map((option) => (
           <option key={option._id} value={option.name}>

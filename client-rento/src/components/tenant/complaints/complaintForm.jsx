@@ -37,6 +37,8 @@ class ComplaintForm extends Forms {
     }
   };
 
+  handleSelect = () => {};
+
   render() {
     const { show, handleClose } = this.props;
     if (!this.state.roomId)

@@ -1,6 +1,10 @@
 const { User, validateRegister, validateLogin } = require("../models/user");
 const upload = require("../middleware/upload");
-const { sendRentoMail, activationMailOption } = require("../middleware/mail");
+const {
+  sendRentoMail,
+  activationMailOption,
+  forgotPasswordMailOption,
+} = require("../middleware/mail");
 const bcrypt = require("bcrypt");
 const _ = require("lodash");
 const jwt = require("jsonwebtoken");
@@ -37,7 +41,7 @@ module.exports = {
     await user.save();
 
     const mailOptions = activationMailOption(user._id, req.body.email);
-    await sendRentoMail(mailOptions);
+    sendRentoMail(mailOptions);
 
     const token = user.generateAuthToken();
 
@@ -113,6 +117,11 @@ module.exports = {
       email: req.body.email,
     });
     if (!user) return res.status(400).send("Invalid Email/ Password!!");
+
+    if (user.passwordResetCode) {
+      user.passwordResetCode = "";
+      user.save();
+    }
 
     const validPassword = await bcrypt.compare(
       req.body.password,
@@ -239,7 +248,7 @@ module.exports = {
     user.save();
 
     const mailOptions = activationMailOption(user._id, req.body.email);
-    await sendRentoMail(mailOptions);
+    sendRentoMail(mailOptions);
     // const value = await User.updateOne(
     //   { _id: req.body.id },
     //   { name: req.body.name, email: req.body.email, phone: req.body.phone }
@@ -276,8 +285,91 @@ module.exports = {
     if (user.isEmailActivated) return res.send("Email Already verified");
 
     const mailOptions = activationMailOption(user._id, user.email);
-    await sendRentoMail(mailOptions);
+    sendRentoMail(mailOptions);
 
     res.send("mail send Successfully");
+  },
+
+  forgotPasswordEmail: async (req, res) => {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) return res.status(404).send("Email doesn't Exist");
+
+    if (user.userRole === "Admin")
+      return res.status(404).send("Email doesn't Exist");
+
+    const secretCode = Math.floor(100000 + Math.random() * 900000);
+
+    user.set({ passwordResetCode: secretCode });
+    user.save();
+    console.log(user);
+    const mailOptions = forgotPasswordMailOption(
+      user._id,
+      user.email,
+      secretCode
+    );
+
+    sendRentoMail(mailOptions);
+
+    res.send("mail send Successfully");
+  },
+
+  changePasswordTokenCheck: async (req, res) => {
+    console.log(req.body);
+    const token = req.body.token;
+    if (!token) return res.status(401).send("Access Denied Token Required!!");
+
+    console.log("Console here1");
+
+    try {
+      const decodedData = jwt.verify(token, "rentoSecretKey");
+      if (!decodedData) return res.status(400).send("something went wrong");
+
+      let user = await User.findOne({
+        _id: decodedData._id,
+        email: decodedData.email,
+        passwordResetCode: decodedData.secretCode,
+      });
+      if (!user) return res.status(400).send("Invalid Token");
+
+      res.send("Token Validated");
+    } catch (ex) {
+      console.log(ex);
+      res.status(400).send("Invalid Token");
+    }
+  },
+  changePasswordByToken: async (req, res) => {
+    const token = req.body.token;
+    if (!token) return res.status(401).send("Access Denied Token Required!!");
+
+    try {
+      const decodedData = jwt.verify(token, "rentoSecretKey");
+      if (!decodedData) return res.status(400).send("something went wrong");
+
+      let user = await User.findOne({
+        _id: decodedData._id,
+        email: decodedData.email,
+        passwordResetCode: decodedData.secretCode,
+      });
+      if (!user) return res.status(400).send("Invalid Token");
+
+      if (req.body.password1 !== req.body.password2)
+        return res.status(402).send("Passwords Doesnot Match");
+
+      console.log(req.body.password1);
+
+      const salt = await bcrypt.genSalt(10);
+      const password = await bcrypt.hash(req.body.password1, salt);
+
+      user.set({
+        password: password,
+        passwordResetCode: "",
+      });
+      await user.save();
+
+      res.send(true);
+    } catch (ex) {
+      console.log(ex);
+      res.status(400).send("Invalid Token");
+    }
   },
 };

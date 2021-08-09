@@ -7,6 +7,9 @@ const router = express.Router();
 
 router.post("/register", User.insert);
 router.post("/verify", [auth], User.verify);
+router.post("/forgotPassword", User.forgotPasswordEmail);
+router.post("/changePasswordTokenCheck", User.changePasswordTokenCheck);
+router.post("/changePasswordByToken", User.changePasswordByToken);
 router.post(
   "/documentUpload",
   [auth, setImagePath("user_assets/profile/")],

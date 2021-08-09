@@ -38,3 +38,24 @@ module.exports.activationMailOption = (userId, email) => {
                 </center>`,
   });
 };
+
+module.exports.forgotPasswordMailOption = (userId, email, secretCode) => {
+  const token = jwt.sign(
+    { _id: userId, email: email, secretCode: secretCode },
+    "rentoSecretKey",
+    {
+      expiresIn: "1d",
+    }
+  );
+  const url = `http://localhost:3000/forgotPassword/${token}`;
+  return (mailOptions = {
+    from: "Rento no-reply@gmail.com",
+    to: email,
+    subject: "Forgot Password",
+    html: `<center>
+                    <strong><h1>You Requested for Password Change</h1></strong>
+                    <h3>Click Link Below To Change Password</h3>
+                    <a href="${url}"><p>${url}</p></a>
+                </center>`,
+  });
+};

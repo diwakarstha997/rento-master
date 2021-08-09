@@ -68,6 +68,22 @@ export function mailResend() {
   return http.get(apiEndpoint + "/mailResend");
 }
 
+export function forgotPasswordEmail(email) {
+  return http.post(apiEndpoint + "/forgotPassword", email);
+}
+
+export function changePasswordTokenCheck(token) {
+  return http.post(apiEndpoint + "/changePasswordTokenCheck", { token });
+}
+
+export function changePasswordByToken(token, password1, password2) {
+  return http.post(apiEndpoint + "/changePasswordByToken", {
+    token,
+    password1,
+    password2,
+  });
+}
+
 const user = {
   register,
   getProfileData,
@@ -79,6 +95,9 @@ const user = {
   checkUserVerification,
   getUserVerificationData,
   mailResend,
+  forgotPasswordEmail,
+  changePasswordTokenCheck,
+  changePasswordByToken,
 };
 
 export default user;

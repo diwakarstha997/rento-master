@@ -74,20 +74,6 @@ class ApplicationForm extends Forms {
 
   render() {
     const { show, handleClose } = this.props;
-    // const applicationData = checkExistingApplication(this.state.roomId);
-    // // const applicationData = true;
-    // console.log(applicationData);
-
-    // if (applicationData === true)
-    //   return (
-    //     <Modal show={show} onHide={handleClose}>
-    //       <Modal.Header closeButton></Modal.Header>
-    //       <Modal.Body className="text-center">
-    //         Application Already Submitted!!!
-    //       </Modal.Body>
-    //     </Modal>
-    //   );
-
     return (
       <React.Fragment>
         <Modal show={show} onHide={this.handleModalClose}>

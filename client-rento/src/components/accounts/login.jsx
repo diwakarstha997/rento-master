@@ -2,6 +2,7 @@ import React from "react";
 import Joi from "joi-browser";
 import Form from "../common/form";
 import auth from "../../services/authService";
+import SendForgetPasswordEmail from "./modal/sendForgetPasswordEmail";
 
 class Login extends Form {
   state = {
@@ -117,13 +118,15 @@ class Login extends Form {
               {this.renderButton("Login")}
             </form>
 
-            <a
+            <SendForgetPasswordEmail />
+
+            {/* <a
               className="d-flex d-xl-flex justify-content-center  text-center"
               href="/"
             >
               <br />
               Forgot password?
-            </a>
+            </a> */}
             <div className="mt-3">
               <p className="text-center">
                 Don't have an account&nbsp;<a href="/register">Sign up</a>
