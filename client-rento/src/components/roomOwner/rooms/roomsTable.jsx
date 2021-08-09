@@ -64,14 +64,14 @@ class RoomTable extends Component {
             />
             {room.status === "Inactive" ? (
               <button
-                onClick={() => this.props.onPublish(room._id)}
+                onClick={() => this.props.onPublish(room._id, this.props.lable)}
                 className="btn btn-success btn-sm ml-2"
               >
                 Publish
               </button>
             ) : (
               <button
-                onClick={() => this.props.onPublish(room._id)}
+                onClick={() => this.props.onPublish(room._id, this.props.lable)}
                 className="btn btn-danger btn-sm ml-2"
               >
                 Hide

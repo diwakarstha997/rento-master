@@ -43,8 +43,12 @@ class EditModal extends Form {
     this.setState({ show: false });
   };
 
-  modalPress = () => {
+  modalPress = async () => {
     const { edit } = this.props;
+    if (edit.viewed === "false") {
+      await application.applicationView(edit._id);
+      this.props.handleView();
+    }
     let data = this.state.data;
     data.occupation = edit.occupation;
     data.monthlyIncome = edit.monthlyIncome;
@@ -69,6 +73,7 @@ class EditModal extends Form {
         data.reasonToLeavePreviousLocation,
         data.additionalComments
       );
+      console.log(message.data, this.props.tab);
       this.props.handleMessage(message.data, this.props.tab);
       console.log(message.data);
       // this.props.status(200);
@@ -132,12 +137,13 @@ class EditModal extends Form {
                         )}
                       </React.Fragment>
                     )}
-
-                    {this.renderModalButton(
-                      "Cancel",
-                      "btn-danger",
-                      this.handleClose
-                    )}
+                    <button
+                      className="btn px-4 mx-1 btn-danger"
+                      type="button"
+                      onClick={this.handleClose}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </React.Fragment>
               ) : (

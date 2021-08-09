@@ -6,6 +6,7 @@ import auth from "./../../services/authService";
 class NavBar extends Component {
   render() {
     const user = auth.getCurrentUser();
+    console.log(user);
     const userType = this.props.userType;
     return (
       <React.Fragment>
@@ -228,18 +229,37 @@ class NavBar extends Component {
         {user && user.userRole !== "Admin" && user.verified === false && (
           <div className="d-flex justify-content-center mx-auto my-3 alert alert-danger text-center admin-alert">
             <p className="my-auto">
-              Your identity is not verified. Please{" "}
-              <a
-                className="text-danger"
-                href={
-                  user.userRole === "Tenant"
-                    ? "/profile/verify"
-                    : "/RoomOwner/profile/verify"
-                }
-              >
-                Click here
-              </a>{" "}
-              to verify
+              {user.declined === true ? (
+                <React.Fragment>
+                  Your documents was declined. Please review your documents and{" "}
+                  <a
+                    className="text-danger"
+                    href={
+                      user.userRole === "Tenant"
+                        ? "/profile/verify"
+                        : "/RoomOwner/profile/verify"
+                    }
+                  >
+                    Click here
+                  </a>{" "}
+                  to resend
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  Your identity is not verified. Please{" "}
+                  <a
+                    className="text-danger"
+                    href={
+                      user.userRole === "Tenant"
+                        ? "/profile/verify"
+                        : "/RoomOwner/profile/verify"
+                    }
+                  >
+                    Click here
+                  </a>{" "}
+                  to verify
+                </React.Fragment>
+              )}
             </p>
           </div>
         )}

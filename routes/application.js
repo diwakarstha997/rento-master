@@ -19,5 +19,7 @@ router.put("/edit/:id", auth, Application.edit);
 router.put("/cancel/:id", auth, Application.cancel);
 router.put("/reject/:id", auth, Application.reject);
 router.put("/approve/:id", auth, Application.approve);
+router.put("/view/:id", auth, Application.view);
+router.put("/view2/:id", auth, Application.view2);
 
 module.exports = router;

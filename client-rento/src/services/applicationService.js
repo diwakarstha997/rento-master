@@ -56,6 +56,14 @@ export function applicationReject(applicationId) {
   return http.put(apiEndpoint + "/reject/" + applicationId);
 }
 
+export function applicationView(applicationId) {
+  return http.put(apiEndpoint + "/view/" + applicationId);
+}
+
+export function applicationView2(applicationId) {
+  return http.put(apiEndpoint + "/view2/" + applicationId);
+}
+
 const application = {
   save,
   checkExistingApplication,
@@ -65,6 +73,8 @@ const application = {
   cancelApplication,
   applicationApprove,
   applicationReject,
+  applicationView,
+  applicationView2,
 };
 
 export default application;

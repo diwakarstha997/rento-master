@@ -8,6 +8,7 @@ import ApplicationForm from "../tenant/applications/applicationForm";
 import ComplaintForm from "../tenant/complaints/complaintForm";
 import { Link } from "react-router-dom";
 import { checkExistingApplication } from "../../services/applicationService";
+import Contact from "../tenant/modal/contact";
 
 class RoomDetail extends Component {
   state = {
@@ -21,6 +22,7 @@ class RoomDetail extends Component {
   async componentDidMount() {
     try {
       const { data: room } = await getRoomById(this.props.match.params.id);
+
       const { data: facilities } = await getFacilities();
       const { data: rooms } = await getRooms();
       this.setState({ room, rooms, facilities });
@@ -127,7 +129,13 @@ class RoomDetail extends Component {
                                     View Application
                                   </a>
                                 )}
-
+                                {existingApplication.status === "Approved" && (
+                                  <Contact
+                                    viewed={existingApplication.viewed}
+                                    id={existingApplication._id}
+                                    contact={existingApplication.contactNo}
+                                  />
+                                )}
                                 <button
                                   className="btn btn-danger"
                                   onClick={() =>

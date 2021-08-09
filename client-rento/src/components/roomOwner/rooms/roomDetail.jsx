@@ -16,10 +16,15 @@ class OwnerRoomDetail extends Component {
     message: "",
     editModalState: false,
     mapData: "",
+    applicationCount: "",
   };
 
   async componentDidMount() {
     const { data: roomData } = await room.getOwnerRoomDetail(
+      this.props.match.params.id
+    );
+
+    const { data: count } = await room.getApplicationsForRoom(
       this.props.match.params.id
     );
     const mapData = {
@@ -29,7 +34,7 @@ class OwnerRoomDetail extends Component {
       marker: roomData.marker,
     };
     const { data: facilities } = await getFacilities();
-    this.setState({ mapData, roomData, facilities });
+    this.setState({ mapData, roomData, facilities, applicationCount: count });
   }
 
   handleImageUpload = async (e) => {
@@ -160,19 +165,23 @@ class OwnerRoomDetail extends Component {
                 <span>
                   <i className="fa fa-eye fa-2x"></i>
                 </span>
-                <p> Total Views : {} </p>
+                <p> Total Views : {roomData.views} </p>
               </div>
             </div>
             <div
               className="card shadow m-2 col-xl col-lg"
               style={{ cursor: "pointer" }}
             >
-              <div className=" card-body">
+              <a
+                className=" card-body"
+                style={{ color: "black" }}
+                href={"/RoomOwner/applications/"}
+              >
                 <span>
                   <i className="fa fa-envelope fa-2x"></i>
                 </span>
-                <p> Total Applications : {} </p>
-              </div>
+                <p> Total Applications : {this.state.applicationCount} </p>
+              </a>
             </div>
           </div>
         </div>

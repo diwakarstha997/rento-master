@@ -45,6 +45,18 @@ export function documentUpload(fileData) {
   return http.post(apiEndpoint + "/documentUpload", document);
 }
 
+export function getVerifyUser() {
+  return http.get(apiEndpoint + "/getVerifyUser");
+}
+
+export function verifyUser(userId) {
+  return http.put(apiEndpoint + "/verify/", { userId });
+}
+
+export function declineUser(userId) {
+  return http.put(apiEndpoint + "/decline/", { userId });
+}
+
 const user = {
   register,
   getProfileData,
@@ -52,6 +64,9 @@ const user = {
   usersCreatedToday,
   editProfileData,
   changePassword,
+  getVerifyUser,
+  verifyUser,
+  declineUser,
 };
 
 export default user;

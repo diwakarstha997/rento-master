@@ -6,7 +6,7 @@ const setImagePath = require("../middleware/imagePath");
 const router = express.Router();
 
 router.post("/register", User.insert);
-router.post("/verify", [auth], User.verify);
+
 router.post(
   "/documentUpload",
   [auth, setImagePath("user_assets/profile/")],
@@ -14,10 +14,13 @@ router.post(
 );
 
 router.get("/", [auth], User.fetchUserData);
-
-router.put("/changePassword", User.changePassword);
-router.put("/editProfile", User.editProfileData);
 router.get("/getTotal", [auth], User.getTotalUser);
 router.get("/createdToday", [auth], User.userCreatedToday);
+router.get("/getVerifyUser", [auth], User.getVerifyUser);
+
+router.put("/verify", [auth], User.verify);
+router.put("/decline", [auth], User.decline);
+router.put("/changePassword", User.changePassword);
+router.put("/editProfile", User.editProfileData);
 
 module.exports = router;

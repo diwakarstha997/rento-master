@@ -10,6 +10,10 @@ export function getRoomById(roomId) {
   return http.get(apiEndpoint + "/" + roomId);
 }
 
+export function getApplicationsForRoom(roomId) {
+  return http.get(apiEndpoint + "/roomowner/getApplicationsForRoom/" + roomId);
+}
+
 export function getRoomsByUser() {
   return http.get(apiEndpoint + "/roomowner/myrooms");
 }
@@ -94,6 +98,7 @@ const rooms = {
   publishRoom,
   updateRoom,
   optionalImageUpload,
+  getApplicationsForRoom,
 };
 
 export default rooms;

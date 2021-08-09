@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  declined: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -49,6 +53,7 @@ userSchema.methods.generateAuthToken = function () {
       name: this.name,
       userRole: this.userRole,
       verified: this.verified,
+      declined: this.declined,
     },
     "rentoUserSecretKey"
   );

@@ -11,9 +11,24 @@ class ApplicationTable extends Component {
       label: "Application No.",
       visibility: true,
       content: (application) => (
-        <a href={`/MyApplications/${application._id}`}>
-          {application.applicationTag}
-        </a>
+        <React.Fragment>
+          <div href={`/MyApplications/${application._id}`}>
+            {application.applicationTag}
+          </div>
+        </React.Fragment>
+      ),
+    },
+    {
+      path: "viewed",
+      visibility: true,
+      content: (application) => (
+        <React.Fragment>
+          {application.viewed === "false" ? (
+            <span className="badge badge-pill badge-danger ">NEW</span>
+          ) : (
+            ""
+          )}
+        </React.Fragment>
       ),
     },
     {
@@ -52,11 +67,17 @@ class ApplicationTable extends Component {
         <React.Fragment>
           <div className="text-center">
             {application.contactNo && (
-              <Contact contact={application.contactNo} />
+              <Contact
+                id={application._id}
+                handleView={this.props.handleView}
+                viewed={application.viewed}
+                contact={application.contactNo}
+              />
             )}
             <EditModal
               edit={application}
               lable={application.status}
+              handleView={this.props.handleView}
               tab={this.props.tab}
               handleMessage={this.props.handleMessage}
             />
@@ -64,6 +85,7 @@ class ApplicationTable extends Component {
               <ConfirmDelete
                 cancel={"cancel"}
                 onClick={this.props.handleCancel}
+                lable={this.props.tab}
                 value={application._id}
               />
             ) : (

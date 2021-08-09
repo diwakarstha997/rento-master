@@ -13,6 +13,52 @@ class Applications extends Component {
     submitted: "",
     rejected: "",
     approved: "",
+    count: 0,
+    message: "",
+  };
+
+  componentDidMount() {
+    this.renderTableData("all");
+  }
+
+  renderTableData = async (tab) => {
+    const user = getCurrentUser();
+    if (user.verified === true) {
+      const { data: applications } = await application.getTenantApplications();
+      const submitted = applications.filter(
+        (d) => d.status === "Submitted"
+      ).length;
+      const rejected = applications.filter(
+        (d) => d.status === "Rejected" || d.status === "Cancelled"
+      ).length;
+      const approved = applications.filter(
+        (d) => d.status === "Approved"
+      ).length;
+      const count = applications.filter((d) => d.viewed === "false").length;
+
+      if (tab === "all") this.setState({ tableData: applications });
+      if (tab === "pending")
+        this.setState({
+          tableData: applications.filter((d) => d.status === "Submitted"),
+        });
+      if (tab === "approved")
+        this.setState({
+          tableData: applications.filter((d) => d.status === "Approved"),
+        });
+      if (tab === "cancel")
+        this.setState({
+          tableData: applications.filter(
+            (d) => d.status === "Rejected" || d.status === "Cancelled"
+          ),
+        });
+      this.setState({
+        applications,
+        submitted,
+        rejected,
+        count,
+        approved,
+      });
+    }
   };
 
   handleSort = (sortColumn) => {
@@ -26,36 +72,7 @@ class Applications extends Component {
     });
   };
 
-  componentDidUpdate(prevProps, prevState) {
-    if (prevState.tableData !== this.state.tableData)
-      this.handleCountRerender();
-  }
-
-  async componentDidMount() {
-    const user = getCurrentUser();
-    if (user.verified === true) {
-      const { data: applications } = await application.getTenantApplications();
-      const submitted = applications.filter(
-        (d) => d.status === "Submitted"
-      ).length;
-      const rejected = applications.filter(
-        (d) => d.status === "Rejected" || d.status === "Cancelled"
-      ).length;
-      const approved = applications.filter(
-        (d) => d.status === "Approved"
-      ).length;
-      this.setState({
-        applications,
-        tableData: applications,
-        submitted,
-        rejected,
-        approved,
-      });
-    }
-  }
-
   handleCountRerender = async () => {
-    console.log("yes");
     const { data: applications } = await application.getTenantApplications();
     const submitted = applications.filter(
       (d) => d.status === "Submitted"
@@ -74,77 +91,46 @@ class Applications extends Component {
   handleSelect = (v) => {
     if (v === "all") {
       this.setState({ active: v });
-      this.setState({ tableData: this.state.applications });
-      // this.handleCountRerender()
+      this.renderTableData("all");
     }
     if (v === "pending") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter((d) => d.status === "Submitted");
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("pending");
     }
     if (v === "approved") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter((d) => d.status === "Approved");
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("approved");
     }
     if (v === "cancel") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter(
-        (d) => d.status === "Rejected" || d.status === "Cancelled"
-      );
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("cancel");
     }
 
     console.log(this.state.active);
   };
 
-  handleMessage = async (m, tab) => {
-    console.log(m);
-    const { data } = await application.getTenantApplications();
-    if (tab === "all")
-      this.setState({
-        applications: data,
-        tableData: data,
-      });
-    if (tab === "pending")
-      this.setState({
-        applications: data,
-        tableData: data.filter((d) => d.status === "Submitted"),
-      });
-    if (tab === "approved")
-      this.setState({
-        applications: data,
-        tableData: data.filter((d) => d.status === "Approved"),
-      });
-    if (tab === "cancel")
-      this.setState({
-        applications: data,
-        tableData: data.filter(
-          (d) => d.status === "Rejected" || d.status === "Cancelled"
-        ),
-      });
+  handleCancel = async (v, tab) => {
+    try {
+      console.log(v, tab + " xys");
+      const { data } = await application.cancelApplication(v);
+      console.log(data);
+      this.renderTableData(tab);
+    } catch (ex) {}
   };
 
-  handleCancel = async (e) => {
-    try {
-      console.log(e.currentTarget.value);
-      const message = await application.cancelApplication(
-        e.currentTarget.value
-      );
-      console.log(message.data);
-      // this.props.status(200);
-      const { data: applications } = await application.getTenantApplications();
-      this.setState({
-        applications,
-        tableData: applications,
-      });
-    } catch (ex) {}
+  handleView = async () => {
+    const { data: applications } = await application.getTenantApplications();
+    const count = applications.filter((d) => d.viewed === "false").length;
+    this.setState({
+      applications,
+      tableData: applications,
+      count,
+    });
+  };
+
+  handleMessage = async (m, tab) => {
+    this.setState({ message: m });
+    this.renderTableData(tab);
   };
 
   render() {
@@ -173,6 +159,13 @@ class Applications extends Component {
                     onClick={() => this.handleSelect("all")}
                   >
                     All({this.state.applications.length})
+                    {this.state.count ? (
+                      <span className="badge badge-pill badge-danger ">
+                        {this.state.count}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </li>
                 <li className="text-dark mx-2">
@@ -199,6 +192,13 @@ class Applications extends Component {
                     onClick={() => this.handleSelect("approved")}
                   >
                     Approved({this.state.approved})
+                    {this.state.count ? (
+                      <span className="badge badge-pill badge-danger ">
+                        {this.state.count}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </li>
                 <li className="text-dark mx-2">
@@ -231,6 +231,7 @@ class Applications extends Component {
                   onSort={this.handleSort}
                   handleMessage={this.handleMessage}
                   handleCancel={this.handleCancel}
+                  handleView={this.handleView}
                   tab={this.state.active}
                 />
               </React.Fragment>

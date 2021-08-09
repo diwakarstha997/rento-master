@@ -14,12 +14,14 @@ class ApplicationForm extends Forms {
       previousLocation: "",
       reasonToLeavePreviousLocation: "",
       additionalComments: "",
+      pets: "",
     },
     errors: {},
   };
 
   schema = {
     occupation: Joi.string().required().label("Occupation"),
+    pets: Joi.string().label("Pets"),
     monthlyIncome: Joi.number().required().label("Monthly Income"),
     emergencyContact: Joi.string()
       .min(10)
@@ -91,6 +93,7 @@ class ApplicationForm extends Forms {
               "reasonToLeavePreviousLocation",
               "Reason To Leave Previous Location"
             )}
+            {this.renderInput("pets", "Any Pets ? If so mention")}
             {this.renderTextArea("additionalComments", "Additional Comments")}
             {this.state.errors.exception && (
               <div className="alert alert-danger">

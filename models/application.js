@@ -23,6 +23,14 @@ const applicationSchema = new mongoose.Schema({
     default: new Date().toISOString().slice(0, 10),
   },
   contactNo: Number,
+  viewed: {
+    type: String,
+    enum: ["submitted", "seen", "false", "true"],
+    default: "submitted",
+  },
+  noOfRoomMates: Number,
+  noOfChildrens: Number,
+  pets: String,
 });
 
 const Application = mongoose.model("Application", applicationSchema);

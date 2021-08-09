@@ -3,6 +3,7 @@ import ApplicationTable from "./applicationsTable";
 import { getRoomOwnerApplications } from "./../../../services/applicationService";
 import { getCurrentUser } from "./../../../services/authService";
 import application from "./../../../services/applicationService";
+import _ from "lodash";
 
 class Applications extends Component {
   state = {
@@ -15,9 +16,15 @@ class Applications extends Component {
     rejected: "",
     approved: "",
     message: "",
+    count: 0,
   };
 
   async componentDidMount() {
+    this.renderTableData("all");
+  }
+
+  renderTableData = async (tab) => {
+    console.log("renderTableData");
     const user = getCurrentUser();
     if (user.verified === true) {
       const { data: applications } = await getRoomOwnerApplications();
@@ -29,41 +36,30 @@ class Applications extends Component {
       ).length;
       const approved = applications.filter(
         (d) => d.status === "Approved"
-      ).length;
+      ).length; ///pending approved cancel
+      const count = applications.filter((d) => d.viewed === "submitted").length;
+      if (tab === "all") this.setState({ tableData: applications });
+      if (tab === "pending")
+        this.setState({
+          tableData: applications.filter((d) => d.status === "Submitted"),
+        });
+      if (tab === "approved")
+        this.setState({
+          tableData: applications.filter((d) => d.status === "Approved"),
+        });
+      if (tab === "cancel")
+        this.setState({
+          tableData: applications.filter((d) => d.status === "Rejected"),
+        });
       this.setState({
         applications,
-        tableData: applications,
         submitted,
         rejected,
         approved,
+        count,
       });
     }
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    if (prevState.message !== this.state.message) {
-      const user = getCurrentUser();
-      if (user.verified === true) {
-        const { data: applications } = await getRoomOwnerApplications();
-        const submitted = applications.filter(
-          (d) => d.status === "Submitted"
-        ).length;
-        const rejected = applications.filter(
-          (d) => d.status === "Rejected"
-        ).length;
-        const approved = applications.filter(
-          (d) => d.status === "Approved"
-        ).length;
-        this.setState({
-          applications,
-          tableData: applications,
-          submitted,
-          rejected,
-          approved,
-        });
-      }
-    }
-  }
+  };
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
@@ -79,46 +75,50 @@ class Applications extends Component {
   handleSelect = (v) => {
     if (v === "all") {
       this.setState({ active: v });
-      this.setState({ tableData: this.state.applications });
+      this.renderTableData("all");
     }
     if (v === "pending") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter((d) => d.status === "Submitted");
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("pending");
     }
     if (v === "approved") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter((d) => d.status === "Approved");
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("approved");
     }
     if (v === "cancel") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter((d) => d.status === "Rejected");
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("cancel");
     }
 
     console.log(this.state.active);
   };
 
-  handleApprove = async (e) => {
-    const { data } = await application.applicationApprove(
-      e.currentTarget.value
-    );
+  handleApprove = async (e, lable) => {
+    console.log(lable);
+    const { data } = await application.applicationApprove(e);
+    this.renderTableData(lable);
     this.setState({ message: data });
   };
 
-  handleReject = async (e) => {
-    const { data } = await application.applicationReject(e.currentTarget.value);
+  handleReject = async (e, lable) => {
+    console.log(lable);
+    const { data } = await application.applicationReject(e);
+    this.renderTableData(lable);
     this.setState({ message: data });
+  };
+
+  handleView = (lable) => {
+    this.renderTableData(lable);
   };
 
   render() {
+    console.log("yes");
+    const { tableData, searchQuery, sortColumn } = this.state;
+    const sortedRooms = _.orderBy(
+      tableData,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
     return (
       <React.Fragment>
         <div>
@@ -144,6 +144,13 @@ class Applications extends Component {
                     onClick={() => this.handleSelect("all")}
                   >
                     All({this.state.applications.length})
+                    {this.state.count ? (
+                      <span className="badge badge-pill badge-danger ">
+                        {this.state.count}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </li>
                 <li className="text-dark mx-2">
@@ -157,6 +164,13 @@ class Applications extends Component {
                     onClick={() => this.handleSelect("pending")}
                   >
                     Pending({this.state.submitted})
+                    {this.state.count ? (
+                      <span className="badge badge-pill badge-danger ">
+                        {this.state.count}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </li>
                 <li className="text-dark mx-2">
@@ -189,20 +203,21 @@ class Applications extends Component {
             </div>
           </div>
           <div style={{ margin: "0 5% 0 5%" }}>
-            {(this.state.tableData.length === 0 && (
+            {(sortedRooms.length === 0 && (
               <h5 className="ml-4 mb-5 ">There are no applications to show</h5>
             )) || (
               <React.Fragment>
                 <p className="ml-4 mb-3 ">
-                  Showing {this.state.tableData.length} Applications
+                  Showing {sortedRooms.length} Applications
                 </p>
                 <ApplicationTable
-                  applications={this.state.tableData}
+                  applications={sortedRooms}
                   sortColumn={this.state.sortColumn}
                   onSort={this.handleSort}
-                  onClick={this.handleApprove}
+                  handleApprove={this.handleApprove}
                   handleReject={this.handleReject}
                   lable={this.state.active}
+                  handleView={this.handleView}
                 />
               </React.Fragment>
             )}

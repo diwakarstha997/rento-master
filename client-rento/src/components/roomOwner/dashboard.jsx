@@ -10,17 +10,43 @@ import { getCurrentUser } from "./../../services/authService";
 
 class Dashboard extends Component {
   state = {
+    active: "all",
+    forRent: "",
+    inactive: "",
     rooms: [],
+    tableData: "",
     message: "",
     status: "",
     searchQuery: "",
     sortColumn: { path: "roomNumber", order: "asc" },
   };
 
-  async componentDidMount() {
-    const { data: userRooms } = await rooms.getRoomsByUser();
-    this.setState({ rooms: userRooms });
+  componentDidMount() {
+    this.renderTableData("all");
   }
+
+  renderTableData = async (tab) => {
+    const user = getCurrentUser();
+    if (user.verified === true) {
+      const { data: userRooms } = await rooms.getRoomsByUser();
+      const forRent = userRooms.filter((d) => d.status === "Active").length;
+      const inactive = userRooms.filter((d) => d.status === "Inactive").length;
+      if (tab === "all") this.setState({ tableData: userRooms });
+      if (tab === "inactive")
+        this.setState({
+          tableData: userRooms.filter((d) => d.status === "Inactive"),
+        });
+      if (tab === "active")
+        this.setState({
+          tableData: userRooms.filter((d) => d.status === "Active"),
+        });
+      this.setState({
+        rooms: userRooms,
+        inactive,
+        forRent,
+      });
+    }
+  };
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
@@ -60,14 +86,33 @@ class Dashboard extends Component {
     }
   };
 
-  onPublish = async (v) => {
+  handleSelect = (v) => {
+    if (v === "all") {
+      this.setState({ active: v });
+      this.setState({ tableData: this.state.rooms });
+    }
+    if (v === "active") {
+      this.setState({ active: v });
+      let data = this.state.rooms;
+      data = data.filter((d) => d.status === "Active");
+      this.setState({ tableData: data });
+    }
+    if (v === "inactive") {
+      this.setState({ active: v });
+      let data = this.state.rooms;
+      data = data.filter((d) => d.status === "Inactive");
+      this.setState({ tableData: data });
+    }
+    console.log(this.state.active);
+  };
+
+  onPublish = async (v, lable) => {
     try {
       const user = await getCurrentUser();
       if (user.verified === true) {
         const { status, data } = await rooms.publishRoom(v);
 
-        const { data: userRooms } = await rooms.getRoomsByUser();
-        this.setState({ rooms: userRooms });
+        this.renderTableData(lable);
 
         this.setState({ message: data, status });
       } else {
@@ -80,8 +125,12 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { rooms, searchQuery, sortColumn } = this.state;
-    const sortedRooms = _.orderBy(rooms, [sortColumn.path], [sortColumn.order]);
+    const { rooms, tableData, searchQuery, sortColumn } = this.state;
+    const sortedRooms = _.orderBy(
+      tableData,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
     return (
       <div>
         <div className="row" style={{ margin: "0 5% 0 5%" }}>
@@ -104,19 +153,43 @@ class Dashboard extends Component {
           <div className="my-2 col-lg col-md d-flex justify-content-lg-start justify-content-md-start justify-content-center">
             <ul className="nav" style={{ listStyleType: "none" }}>
               <li className=" mx-2">
-                <a className="text-dark" href="/">
-                  All
-                </a>
+                <div
+                  style={{ cursor: "pointer" }}
+                  className={
+                    this.state.active === "all"
+                      ? "text-dark font-weight-bold application-button"
+                      : "text-dark application-button"
+                  }
+                  onClick={() => this.handleSelect("all")}
+                >
+                  All({this.state.rooms.length})
+                </div>
               </li>
               <li className="text-dark mx-2">
-                <a className="text-dark" href="/">
-                  For Rent
-                </a>
+                <div
+                  style={{ cursor: "pointer" }}
+                  className={
+                    this.state.active === "active"
+                      ? "text-dark font-weight-bold application-button"
+                      : "text-dark application-button"
+                  }
+                  onClick={() => this.handleSelect("active")}
+                >
+                  For Rent({this.state.forRent})
+                </div>
               </li>
               <li className="text-dark mx-2">
-                <a className="text-dark" href="/">
-                  Inactive
-                </a>
+                <div
+                  style={{ cursor: "pointer" }}
+                  className={
+                    this.state.active === "inactive"
+                      ? "text-dark font-weight-bold application-button"
+                      : "text-dark application-button"
+                  }
+                  onClick={() => this.handleSelect("inactive")}
+                >
+                  Inactive({this.state.inactive})
+                </div>
               </li>
             </ul>
           </div>
@@ -144,6 +217,7 @@ class Dashboard extends Component {
                 doDelete={this.doDelete}
                 onPublish={this.onPublish}
                 handleMessage={this.handleMessage}
+                lable={this.state.active}
               />
               {/* <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
                   <Pagination

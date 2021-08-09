@@ -38,6 +38,10 @@ const roomSchema = new mongoose.Schema({
   datePublished: {
     type: Date,
   },
+  views: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const Room = mongoose.model("Room", roomSchema);
