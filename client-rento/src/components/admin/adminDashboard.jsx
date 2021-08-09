@@ -10,7 +10,15 @@ class AdminDashboard extends Component {
     sidebarSelect: "index",
   };
 
+  componentDidMount() {
+    document.title = "Rento Admin | Dashboard";
+  }
+
   onSidebarSelect = (s) => {
+    if (s === "index") document.title = "Rento Admin | Dashboard";
+    if (s === "location") document.title = "Rento Admin | Location";
+    if (s === "facility") document.title = "Rento Admin | Facility";
+    if (s === "users") document.title = "Rento Admin | User Verification";
     this.setState({ sidebarSelect: s });
   };
 

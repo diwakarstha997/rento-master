@@ -20,6 +20,7 @@ class OwnerRoomDetail extends Component {
   };
 
   async componentDidMount() {
+    document.title = "Rento | Room Detail";
     const { data: roomData } = await room.getOwnerRoomDetail(
       this.props.match.params.id
     );

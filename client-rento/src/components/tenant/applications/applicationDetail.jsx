@@ -7,6 +7,7 @@ class ApplicationDetail extends Component {
   };
 
   async componentDidMount() {
+    document.title = "Rento | Application Detail";
     try {
       const { data: applicationData } = await application.findApplication(
         this.props.match.params.id

@@ -140,7 +140,18 @@ class App extends Component {
               <Route path="/RoomOwner/room/:id" component={OwnerRoomDetail} />
               <Route path="/RoomOwner/rooms/new" component={RoomForm} />
 
+              <Route
+                path="/RoomOwner/activation/:id"
+                component={EmailActivate}
+              />
+
               <Route path="/RoomOwner/not-found" component={NotFound} />
+
+              <Redirect
+                exact
+                from="/activation/:id"
+                to="/RoomOwner/activation/:id"
+              />
 
               <Redirect exact from="/" to="/RoomOwner/MyRooms" />
               <Redirect to="/RoomOwner/not-found" />
@@ -183,6 +194,9 @@ class App extends Component {
                   component={ApplicationDetail}
                 />
               )}
+
+              <Route path="/activation/:id" component={EmailActivate} />
+
               <Redirect exact from="/" to="/rooms" />
 
               <Route path="/not-found" component={NotFound} />

@@ -42,6 +42,7 @@ class RoomForm extends Form {
   };
 
   async componentDidMount() {
+    document.title = "Rento | Add Room";
     const { data } = await getCities();
     const { data: facilities } = await getFacilities();
     const cities = [

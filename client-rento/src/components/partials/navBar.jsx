@@ -25,21 +25,27 @@ class NavBar extends Component {
     if (user) uv_data = getUserVerificationData();
     console.log(user, uv_data);
     const userType = this.props.userType;
+
+    const path = this.props.location.pathname;
+    const route = path.split("/");
+    const routeLength = route.length;
+    console.log(route[routeLength]);
+
     return (
       <React.Fragment>
         <div className="mx-lg-5 mx-md-4">
           {(((!userType && !user) || (user && user.userRole !== "Admin")) && (
             <nav className="navbar navbar-light navbar-expand-md navigation-clean-button">
-              <NavLink
+              <a
                 className="remove-active navbar-brand"
-                to={
+                href={
                   user && user.userRole === "RoomOwner"
                     ? "/RoomOwner/MyRooms"
                     : "/"
                 }
               >
                 <img id="rento-logo" src={logo} alt="Rento" />
-              </NavLink>
+              </a>
 
               <button
                 data-toggle="collapse"
@@ -56,36 +62,36 @@ class NavBar extends Component {
                 <ul className="nav navbar-nav mr-auto">
                   {(user && user.userRole === "RoomOwner" && (
                     <React.Fragment>
-                      <NavLink
+                      <a
                         className="nav-item nav-menu nav-link"
                         exact
-                        to="/RoomOwner/MyRooms"
+                        href="/RoomOwner/MyRooms"
                       >
                         My Rooms
-                      </NavLink>
-                      <NavLink
+                      </a>
+                      <a
                         className="nav-item nav-menu nav-link"
-                        to="/RoomOwner/applications"
+                        href="/RoomOwner/applications"
                       >
                         APPLICATIONS
-                      </NavLink>
+                      </a>
                     </React.Fragment>
                   )) ||
                     (user && user.userRole === "Tenant" && (
                       <React.Fragment>
-                        <NavLink
-                          className="nav-item nav-menu nav-link"
-                          to="/rooms"
+                        <a
+                          className="nav-item nav-menu nav-link "
+                          href="/rooms"
                         >
                           FIND ROOM
-                        </NavLink>
+                        </a>
 
-                        <NavLink
+                        <a
                           className="nav-item nav-menu nav-link"
-                          to="/MyApplications"
+                          href="/MyApplications"
                         >
                           APPLICATIONS
-                        </NavLink>
+                        </a>
                       </React.Fragment>
                     )) || (
                       <React.Fragment>

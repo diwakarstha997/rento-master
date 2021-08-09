@@ -21,6 +21,7 @@ class EditProfile extends Form {
   };
 
   async componentDidMount() {
+    document.title = "Rento | Edit Profile";
     const { data: users } = await user.getProfileData();
     let data = this.state.data;
     data.name = users.name;

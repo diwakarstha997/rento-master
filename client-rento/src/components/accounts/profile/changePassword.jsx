@@ -20,6 +20,7 @@ class ChangePassword extends Form {
   };
 
   async componentDidMount() {
+    document.title = "Rento | Change Password";
     const { data } = await user.getProfileData();
     this.setState({ userRole: data.userRole, id: data._id });
   }

@@ -11,11 +11,12 @@ class Login extends Form {
 
   schema = {
     userRole: Joi.required().label("User Role"),
-    email: Joi.string().required().label("Email"),
+    email: Joi.string().required().email().label("Email"),
     password: Joi.string().required().label("Password"),
   };
 
   componentDidMount = () => {
+    document.title = "Rento | Login";
     const { state } = this.props.location;
     const data = { ...this.state.data };
     if (state) {

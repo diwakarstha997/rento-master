@@ -273,6 +273,8 @@ module.exports = {
     const user = await User.findOne({ _id: req.user._id });
     if (!user) return res.status.status(404).send("user not found");
 
+    if (user.isEmailActivated) return res.send("Email Already verified");
+
     const mailOptions = activationMailOption(user._id, user.email);
     await sendRentoMail(mailOptions);
 

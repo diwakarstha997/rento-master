@@ -19,6 +19,7 @@ class VerifyIdentity extends Form {
   };
 
   async componentDidMount() {
+    document.title = "Rento | Document Verification";
     try {
       const { data: userData } = await getProfileData();
       this.setState({

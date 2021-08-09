@@ -33,6 +33,7 @@ class Applications extends Component {
   }
 
   async componentDidMount() {
+    document.title = "Rento | Applications";
     const user = getCurrentUser();
     let uv_data;
     if (user) uv_data = getUserVerificationData();

@@ -7,6 +7,7 @@ class EmailActivate extends Component {
     status: "",
   };
   componentDidMount = async () => {
+    document.title = "Rento | Email Activation";
     try {
       const { data: message } = await activateEmail(this.props.match.params.id);
       this.setState({ message, status: 200 });

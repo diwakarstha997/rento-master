@@ -20,6 +20,7 @@ class Rooms extends Component {
   };
 
   async componentDidMount() {
+    document.title = "Rento | Find Rooms";
     const { data: facilities } = await getFacilities();
     const { data: rooms } = await getRooms();
     this.setState({ facilities, rooms });

@@ -19,6 +19,7 @@ class Dashboard extends Component {
   };
 
   async componentDidMount() {
+    document.title = "Rento | My Rooms";
     const { data: userRooms } = await rooms.getRoomsByUser();
     this.setState({ rooms: userRooms });
   }

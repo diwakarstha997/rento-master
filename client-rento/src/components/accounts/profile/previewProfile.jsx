@@ -7,6 +7,7 @@ class PreviewProfile extends Component {
   };
 
   async componentDidMount() {
+    document.title = "Rento | Profile Preview";
     const { data: profileData } = await getProfileData();
     this.setState({ profileData });
   }
@@ -38,7 +39,20 @@ class PreviewProfile extends Component {
                   <label htmlFor="email">Email:</label>
                 </div>
                 <div className="col-lg col-md">
-                  <p>{profileData.email}</p>
+                  <p>
+                    {profileData.email}{" "}
+                    {(profileData.isEmailActivated && (
+                      <i className="fa fa-check-circle text-success">
+                        {" "}
+                        verified
+                      </i>
+                    )) || (
+                      <i className="fa fa-times-circle text-danger">
+                        {" "}
+                        Not verified
+                      </i>
+                    )}
+                  </p>
                 </div>
               </div>
 

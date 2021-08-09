@@ -1,6 +1,7 @@
 import React from "react";
 
 const Contacts = () => {
+  document.title = "Rento | Contact";
   return <h1>Contacts</h1>;
 };
 

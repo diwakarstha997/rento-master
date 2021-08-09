@@ -5,6 +5,7 @@ import { getRooms } from "./../../services/roomService";
 class Home extends Component {
   state = { rooms: getRooms() };
   render() {
+    document.title = "Rento | Home";
     return (
       <React.Fragment>
         <div className="container-fluid" autoComplete="off">

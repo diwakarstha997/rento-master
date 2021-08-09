@@ -29,6 +29,10 @@ class Register extends Form {
     confirm_password: Joi.string().required().label("Confirm Password"),
   };
 
+  componentDidMount() {
+    document.title = "Rento | Register";
+  }
+
   childValidation = (name, value) => {
     const { confirm_password } = this.state.data;
 
