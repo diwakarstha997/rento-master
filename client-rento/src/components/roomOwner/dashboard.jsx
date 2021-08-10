@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import Search from "./../common/search";
-// import Pagination from "../common/pagination";
+import Pagination from "../common/pagination";
 import rooms from "../../services/roomService";
 // import { getRoomsByUser } from "../../services/roomService";
 import RoomTable from "./rooms/roomsTable";
 import Message from "../admin/dashboard/message";
 import { getCurrentUser } from "./../../services/authService";
 import { getUserVerificationData } from "../../services/userService";
+import { paginate } from "../../utils/paginate";
 
 class Dashboard extends Component {
   state = {
@@ -16,6 +17,8 @@ class Dashboard extends Component {
     status: "",
     searchQuery: "",
     sortColumn: { path: "roomNumber", order: "asc" },
+    pageSize: 5,
+    currentPage: 1,
   };
 
   async componentDidMount() {
@@ -23,6 +26,11 @@ class Dashboard extends Component {
     const { data: userRooms } = await rooms.getRoomsByUser();
     this.setState({ rooms: userRooms });
   }
+
+  handlePageChange = (page) => {
+    console.log("Set this page number as current:", page);
+    this.setState({ currentPage: page });
+  };
 
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
@@ -84,9 +92,21 @@ class Dashboard extends Component {
     } catch (ex) {}
   };
 
-  render() {
-    const { rooms, searchQuery, sortColumn } = this.state;
+  getPageData = () => {
+    const { rooms, sortColumn } = this.state;
     const sortedRooms = _.orderBy(rooms, [sortColumn.path], [sortColumn.order]);
+    const roomData = paginate(
+      sortedRooms,
+      this.state.currentPage,
+      this.state.pageSize
+    );
+
+    return { totalCount: sortedRooms.length, data: roomData };
+  };
+
+  render() {
+    const { searchQuery, sortColumn } = this.state;
+    const { totalCount, data } = this.getPageData();
     return (
       <div>
         <div className="row" style={{ margin: "0 5% 0 5%" }}>
@@ -137,27 +157,29 @@ class Dashboard extends Component {
           <div className=" d-flex justify-content-center">
             <Message message={this.state.message} status={this.state.status} />
           </div>
-          {(sortedRooms.length === 0 && (
+          {(totalCount === 0 && (
             <h5 className="ml-4 mb-5 ">There are no rooms to show</h5>
           )) || (
             <React.Fragment>
-              <p className="ml-4 mb-3 ">Showing {sortedRooms.length} Rooms</p>
+              <p className="ml-4 mb-3 ">
+                Showing {data.length} of {totalCount} Rooms
+              </p>
               <RoomTable
-                rooms={sortedRooms}
+                rooms={data}
                 sortColumn={sortColumn}
                 onSort={this.handleSort}
                 doDelete={this.doDelete}
                 onPublish={this.onPublish}
                 handleMessage={this.handleMessage}
               />
-              {/* <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
-                  <Pagination
-                    itemsCount="100"
-                    pageSize="10"
-                    currentPage="1"
-                    onPageChange={this.handlePageChange}
-                  />
-                </div> */}
+              <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
+                <Pagination
+                  itemsCount={totalCount}
+                  pageSize={this.state.pageSize}
+                  currentPage={this.state.currentPage}
+                  onPageChange={this.handlePageChange}
+                />
+              </div>
             </React.Fragment>
           )}
         </div>

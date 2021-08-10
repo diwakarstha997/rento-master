@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import _ from "lodash";
 import ApplicationTable from "./applicationsTable";
 import { getRoomOwnerApplications } from "./../../../services/applicationService";
 import { getCurrentUser } from "./../../../services/authService";
 import application from "./../../../services/applicationService";
 import { getUserVerificationData } from "../../../services/userService";
+import { paginate } from "../../../utils/paginate";
+import Pagination from "../../common/pagination";
 
 class Applications extends Component {
   state = {
@@ -16,6 +19,8 @@ class Applications extends Component {
     rejected: "",
     approved: "",
     message: "",
+    pageSize: 5,
+    currentPage: 1,
   };
 
   async componentDidMount() {
@@ -75,6 +80,11 @@ class Applications extends Component {
     }
   }
 
+  handlePageChange = (page) => {
+    console.log("Set this page number as current:", page);
+    this.setState({ currentPage: page });
+  };
+
   handleSort = (sortColumn) => {
     this.setState({ sortColumn });
   };
@@ -128,7 +138,25 @@ class Applications extends Component {
     this.setState({ message: data });
   };
 
+  getPageData = () => {
+    const { tableData, sortColumn } = this.state;
+    const sortedApplications = _.orderBy(
+      tableData,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
+    const applicationData = paginate(
+      sortedApplications,
+      this.state.currentPage,
+      this.state.pageSize
+    );
+
+    return { totalCount: sortedApplications.length, data: applicationData };
+  };
+
   render() {
+    const { sortColumn } = this.state;
+    const { totalCount, data } = this.getPageData();
     return (
       <React.Fragment>
         <div>
@@ -199,21 +227,29 @@ class Applications extends Component {
             </div>
           </div>
           <div style={{ margin: "0 5% 0 5%" }}>
-            {(this.state.tableData.length === 0 && (
+            {(totalCount === 0 && (
               <h5 className="ml-4 mb-5 ">There are no applications to show</h5>
             )) || (
               <React.Fragment>
                 <p className="ml-4 mb-3 ">
-                  Showing {this.state.tableData.length} Applications
+                  Showing {data.length} of {totalCount} Applications
                 </p>
                 <ApplicationTable
-                  applications={this.state.tableData}
+                  applications={data}
                   sortColumn={this.state.sortColumn}
                   onSort={this.handleSort}
                   onClick={this.handleApprove}
                   handleReject={this.handleReject}
                   lable={this.state.active}
                 />
+                <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
+                  <Pagination
+                    itemsCount={totalCount}
+                    pageSize={this.state.pageSize}
+                    currentPage={this.state.currentPage}
+                    onPageChange={this.handlePageChange}
+                  />
+                </div>
               </React.Fragment>
             )}
           </div>

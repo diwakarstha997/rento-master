@@ -7,6 +7,11 @@ import complaint from "../../../services/complaintService";
 class ComplaintForm extends Forms {
   state = {
     roomId: this.props.roomId,
+    reportOptions: [
+      { _id: "", name: "", default: "Select Report Type" },
+      { _id: 1, name: "Misleading Pictures" },
+      { _id: 2, name: "Fake Rooms" },
+    ],
     data: {
       reportType: "",
       reportDescription: "",
@@ -61,11 +66,26 @@ class ComplaintForm extends Forms {
               <Modal.Title>Room Application Form</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              {this.renderSelect("reportType", "Report Type", [
+              {/* {this.renderSelect("reportType", "Report Type", [
                 { _id: "", name: "", default: "Select Report Type" },
                 { _id: 1, name: "Misleading Pictures" },
                 { _id: 2, name: "Fake Rooms" },
-              ])}
+              ])} */}
+              <div className="form-group mt-2">
+                <label htmlFor="username">Report Type</label>
+                <select name="reportType" className="form-control">
+                  {this.state.reportOptions.map((option) => (
+                    <option key={option._id} value={option.name}>
+                      {option.name || option.default}
+                    </option>
+                  ))}
+                </select>
+                {this.state.errors.reportType && (
+                  <div className="alert alert-danger">
+                    {this.state.errors.reportType}
+                  </div>
+                )}
+              </div>
               {this.renderTextArea("reportDescription", "Report Description")}
               {this.state.errors.exception && (
                 <div className="alert alert-danger">

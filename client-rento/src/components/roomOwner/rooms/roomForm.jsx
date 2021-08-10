@@ -235,11 +235,8 @@ class RoomForm extends Form {
         <div className="py-5" style={{ backgroundColor: "#e9ecef" }}>
           <form onSubmit={this.handleSubmit} encType="multipart/form-data">
             <div style={{ margin: "0 5% 0 5%" }}>
-              {this.renderSelect(
-                "city",
-                "City",
-                this.state.cities,
-                this.handleSelect
+              {this.renderSelect("city", "City", this.state.cities, () =>
+                this.handleSelect()
               )}
               {this.renderNumberInput(
                 "wardNumber",

@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import _ from "lodash";
-// import Pagination from "./../common/pagination";
+import Pagination from "./../common/pagination";
 import Search from "./../common/search";
 import RoomCard from "./roomCard";
 import Sort from "./../common/sort";
 import { getRooms } from "../../services/roomService";
 import { getFacilities } from "../../services/facilityService";
 import Filter from "./filter";
+import { paginate } from "../../utils/paginate";
 // import RoomCard from "./roomCard";
 
 class Rooms extends Component {
@@ -17,6 +18,8 @@ class Rooms extends Component {
     selectedFacilities: [],
     maxPrice: 10000000,
     sortColumn: { sortPath: "None", sortOrder: "" },
+    pageSize: 8,
+    currentPage: 1,
   };
 
   async componentDidMount() {
@@ -28,6 +31,7 @@ class Rooms extends Component {
 
   handlePageChange = (page) => {
     console.log("Set this page number as current:", page);
+    this.setState({ currentPage: page });
   };
 
   handleSearch = (e) => {
@@ -122,7 +126,9 @@ class Rooms extends Component {
       [this.state.sortColumn.sortOrder]
     );
 
-    return { totalCount: sorted.length, data: sorted };
+    const rooms = paginate(sorted, this.state.currentPage, this.state.pageSize);
+
+    return { totalCount: sorted.length, data: rooms };
   };
 
   render() {
@@ -170,7 +176,7 @@ class Rooms extends Component {
                       ? 'at "' + this.state.searchedLocation + '"'
                       : ""
                   } !!!`) ||
-                  `Showing ${totalCount} rooms ${
+                  `Showing ${data.length} of ${totalCount} rooms ${
                     this.state.searchedLocation
                       ? 'at "' + this.state.searchedLocation + '"'
                       : ""
@@ -186,14 +192,14 @@ class Rooms extends Component {
             </div>
             <hr />
             <RoomCard items={data} />
-            {/* <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
+            <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
               <Pagination
-                itemsCount="100"
-                pageSize="10"
-                currentPage="1"
+                itemsCount={totalCount}
+                pageSize={this.state.pageSize}
+                currentPage={this.state.currentPage}
                 onPageChange={this.handlePageChange}
               />
-            </div> */}
+            </div>
           </div>
         </div>
       </React.Fragment>
