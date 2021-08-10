@@ -46,7 +46,11 @@ class ConfirmDelete extends Component {
               type="button"
               className="btn-sm btn-danger  mx-2 "
               value={this.props.value}
-              onClick={this.props.onClick}
+              onClick={
+                this.props.lable
+                  ? () => this.props.onClick(this.props.value, this.props.lable)
+                  : this.props.onClick
+              }
             >
               {this.props.reject
                 ? "Reject"

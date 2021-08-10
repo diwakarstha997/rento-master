@@ -14,12 +14,24 @@ class EditModal extends Form {
       previousLocation: "",
       reasonToLeavePreviousLocation: "",
       additionalComments: "",
+      pets: "",
+      noOfRoomMates: "",
+      noOfChildrens: "",
     },
     errors: {},
   };
   schema = {
     occupation: Joi.string().required().label("Occupation"),
     monthlyIncome: Joi.number().required().label("Monthly Income"),
+    pets: Joi.string().allow("").optional().label("Pets"),
+    noOfRoomMates: Joi.number()
+      .allow("")
+      .optional()
+      .label("Number of Roomates"),
+    noOfChildrens: Joi.number()
+      .allow("")
+      .optional()
+      .label("Number of Childrens"),
     emergencyContact: Joi.string()
       .min(10)
       .max(10)
@@ -43,8 +55,12 @@ class EditModal extends Form {
     this.setState({ show: false });
   };
 
-  modalPress = () => {
+  modalPress = async () => {
     const { edit } = this.props;
+    if (edit.viewed === "false") {
+      await application.applicationView(edit._id);
+      this.props.handleView();
+    }
     let data = this.state.data;
     data.occupation = edit.occupation;
     data.monthlyIncome = edit.monthlyIncome;
@@ -52,6 +68,9 @@ class EditModal extends Form {
     data.previousLocation = edit.previousLocation;
     data.reasonToLeavePreviousLocation = edit.reasonToLeavePreviousLocation;
     data.additionalComments = edit.additionalComments;
+    data.pets = edit.pets;
+    data.noOfRoomMates = edit.noOfRoomMates;
+    data.noOfChildrens = edit.noOfChildrens;
 
     this.setState({ show: true, data });
   };
@@ -67,7 +86,10 @@ class EditModal extends Form {
         data.emergencyContact,
         data.previousLocation,
         data.reasonToLeavePreviousLocation,
-        data.additionalComments
+        data.additionalComments,
+        data.pets,
+        data.noOfRoomMates,
+        data.noOfChildrens
       );
       this.props.handleMessage(message.data, this.props.tab);
       console.log(message.data);
@@ -110,6 +132,13 @@ class EditModal extends Form {
                     "reasonToLeavePreviousLocation",
                     "Reason To Leave Previous Location"
                   )}
+
+                  {this.renderInput("noOfRoomMates", "Number of Roomates")}
+                  {this.renderInput(
+                    "noOfChildrens",
+                    "Any Childrens ? If so mention"
+                  )}
+                  {this.renderInput("pets", "Any Pets ? If so mention")}
                   {this.renderInput(
                     "additionalComments",
                     "Additional Comments"
@@ -133,11 +162,13 @@ class EditModal extends Form {
                       </React.Fragment>
                     )}
 
-                    {this.renderModalButton(
-                      "Cancel",
-                      "btn-danger",
-                      this.handleClose
-                    )}
+                    <button
+                      className="btn px-4 mx-1 btn-danger"
+                      type="button"
+                      onClick={this.handleClose}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </React.Fragment>
               ) : (
@@ -156,6 +187,16 @@ class EditModal extends Form {
                     "reasonToLeavePreviousLocation",
                     "Reason To Leave Previous Location"
                   )}
+
+                  {this.renderDisabledInput(
+                    "noOfRoomMates",
+                    "Number of Roomates"
+                  )}
+                  {this.renderDisabledInput(
+                    "noOfChildrens",
+                    "Any Childrens ? If so mention"
+                  )}
+                  {this.renderDisabledInput("pets", "Any Pets ? If so mention")}
                   {this.renderDisabledInput(
                     "additionalComments",
                     "Additional Comments"

@@ -273,7 +273,10 @@ class NavBar extends Component {
             {uv_data.verified === false && (
               <div className="d-flex justify-content-center mx-auto my-3 alert alert-danger text-center admin-alert">
                 <p className="my-auto">
-                  Your identity is not verified. Please{" "}
+                  {(uv_data.declined === true &&
+                    "Your documents was declined.") ||
+                    "Your identity is not verified."}{" "}
+                  Please{" "}
                   <a
                     className="text-danger"
                     href={

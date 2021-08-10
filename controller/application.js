@@ -39,6 +39,9 @@ module.exports = {
       previousLocation: req.body.previousLocation,
       reasonToLeavePreviousLocation: req.body.reasonToLeavePreviousLocation,
       additionalComments: req.body.additionalComments,
+      pets: req.body.pets,
+      noOfRoomMates: req.body.noOfRoomMates,
+      noOfChildrens: req.body.noOfChildrens,
     });
     await application.save();
     res.send("application created successfully");
@@ -152,6 +155,9 @@ module.exports = {
       previousLocation: req.body.previousLocation,
       reasonToLeavePreviousLocation: req.body.reasonToLeavePreviousLocation,
       additionalComments: req.body.additionalComments,
+      pets: req.body.pets,
+      noOfRoomMates: req.body.noOfRoomMates,
+      noOfChildrens: req.body.noOfChildrens,
     });
 
     await application.save();
@@ -181,6 +187,7 @@ module.exports = {
 
     application.set({
       status: "Rejected",
+      viewed: "true",
     });
 
     await application.save();
@@ -200,6 +207,7 @@ module.exports = {
     console.log(user.name, user.phone);
     application.set({
       status: "Approved",
+      viewed: "false",
       contactNo: user.phone,
     });
     await application.save();
@@ -207,6 +215,33 @@ module.exports = {
     res
       .status(200)
       .send(application.applicationTag + " Application was Approved");
+  },
+  view: async (req, res) => {
+    const application = await Application.findOne({
+      _id: req.params.id,
+    });
+
+    application.set({
+      viewed: "true",
+    });
+
+    await application.save();
+
+    res.send("viewed");
+  },
+
+  view2: async (req, res) => {
+    const application = await Application.findOne({
+      _id: req.params.id,
+    });
+
+    application.set({
+      viewed: "seen",
+    });
+
+    await application.save();
+
+    res.send("viewed");
   },
   //   findByUser: "finds user specific application",
   //   findByRoom: "finds all application",

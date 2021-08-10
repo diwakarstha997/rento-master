@@ -194,3 +194,8 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.badge-pill {
+  padding-left: 6px;
+  margin: 2px 2px;
+}

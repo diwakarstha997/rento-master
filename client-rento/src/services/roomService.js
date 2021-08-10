@@ -83,6 +83,10 @@ export function optionalImageDelete(imagePath, roomId) {
   });
 }
 
+export function getApplicationsForRoom(roomId) {
+  return http.get(apiEndpoint + "/roomowner/getApplicationsForRoom/" + roomId);
+}
+
 const rooms = {
   getRooms,
   getRoomsByUser,
@@ -94,6 +98,7 @@ const rooms = {
   publishRoom,
   updateRoom,
   optionalImageUpload,
+  getApplicationsForRoom,
 };
 
 export default rooms;

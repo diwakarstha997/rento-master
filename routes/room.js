@@ -15,6 +15,10 @@ router.get("/createdToday", Room.roomCreatedToday);
 router.get("/:id", Room.findByIdForTenant);
 router.get("/roomowner/myrooms", [auth], Room.findByUser);
 router.get("/RoomOwner/:id", [auth], Room.findByIdForRoomOwner);
+router.get(
+  "/RoomOwner/getApplicationsForRoom/:id",
+  Room.getApplicationsForRoom
+);
 
 router.post(
   "/image/upload",

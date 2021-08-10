@@ -21,14 +21,18 @@ class Applications extends Component {
     message: "",
     pageSize: 5,
     currentPage: 1,
+    count: 0,
   };
 
   async componentDidMount() {
     document.title = "Rento | Room Applications";
+    this.renderTableData("all");
+  }
+
+  renderTableData = async (tab) => {
     const user = getCurrentUser();
     let uv_data;
     if (user) uv_data = getUserVerificationData();
-    console.log(user, uv_data);
 
     if (uv_data.verified === true) {
       const { data: applications } = await getRoomOwnerApplications();
@@ -40,45 +44,30 @@ class Applications extends Component {
       ).length;
       const approved = applications.filter(
         (d) => d.status === "Approved"
-      ).length;
+      ).length; ///pending approved cancel
+      const count = applications.filter((d) => d.viewed === "submitted").length;
+      if (tab === "all") this.setState({ tableData: applications });
+      if (tab === "pending")
+        this.setState({
+          tableData: applications.filter((d) => d.status === "Submitted"),
+        });
+      if (tab === "approved")
+        this.setState({
+          tableData: applications.filter((d) => d.status === "Approved"),
+        });
+      if (tab === "cancel")
+        this.setState({
+          tableData: applications.filter((d) => d.status === "Rejected"),
+        });
       this.setState({
         applications,
-        tableData: applications,
         submitted,
         rejected,
         approved,
+        count,
       });
     }
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    if (prevState.message !== this.state.message) {
-      const user = getCurrentUser();
-      let uv_data;
-      if (user) uv_data = getUserVerificationData();
-      console.log(user, uv_data);
-
-      if (uv_data.verified === true) {
-        const { data: applications } = await getRoomOwnerApplications();
-        const submitted = applications.filter(
-          (d) => d.status === "Submitted"
-        ).length;
-        const rejected = applications.filter(
-          (d) => d.status === "Rejected"
-        ).length;
-        const approved = applications.filter(
-          (d) => d.status === "Approved"
-        ).length;
-        this.setState({
-          applications,
-          tableData: applications,
-          submitted,
-          rejected,
-          approved,
-        });
-      }
-    }
-  }
+  };
 
   handlePageChange = (page) => {
     console.log("Set this page number as current:", page);
@@ -99,43 +88,40 @@ class Applications extends Component {
   handleSelect = (v) => {
     if (v === "all") {
       this.setState({ active: v });
-      this.setState({ tableData: this.state.applications });
+      this.renderTableData("all");
     }
     if (v === "pending") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter((d) => d.status === "Submitted");
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("pending");
     }
     if (v === "approved") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter((d) => d.status === "Approved");
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("approved");
     }
     if (v === "cancel") {
       this.setState({ active: v });
-      let data = this.state.applications;
-      data = data.filter((d) => d.status === "Rejected");
-      this.setState({ tableData: data });
-      console.log(data);
+      this.renderTableData("cancel");
     }
 
     console.log(this.state.active);
   };
 
-  handleApprove = async (e) => {
-    const { data } = await application.applicationApprove(
-      e.currentTarget.value
-    );
+  handleApprove = async (e, lable) => {
+    console.log(lable);
+    const { data } = await application.applicationApprove(e);
+    this.renderTableData(lable);
     this.setState({ message: data });
   };
 
-  handleReject = async (e) => {
-    const { data } = await application.applicationReject(e.currentTarget.value);
+  handleReject = async (e, lable) => {
+    console.log(lable);
+    const { data } = await application.applicationReject(e);
+    this.renderTableData(lable);
     this.setState({ message: data });
+  };
+
+  handleView = (lable) => {
+    this.renderTableData(lable);
   };
 
   getPageData = () => {
@@ -182,6 +168,13 @@ class Applications extends Component {
                     onClick={() => this.handleSelect("all")}
                   >
                     All({this.state.applications.length})
+                    {this.state.count ? (
+                      <span className="badge badge-pill badge-danger ">
+                        {this.state.count}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </li>
                 <li className="text-dark mx-2">
@@ -195,6 +188,13 @@ class Applications extends Component {
                     onClick={() => this.handleSelect("pending")}
                   >
                     Pending({this.state.submitted})
+                    {this.state.count ? (
+                      <span className="badge badge-pill badge-danger ">
+                        {this.state.count}
+                      </span>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 </li>
                 <li className="text-dark mx-2">
@@ -236,10 +236,11 @@ class Applications extends Component {
                 </p>
                 <ApplicationTable
                   applications={data}
-                  sortColumn={this.state.sortColumn}
+                  sortColumn={sortColumn}
                   onSort={this.handleSort}
-                  onClick={this.handleApprove}
+                  handleApprove={this.handleApprove}
                   handleReject={this.handleReject}
+                  handleView={this.handleView}
                   lable={this.state.active}
                 />
                 <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">

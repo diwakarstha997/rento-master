@@ -12,6 +12,10 @@ import { paginate } from "../../utils/paginate";
 
 class Dashboard extends Component {
   state = {
+    active: "all",
+    forRent: "",
+    inactive: "",
+    tableData: "",
     rooms: [],
     message: "",
     status: "",
@@ -23,9 +27,54 @@ class Dashboard extends Component {
 
   async componentDidMount() {
     document.title = "Rento | My Rooms";
-    const { data: userRooms } = await rooms.getRoomsByUser();
-    this.setState({ rooms: userRooms });
+    this.renderTableData("all");
   }
+
+  renderTableData = async (tab) => {
+    const user = getCurrentUser();
+    let uv_data;
+    if (user) uv_data = getUserVerificationData();
+
+    if (uv_data.verified === true) {
+      const { data: userRooms } = await rooms.getRoomsByUser();
+      const forRent = userRooms.filter((d) => d.status === "Active").length;
+      const inactive = userRooms.filter((d) => d.status === "Inactive").length;
+      if (tab === "all") this.setState({ tableData: userRooms });
+      if (tab === "inactive")
+        this.setState({
+          tableData: userRooms.filter((d) => d.status === "Inactive"),
+        });
+      if (tab === "active")
+        this.setState({
+          tableData: userRooms.filter((d) => d.status === "Active"),
+        });
+      this.setState({
+        rooms: userRooms,
+        inactive,
+        forRent,
+      });
+    }
+  };
+
+  handleSelect = (v) => {
+    if (v === "all") {
+      this.setState({ active: v });
+      this.setState({ tableData: this.state.rooms });
+    }
+    if (v === "active") {
+      this.setState({ active: v });
+      let data = this.state.rooms;
+      data = data.filter((d) => d.status === "Active");
+      this.setState({ tableData: data });
+    }
+    if (v === "inactive") {
+      this.setState({ active: v });
+      let data = this.state.rooms;
+      data = data.filter((d) => d.status === "Inactive");
+      this.setState({ tableData: data });
+    }
+    console.log(this.state.active);
+  };
 
   handlePageChange = (page) => {
     console.log("Set this page number as current:", page);
@@ -70,7 +119,7 @@ class Dashboard extends Component {
     }
   };
 
-  onPublish = async (v) => {
+  onPublish = async (v, lable) => {
     try {
       const user = await getCurrentUser();
       let uv_data;
@@ -79,8 +128,7 @@ class Dashboard extends Component {
       if (uv_data.verified === true) {
         const { status, data } = await rooms.publishRoom(v);
 
-        const { data: userRooms } = await rooms.getRoomsByUser();
-        this.setState({ rooms: userRooms });
+        this.renderTableData(lable);
 
         this.setState({ message: data, status });
       } else {
@@ -93,8 +141,12 @@ class Dashboard extends Component {
   };
 
   getPageData = () => {
-    const { rooms, sortColumn } = this.state;
-    const sortedRooms = _.orderBy(rooms, [sortColumn.path], [sortColumn.order]);
+    const { tableData, sortColumn } = this.state;
+    const sortedRooms = _.orderBy(
+      tableData,
+      [sortColumn.path],
+      [sortColumn.order]
+    );
     const roomData = paginate(
       sortedRooms,
       this.state.currentPage,
@@ -129,19 +181,43 @@ class Dashboard extends Component {
           <div className="my-2 col-lg col-md d-flex justify-content-lg-start justify-content-md-start justify-content-center">
             <ul className="nav" style={{ listStyleType: "none" }}>
               <li className=" mx-2">
-                <a className="text-dark" href="/">
-                  All
-                </a>
+                <div
+                  style={{ cursor: "pointer" }}
+                  className={
+                    this.state.active === "all"
+                      ? "text-dark font-weight-bold application-button"
+                      : "text-dark application-button"
+                  }
+                  onClick={() => this.handleSelect("all")}
+                >
+                  All({this.state.rooms.length})
+                </div>
               </li>
               <li className="text-dark mx-2">
-                <a className="text-dark" href="/">
-                  For Rent
-                </a>
+                <div
+                  style={{ cursor: "pointer" }}
+                  className={
+                    this.state.active === "active"
+                      ? "text-dark font-weight-bold application-button"
+                      : "text-dark application-button"
+                  }
+                  onClick={() => this.handleSelect("active")}
+                >
+                  For Rent({this.state.forRent})
+                </div>
               </li>
               <li className="text-dark mx-2">
-                <a className="text-dark" href="/">
-                  Inactive
-                </a>
+                <div
+                  style={{ cursor: "pointer" }}
+                  className={
+                    this.state.active === "inactive"
+                      ? "text-dark font-weight-bold application-button"
+                      : "text-dark application-button"
+                  }
+                  onClick={() => this.handleSelect("inactive")}
+                >
+                  Inactive({this.state.inactive})
+                </div>
               </li>
             </ul>
           </div>
@@ -171,6 +247,7 @@ class Dashboard extends Component {
                 doDelete={this.doDelete}
                 onPublish={this.onPublish}
                 handleMessage={this.handleMessage}
+                lable={this.state.active}
               />
               <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">
                 <Pagination

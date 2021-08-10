@@ -2,6 +2,7 @@ import React from "react";
 import { Button, Modal } from "react-bootstrap";
 import Form from "../../common/form";
 import Joi from "joi-browser";
+import application from "../../../services/applicationService";
 
 class ViewApplicationModal extends Form {
   state = {
@@ -39,7 +40,7 @@ class ViewApplicationModal extends Form {
 
   handleClose = () => this.setState({ show: false });
 
-  modalPress = () => {
+  modalPress = async () => {
     const { edit } = this.props;
     console.log(edit);
     let data = this.state.data;
@@ -49,7 +50,14 @@ class ViewApplicationModal extends Form {
     data.previousLocation = edit.previousLocation;
     data.reasonToLeavePreviousLocation = edit.reasonToLeavePreviousLocation;
     data.additionalComments = edit.additionalComments;
-
+    if (edit.viewed === "submitted") {
+      try {
+        await application.applicationView2(edit._id);
+        this.props.handleView(this.props.lable);
+      } catch (e) {
+        console.log(e);
+      }
+    }
     this.setState({ show: true, data });
   };
 

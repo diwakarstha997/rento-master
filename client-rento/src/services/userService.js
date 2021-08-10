@@ -84,6 +84,18 @@ export function changePasswordByToken(token, password1, password2) {
   });
 }
 
+export function getVerifyUser() {
+  return http.get(apiEndpoint + "/getVerifyUser");
+}
+
+export function verifyUser(userId) {
+  return http.put(apiEndpoint + "/verify/", { userId });
+}
+
+export function declineUser(userId) {
+  return http.put(apiEndpoint + "/decline/", { userId });
+}
+
 const user = {
   register,
   getProfileData,
@@ -98,6 +110,9 @@ const user = {
   forgotPasswordEmail,
   changePasswordTokenCheck,
   changePasswordByToken,
+  getVerifyUser,
+  verifyUser,
+  declineUser,
 };
 
 export default user;

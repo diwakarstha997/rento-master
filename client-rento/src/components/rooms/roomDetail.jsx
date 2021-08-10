@@ -9,6 +9,7 @@ import ComplaintForm from "../tenant/complaints/complaintForm";
 import { Link } from "react-router-dom";
 import { checkExistingApplication } from "../../services/applicationService";
 import { getUserVerificationData } from "../../services/userService";
+import Contact from "../tenant/modal/contact";
 
 class RoomDetail extends Component {
   state = {
@@ -131,6 +132,14 @@ class RoomDetail extends Component {
                                   >
                                     View Application
                                   </a>
+                                )}
+
+                                {existingApplication.status === "Approved" && (
+                                  <Contact
+                                    viewed={existingApplication.viewed}
+                                    id={existingApplication._id}
+                                    contact={existingApplication.contactNo}
+                                  />
                                 )}
 
                                 <button

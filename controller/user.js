@@ -186,8 +186,18 @@ module.exports = {
   },
 
   verify: async (req, res) => {
-    await User.updateOne({ _id: req.body.userId }, { verified: true });
-    res.send("user verified");
+    const user = await User.findOneAndUpdate(
+      { _id: req.body.userId },
+      { verified: true }
+    );
+    res.send(`User ${user.name} was verified`);
+  },
+  decline: async (req, res) => {
+    const user = await User.findOneAndUpdate(
+      { _id: req.body.userId },
+      { declined: true }
+    );
+    res.send(`User ${user.name}'s verification was declined`);
   },
 
   changePassword: async (req, res) => {
@@ -371,5 +381,11 @@ module.exports = {
       console.log(ex);
       res.status(400).send("Invalid Token");
     }
+  },
+  getVerifyUser: async (req, res) => {
+    const value = await User.find({ verified: false })
+      .and({ documentImagePath: { $exists: true } })
+      .and({ declined: false });
+    res.send(value);
   },
 };

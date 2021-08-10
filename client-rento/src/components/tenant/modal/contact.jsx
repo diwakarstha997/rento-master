@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Button, Modal } from "react-bootstrap";
 import { getRoomById } from "../../../services/roomService";
 import Map from "../../common/map";
+import application from "../../../services/applicationService";
 
 class Contact extends Component {
   state = {
@@ -12,17 +13,28 @@ class Contact extends Component {
   async componentDidMount() {}
 
   handleOpen = async () => {
-    console.log(this.props.roomId);
-    const { data: roomData } = await getRoomById(this.props.roomId);
-    const mapData = {
-      lng: roomData.lng,
-      lat: roomData.lat,
-      zoom: roomData.zoom,
-      marker: roomData.marker,
-    };
-    this.setState({ mapData });
-    console.log(mapData);
-    this.setState({ show: true });
+    try {
+      console.log("heloow");
+      if (this.props.viewed === "false") {
+        await application.applicationView(this.props.id);
+        if (this.props.handleView) {
+          this.props.handleView();
+        }
+      }
+
+      const { data: roomData } = await getRoomById(this.props.roomId);
+      const mapData = {
+        lng: roomData.lng,
+        lat: roomData.lat,
+        zoom: roomData.zoom,
+        marker: roomData.marker,
+      };
+      this.setState({ mapData });
+      console.log(mapData);
+      this.setState({ show: true });
+    } catch (error) {
+      console.log(error.respose.data);
+    }
   };
 
   handleClose = () => this.setState({ show: false });
@@ -32,7 +44,11 @@ class Contact extends Component {
       <React.Fragment>
         <Button
           type="button"
-          className="btn-success  btn-sm ml-2"
+          className={
+            this.props.handleView
+              ? "btn-success  btn-sm ml-2"
+              : "btn-success  btn mr-2"
+          }
           onClick={this.handleOpen}
         >
           Contact
@@ -40,8 +56,8 @@ class Contact extends Component {
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Title>Contact RoomOwner</Modal.Title>
           <Modal.Body>
-            <div class="p-3 mb-2">
-              <label forHtml="contact">Contact: </label>{" "}
+            <div className="p-3 mb-2">
+              <label forhtml="contact">Contact: </label>{" "}
               <a name="contact" href={`tel:+977-${this.props.contact}`}>
                 +977-{this.props.contact}
               </a>

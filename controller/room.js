@@ -109,6 +109,11 @@ module.exports = {
 
     if (room.status !== "Active") return res.status(404).send("File not Found");
 
+    room.set({
+      views: room.views + 1,
+    });
+    room.save();
+
     res.send(room);
   },
 
@@ -194,5 +199,16 @@ module.exports = {
       await room.save();
       res.status(202).send("Room was hidden successfully");
     }
+  },
+  getApplicationsForRoom: async (req, res) => {
+    const count = await Application.find({
+      room: req.params.id,
+      // roomOwner: req.user._id,
+    })
+      .and([{ status: { $ne: "Rejected" } }, { status: { $ne: "Cancelled" } }])
+      .countDocuments();
+    if (!count) return res.send("0");
+
+    res.send("" + count);
   },
 };

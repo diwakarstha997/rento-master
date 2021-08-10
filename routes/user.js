@@ -24,6 +24,12 @@ router.get("/mailResend", [auth], User.mailResend);
 
 router.get("/checkUserVerification", [auth], User.checkUserVerification);
 
+router.get("/getTotal", [auth], User.getTotalUser);
+router.get("/createdToday", [auth], User.userCreatedToday);
+router.get("/getVerifyUser", [auth], User.getVerifyUser);
+
+router.put("/verify", [auth], User.verify);
+
 router.put("/changePassword", User.changePassword);
 router.put("/editProfile", User.editProfileData);
 router.get("/getTotal", [auth], User.getTotalUser);

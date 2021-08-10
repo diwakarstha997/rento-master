@@ -36,7 +36,10 @@ export function editApplication(
   emergencyContact,
   previousLocation,
   reasonToLeavePreviousLocation,
-  additionalComments
+  additionalComments,
+  pets,
+  noOfRoomMates,
+  noOfChildrens
 ) {
   return http.put(apiEndpoint + "/edit/" + applicationId, {
     occupation,
@@ -45,6 +48,9 @@ export function editApplication(
     previousLocation,
     reasonToLeavePreviousLocation,
     additionalComments,
+    pets,
+    noOfRoomMates,
+    noOfChildrens,
   });
 }
 
@@ -56,6 +62,14 @@ export function applicationReject(applicationId) {
   return http.put(apiEndpoint + "/reject/" + applicationId);
 }
 
+export function applicationView(applicationId) {
+  return http.put(apiEndpoint + "/view/" + applicationId);
+}
+
+export function applicationView2(applicationId) {
+  return http.put(apiEndpoint + "/view2/" + applicationId);
+}
+
 const application = {
   save,
   checkExistingApplication,
@@ -65,6 +79,8 @@ const application = {
   cancelApplication,
   applicationApprove,
   applicationReject,
+  applicationView,
+  applicationView2,
 };
 
 export default application;

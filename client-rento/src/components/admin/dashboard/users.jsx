@@ -1,45 +1,28 @@
 import React, { Component } from "react";
-import AddFacilityModal from "../modals/addFacilityModal";
-import facility from "../../../services/facilityService";
 import Message from "./message";
-import EditModal from "../modals/editModal";
-import ConfirmDelete from "../../common/confirmDelete";
-import Joi from "joi-browser";
+import user from "../../../services/userService";
+import ViewVerify from "../modals/viewVerify";
 
 class Users extends Component {
   state = {
-    facilities: [],
+    users: [],
     message: "",
     status: "",
-    undo: [],
   };
 
   async componentDidMount() {
-    const { data: facilities } = await facility.getFacilities();
-    this.setState({ facilities });
-    console.log(facilities);
+    const { data: users } = await user.getVerifyUser();
+    this.setState({ users });
+    console.log(users);
   }
-  async componentDidUpdate() {
-    const { data: facilities } = await facility.getFacilities();
-    this.setState({ facilities });
-  }
-  doDelete = async (e) => {
-    try {
-      const { status, data } = await facility.deleteFacility(e.target.value);
-      const message = data.name + " Facility was sucessefully deleted ";
-      this.setState({ message, undo: data, status });
-      console.log(status);
-    } catch (ex) {}
-  };
-  undoDelete = async () => {
-    try {
-      const { undo } = this.state;
-      console.log("!");
-      await facility.addFacility(undo.name, undo.icon);
 
-      this.setState({ undo: [], message: "" });
-    } catch (ex) {}
-  };
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevState.message !== this.state.message) {
+      const { data: users } = await user.getVerifyUser();
+      this.setState({ users });
+    }
+  }
+
   setMessage = (m) => {
     this.setState({ message: m });
   };
@@ -47,15 +30,23 @@ class Users extends Component {
     this.setState({ status: s });
   };
 
+  handleDecline = async (e) => {
+    const { data } = await user.declineUser(e.target.value);
+    this.setState({ message: data });
+    console.log(data);
+  };
+
+  handleVerify = async (e) => {
+    const { data } = await user.verifyUser(e.target.value);
+    this.setState({ message: data });
+    console.log(data);
+  };
+
   render() {
     return (
       <React.Fragment>
         {this.props.sidebarSelect === "users" && (
-          <div className="col">
-            <AddFacilityModal
-              message={this.setMessage}
-              status={this.setStatus}
-            />
+          <div className="col ">
             <Message
               message={this.state.message}
               undoDelete={this.undoDelete}
@@ -66,31 +57,34 @@ class Users extends Component {
                 <tr>
                   <th> Id</th>
                   <th> Name</th>
-                  <th> Icon</th>
+                  <th> Date Created</th>
+                  <th>User Role</th>
                   <th> </th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.facilities.map((f) => (
-                  <tr key={f._id}>
-                    <td>{f._id}</td>
-                    <td>{f.name}</td>
-                    <td>
-                      <i className={`fa ${f.icon}`}></i>
-                    </td>
-                    <td>
-                      <ConfirmDelete value={f._id} onClick={this.doDelete} />
-                      <EditModal
-                        edit={f}
-                        message={this.setMessage}
-                        status={this.setStatus}
-                        nTag={"Facility"}
-                        vTag={"Icon"}
-                        schema={Joi.string().label("Icon")}
-                      />
-                    </td>
-                  </tr>
-                ))}
+                {this.state.users ? (
+                  <React.Fragment>
+                    {this.state.users.map((u) => (
+                      <tr key={u._id}>
+                        <td>{u._id}</td>
+                        <td>{u.name}</td>
+                        <td>{u.dateCreated.slice(0, 10)}</td>
+                        <td>{u.userRole}</td>
+                        <td>
+                          <ViewVerify
+                            data={u.documentImagePath}
+                            id={u._id}
+                            handleDecline={this.handleDecline}
+                            handleVerify={this.handleVerify}
+                          />
+                        </td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ) : (
+                  <p>No user verify request</p>
+                )}
               </tbody>
             </table>
           </div>

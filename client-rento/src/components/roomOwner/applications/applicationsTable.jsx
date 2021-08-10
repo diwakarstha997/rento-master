@@ -18,6 +18,19 @@ class ApplicationTable extends Component {
       ),
     },
     {
+      path: "viewed",
+      visibility: true,
+      content: (application) => (
+        <React.Fragment>
+          {application.viewed === "submitted" ? (
+            <span className="badge badge-pill badge-danger ">NEW</span>
+          ) : (
+            ""
+          )}
+        </React.Fragment>
+      ),
+    },
+    {
       path: "room.roomTag",
       label: "Room No.",
       visibility: true,
@@ -40,19 +53,29 @@ class ApplicationTable extends Component {
           <div className="text-center">
             {application.status === "Submitted" ? (
               <div>
-                <ViewApplicationModal edit={application} />
+                <ViewApplicationModal
+                  edit={application}
+                  handleView={this.props.handleView}
+                  lable={this.props.lable}
+                />
                 <ApproveModal
                   value={application._id}
-                  onClick={this.props.onClick}
+                  onClick={this.props.handleApprove}
+                  lable={this.props.lable}
                 />
                 <ConfirmDelete
                   reject={"reject"}
                   value={application._id}
                   onClick={this.props.handleReject}
+                  lable={this.props.lable}
                 />
               </div>
             ) : (
-              <ViewApplicationModal edit={application} />
+              <ViewApplicationModal
+                edit={application}
+                handleView={this.props.handleView}
+                lable={this.props.lable}
+              />
             )}
           </div>
         </React.Fragment>

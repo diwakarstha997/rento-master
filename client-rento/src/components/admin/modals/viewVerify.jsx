@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Button, Modal } from "react-bootstrap";
 
-class ApproveModal extends Component {
+class ViewVerify extends Component {
   state = {
     show: false,
   };
@@ -9,44 +9,43 @@ class ApproveModal extends Component {
   handleShow = () => this.setState({ show: true });
 
   handleClose = () => this.setState({ show: false });
-
   render() {
     return (
       <React.Fragment>
         <Button
           type="button"
-          className=" btn-success  btn-sm ml-2"
+          className=" btn-primary btn-sm ml-2 "
           onClick={this.handleShow}
         >
-          Approve
+          View
         </Button>
 
         <Modal show={this.state.show} onHide={this.handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Confirm Approve ? </Modal.Title>
+            <Modal.Title>View Documents</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <p className="text-danger">
-              Are you sure you wint to approve this appilcation
-            </p>
-            <p className="text-danger">
-              Your contact details will be shared with tennant
-            </p>
+            <img
+              className="d-block w-100"
+              src={`/${this.props.data}`}
+              style={{ height: 600 }}
+              alt="Document"
+            />
             <Button
               type="button"
-              className="btn-sm btn-danger  mx-2 "
-              onClick={() =>
-                this.props.onClick(this.props.value, this.props.lable)
-              }
+              className="btn-sm btn-success mt-3 mx-2 "
+              value={this.props.id}
+              onClick={this.props.handleVerify}
             >
-              Approve
+              Verify
             </Button>
             <Button
               type="button"
-              className="btn-sm btn-secondary  mx-2 "
-              onClick={this.handleClose}
+              className="btn-sm btn-danger mt-3 mx-2 "
+              value={this.props.id}
+              onClick={this.props.handleDecline}
             >
-              Cancel
+              Decline
             </Button>
           </Modal.Body>
         </Modal>
@@ -55,4 +54,4 @@ class ApproveModal extends Component {
   }
 }
 
-export default ApproveModal;
+export default ViewVerify;

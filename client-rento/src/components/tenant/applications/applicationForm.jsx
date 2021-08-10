@@ -15,6 +15,9 @@ class ApplicationForm extends Forms {
       previousLocation: "",
       reasonToLeavePreviousLocation: "",
       additionalComments: "",
+      pets: "",
+      noOfRoomMates: "",
+      noOfChildrens: "",
     },
     errors: {},
   };
@@ -22,6 +25,15 @@ class ApplicationForm extends Forms {
   schema = {
     occupation: Joi.string().required().label("Occupation"),
     monthlyIncome: Joi.number().required().label("Monthly Income"),
+    pets: Joi.string().allow("").optional().label("Pets"),
+    noOfRoomMates: Joi.number()
+      .allow("")
+      .optional()
+      .label("Number of Roomates"),
+    noOfChildrens: Joi.number()
+      .allow("")
+      .optional()
+      .label("Number of Childrens"),
     emergencyContact: Joi.string()
       .min(10)
       .max(10)
@@ -50,6 +62,9 @@ class ApplicationForm extends Forms {
     data.previousLocation = "";
     data.reasonToLeavePreviousLocation = "";
     data.additionalComments = "";
+    data.pets = "";
+    data.noOfRoomMates = "";
+    data.noOfChildrens = "";
     this.setState({
       roomId: this.props.roomId,
       message: "",
@@ -94,6 +109,10 @@ class ApplicationForm extends Forms {
               "reasonToLeavePreviousLocation",
               "Reason To Leave Previous Location"
             )}
+
+            {this.renderInput("noOfRoomMates", "Number of Roomates")}
+            {this.renderInput("noOfChildrens", "Any Childrens ? If so mention")}
+            {this.renderInput("pets", "Any Pets ? If so mention")}
             {this.renderTextArea("additionalComments", "Additional Comments")}
             {this.state.message && (
               <div className="alert alert-danger">{this.state.message}</div>
