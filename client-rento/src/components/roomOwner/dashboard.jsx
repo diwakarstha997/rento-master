@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import Search from "./../common/search";
 import Pagination from "../common/pagination";
 import rooms from "../../services/roomService";
 // import { getRoomsByUser } from "../../services/roomService";
@@ -31,29 +30,23 @@ class Dashboard extends Component {
   }
 
   renderTableData = async (tab) => {
-    const user = getCurrentUser();
-    let uv_data;
-    if (user) uv_data = getUserVerificationData();
-
-    if (uv_data.verified === true) {
-      const { data: userRooms } = await rooms.getRoomsByUser();
-      const forRent = userRooms.filter((d) => d.status === "Active").length;
-      const inactive = userRooms.filter((d) => d.status === "Inactive").length;
-      if (tab === "all") this.setState({ tableData: userRooms });
-      if (tab === "inactive")
-        this.setState({
-          tableData: userRooms.filter((d) => d.status === "Inactive"),
-        });
-      if (tab === "active")
-        this.setState({
-          tableData: userRooms.filter((d) => d.status === "Active"),
-        });
+    const { data: userRooms } = await rooms.getRoomsByUser();
+    const forRent = userRooms.filter((d) => d.status === "Active").length;
+    const inactive = userRooms.filter((d) => d.status === "Inactive").length;
+    if (tab === "all") this.setState({ tableData: userRooms });
+    if (tab === "inactive")
       this.setState({
-        rooms: userRooms,
-        inactive,
-        forRent,
+        tableData: userRooms.filter((d) => d.status === "Inactive"),
       });
-    }
+    if (tab === "active")
+      this.setState({
+        tableData: userRooms.filter((d) => d.status === "Active"),
+      });
+    this.setState({
+      rooms: userRooms,
+      inactive,
+      forRent,
+    });
   };
 
   handleSelect = (v) => {
@@ -73,11 +66,9 @@ class Dashboard extends Component {
       data = data.filter((d) => d.status === "Inactive");
       this.setState({ tableData: data });
     }
-    console.log(this.state.active);
   };
 
   handlePageChange = (page) => {
-    console.log("Set this page number as current:", page);
     this.setState({ currentPage: page });
   };
 
@@ -86,7 +77,6 @@ class Dashboard extends Component {
   };
 
   handleSearch = (e) => {
-    console.log(e.currentTarget.value);
     this.setState({
       searchQuery: e.currentTarget.value,
     });
@@ -97,20 +87,20 @@ class Dashboard extends Component {
     this.setState({ message: m.data, status: m.status, rooms: userRooms });
   };
 
-  doDelete = async (e) => {
+  doDelete = async (v, lable) => {
     try {
-      const { status, data } = await rooms.deleteRoom(e.target.value);
+      const { status, data } = await rooms.deleteRoom(v);
 
       const { data: userRooms } = await rooms.getRoomsByUser();
       this.setState({ rooms: userRooms });
+      this.renderTableData(lable);
 
       this.setState({ message: data, status });
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
-        this.setState({ rooms: "" });
-
         const { data: userRooms } = await rooms.getRoomsByUser();
         this.setState({ rooms: userRooms });
+
         this.setState({
           message: ex.response.data,
           status: 202,
@@ -124,7 +114,7 @@ class Dashboard extends Component {
       const user = await getCurrentUser();
       let uv_data;
       if (user) uv_data = getUserVerificationData();
-      console.log(user, uv_data);
+
       if (uv_data.verified === true) {
         const { status, data } = await rooms.publishRoom(v);
 
@@ -142,6 +132,7 @@ class Dashboard extends Component {
 
   getPageData = () => {
     const { tableData, sortColumn } = this.state;
+
     const sortedRooms = _.orderBy(
       tableData,
       [sortColumn.path],
@@ -157,7 +148,7 @@ class Dashboard extends Component {
   };
 
   render() {
-    const { searchQuery, sortColumn } = this.state;
+    const { sortColumn } = this.state;
     const { totalCount, data } = this.getPageData();
     return (
       <div>
@@ -221,13 +212,13 @@ class Dashboard extends Component {
               </li>
             </ul>
           </div>
-          <div className="my-2 col-lg col-md d-flex justify-content-lg-start justify-content-md-start justify-content-center">
+          {/* <div className="my-2 col-lg col-md d-flex justify-content-lg-start justify-content-md-start justify-content-center">
             <Search
               value={searchQuery}
               placeHolder="Enter City/Location"
               onChange={this.handleSearch}
             />
-          </div>
+          </div> */}
         </div>
         <div style={{ margin: "0 5% 0 5%" }}>
           <div className=" d-flex justify-content-center">

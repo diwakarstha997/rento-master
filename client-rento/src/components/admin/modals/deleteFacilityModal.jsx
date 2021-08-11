@@ -27,7 +27,6 @@ class DeleteFacilityModal extends Forms {
       const { data } = await facility.deleteFacility(e.target.value);
       const message = data.name + " Facility was sucessefully deleted ";
       this.setState({ message, undo: data });
-      console.log(this.state.undo);
     } catch (ex) {}
   };
 

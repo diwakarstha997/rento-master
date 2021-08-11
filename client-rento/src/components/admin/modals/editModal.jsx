@@ -78,10 +78,11 @@ class EditModal extends Form {
               {this.renderInput(
                 "name",
                 `${this.props.nTag} Name`,
+                true,
                 "text",
                 "autoFocus"
               )}
-              {this.renderInput("value", `${this.props.vTag}`)}
+              {this.renderInput("value", `${this.props.vTag}`, true)}
               <div className="text-center">
                 {this.renderModalButton(
                   "Add",

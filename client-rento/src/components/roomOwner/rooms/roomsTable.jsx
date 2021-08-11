@@ -60,6 +60,7 @@ class RoomTable extends Component {
             <ConfirmDelete
               value={room._id}
               onClick={this.props.doDelete}
+              lable={this.props.lable}
               className="btn btn-danger btn-sm ml-2"
             />
             {room.status === "Inactive" ? (
@@ -92,7 +93,7 @@ class RoomTable extends Component {
 
   render() {
     const { rooms, sortColumn, onSort } = this.props;
-    console.log(rooms);
+
     return (
       <React.Fragment>
         <Table

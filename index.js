@@ -1,6 +1,7 @@
 require("express-async-errors");
 const express = require("express");
 const cors = require("cors");
+
 const auth = require("./routes/auth");
 const facility = require("./routes/facility");
 const city = require("./routes/city");
@@ -15,8 +16,10 @@ const app = express();
 app.use(cors());
 
 require("./startup/db")();
+require("./startup/adminInitialize")();
 
 //middlewares
+
 app.use(express.json());
 app.use("/api/city", city);
 app.use("/api/facility", facility);

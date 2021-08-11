@@ -11,13 +11,10 @@ const unlinkAsync = promisify(fs.unlink);
 
 module.exports = {
   insert: async (req, res) => {
-    // await upload(req, res);
-
     // const { error } = validateRoom(req.body);
-    let error = false;
-    console.log(error);
-    if (error) return res.status(400).send(error.details[0].message);
-    console.log(req.body);
+    // let error = false;
+
+    // if (error) return res.status(400).send(error.details[0].message);
 
     const user = await User.findById(req.user._id);
     const roomCount = await Room.find({
@@ -45,7 +42,6 @@ module.exports = {
     });
     await room.save();
 
-    console.log("room saved successfully");
     res.send("room saved successfully");
   },
 
@@ -133,7 +129,6 @@ module.exports = {
 
   update: async (req, res) => {
     //Update rooms
-    console.log(req.params.id);
     const room = await Room.findById({ _id: req.params.id });
     if (!room) return res.status(404).send("Room Doesn't Exists");
 
@@ -148,7 +143,6 @@ module.exports = {
     });
     await room.save();
 
-    console.log("room updated successfully");
     res.send("room updated successfully");
   },
 

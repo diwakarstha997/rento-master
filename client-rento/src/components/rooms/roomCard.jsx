@@ -5,7 +5,6 @@ class RoomCard extends Component {
   state = { item: "", mouseHover: false };
 
   handleRoomClick = (roomId) => {
-    console.log(roomId, " is clicked");
     window.location = `/rooms/${roomId}`;
   };
 

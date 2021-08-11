@@ -17,7 +17,6 @@ module.exports.sendRentoMail = async (mailOptions) => {
     await transporter.sendMail(mailOptions);
     return true;
   } catch (error) {
-    console.log(error.message);
     return false;
   }
 };

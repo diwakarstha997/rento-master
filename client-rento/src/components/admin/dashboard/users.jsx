@@ -13,7 +13,6 @@ class Users extends Component {
   async componentDidMount() {
     const { data: users } = await user.getVerifyUser();
     this.setState({ users });
-    console.log(users);
   }
 
   async componentDidUpdate(prevProps, prevState) {
@@ -33,13 +32,11 @@ class Users extends Component {
   handleDecline = async (e) => {
     const { data } = await user.declineUser(e.target.value);
     this.setState({ message: data });
-    console.log(data);
   };
 
   handleVerify = async (e) => {
     const { data } = await user.verifyUser(e.target.value);
     this.setState({ message: data });
-    console.log(data);
   };
 
   render() {

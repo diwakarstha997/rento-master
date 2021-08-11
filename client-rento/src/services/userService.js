@@ -50,9 +50,11 @@ export function activateEmail(activationToken) {
   return http.get(apiEndpoint + "/activation/" + activationToken);
 }
 
-export async function checkUserVerification() {
+export async function checkUserVerification(user) {
   const { data: jwt } = await http.get(apiEndpoint + "/checkUserVerification");
-  localStorage.setItem("uv_token", jwt);
+  const verificationData = jwtDecode(jwt);
+  if (user._id === verificationData._id) localStorage.setItem("uv_token", jwt);
+  else return;
 }
 
 export function getUserVerificationData() {

@@ -46,7 +46,11 @@ module.exports = {
     const token = user.generateAuthToken();
 
     const uv_token = jwt.sign(
-      { isEmailActivated: user.isEmailActivated, verified: user.verified },
+      {
+        _id: user._id,
+        isEmailActivated: user.isEmailActivated,
+        verified: user.verified,
+      },
       "rentoSecretKey",
       {
         expiresIn: "1d",
@@ -76,7 +80,6 @@ module.exports = {
 
       res.send(`${decodedUser.email} Email is Activated`);
     } catch (ex) {
-      console.log(ex);
       res.status(400).send("Invalid Token");
     }
   },
@@ -101,7 +104,6 @@ module.exports = {
     });
     await user.save();
 
-    console.log(documentPath);
     res.send(documentPath);
   },
 
@@ -133,7 +135,12 @@ module.exports = {
     const token = user.generateAuthToken();
 
     const uv_token = jwt.sign(
-      { isEmailActivated: user.isEmailActivated, verified: user.verified },
+      {
+        _id: user._id,
+        isEmailActivated: user.isEmailActivated,
+        verified: user.verified,
+        declined: user.declined,
+      },
       "rentoSecretKey",
       {
         expiresIn: "1d",
@@ -241,23 +248,25 @@ module.exports = {
   },
 
   editProfileData: async (req, res) => {
+    const email = req.body.email.toLowerCase();
+
     const user = await User.findOne({ _id: req.body.id });
 
-    let emailCheck = await User.findOne({ email: req.body.email });
-    // console.log(emailCheck._id, user._id);
+    let emailCheck = await User.findOne({ email: email });
+
     if (emailCheck && emailCheck._id.toString() !== user._id.toString())
       return res.status(400).send("Email already in Use !!");
 
-    if (user.email !== req.body.email) user.isEmailActivated = false;
+    if (user.email !== email) user.isEmailActivated = false;
 
     user.set({
       name: req.body.name,
-      email: req.body.email,
+      email: email,
       phone: req.body.phone,
     });
     user.save();
 
-    const mailOptions = activationMailOption(user._id, req.body.email);
+    const mailOptions = activationMailOption(user._id, email);
     sendRentoMail(mailOptions);
     // const value = await User.updateOne(
     //   { _id: req.body.id },
@@ -275,7 +284,12 @@ module.exports = {
     if (!user) return res.status(404).send("User not found");
 
     const token = jwt.sign(
-      { isEmailActivated: user.isEmailActivated, verified: user.verified },
+      {
+        _id: user._id,
+        isEmailActivated: user.isEmailActivated,
+        verified: user.verified,
+        declined: user.declined,
+      },
       "rentoUserSecretKey",
       {
         expiresIn: "1d",
@@ -283,7 +297,6 @@ module.exports = {
     );
 
     const decoded = jwt.verify(token, "rentoUserSecretKey");
-    console.log(decoded);
 
     res.send(token);
   },
@@ -311,7 +324,7 @@ module.exports = {
 
     user.set({ passwordResetCode: secretCode });
     user.save();
-    console.log(user);
+
     const mailOptions = forgotPasswordMailOption(
       user._id,
       user.email,
@@ -324,11 +337,8 @@ module.exports = {
   },
 
   changePasswordTokenCheck: async (req, res) => {
-    console.log(req.body);
     const token = req.body.token;
     if (!token) return res.status(401).send("Access Denied Token Required!!");
-
-    console.log("Console here1");
 
     try {
       const decodedData = jwt.verify(token, "rentoSecretKey");
@@ -343,7 +353,6 @@ module.exports = {
 
       res.send("Token Validated");
     } catch (ex) {
-      console.log(ex);
       res.status(400).send("Invalid Token");
     }
   },
@@ -365,8 +374,6 @@ module.exports = {
       if (req.body.password1 !== req.body.password2)
         return res.status(402).send("Passwords Doesnot Match");
 
-      console.log(req.body.password1);
-
       const salt = await bcrypt.genSalt(10);
       const password = await bcrypt.hash(req.body.password1, salt);
 
@@ -378,7 +385,6 @@ module.exports = {
 
       res.send(true);
     } catch (ex) {
-      console.log(ex);
       res.status(400).send("Invalid Token");
     }
   },

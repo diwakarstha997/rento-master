@@ -34,7 +34,6 @@ export async function adminLogin(email, password) {
     email,
     password,
   });
-  console.log("test" + jwt);
   localStorage.setItem(tokenKey, jwt);
 }
 

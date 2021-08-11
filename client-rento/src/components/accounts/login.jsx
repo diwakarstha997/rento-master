@@ -21,7 +21,6 @@ class Login extends Form {
     const { state } = this.props.location;
     const data = { ...this.state.data };
     if (state) {
-      console.log(state);
       data.userRole = state.role;
       this.setState({ data });
     }
@@ -46,7 +45,6 @@ class Login extends Form {
       const { state } = this.props.location;
       window.location = state ? state.from : dest;
     } catch (ex) {
-      console.log(ex);
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.email = ex.response.data;
@@ -75,7 +73,9 @@ class Login extends Form {
               </p>
             )}
             <form onSubmit={this.handleSubmit} className="mt-3">
-              <label htmlFor="user-role">You are: </label>
+              <label htmlFor="user-role">
+                You are: <i className="text-danger ">*</i>
+              </label>
               <br />
               <div className="row">
                 <div className="col-lg d-lg-flex justify-content-lg-center">
@@ -113,20 +113,12 @@ class Login extends Form {
                   </div>
                 </div>
               </div>
-              {this.renderInput("email", "Email", "mb-3")}
-              {this.renderInput("password", "Password", "mb-4", "password")}
+              {this.renderInput("email", "Email", true)}
+              {this.renderInput("password", "Password", true, "password")}
               {this.renderButton("Login")}
             </form>
 
             <SendForgetPasswordEmail />
-
-            {/* <a
-              className="d-flex d-xl-flex justify-content-center  text-center"
-              href="/"
-            >
-              <br />
-              Forgot password?
-            </a> */}
             <div className="mt-3">
               <p className="text-center">
                 Don't have an account&nbsp;<a href="/register">Sign up</a>

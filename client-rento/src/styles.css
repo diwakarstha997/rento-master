@@ -199,3 +199,13 @@
   padding-left: 6px;
   margin: 2px 2px;
 }
+
+.forgot-password {
+  color: rgb(25, 110, 238);
+}
+
+.forgot-password:hover {
+  color: rgb(25, 110, 238);
+  text-decoration: underline;
+  cursor: pointer;
+}

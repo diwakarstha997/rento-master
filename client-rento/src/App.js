@@ -23,12 +23,10 @@ import AdminDashboard from "./components/admin/adminDashboard";
 import OwnerRoomDetail from "./components/roomOwner/rooms/roomDetail";
 import Profile from "./components/accounts/profile/profile";
 import EmailActivate from "./components/accounts/emailActivate";
-import {
-  checkUserVerification,
-  getUserVerificationData,
-} from "./services/userService";
+import { getUserVerificationData } from "./services/userService";
 import ForgotPassword from "./components/accounts/forgetPassword";
 import InvalidToken from "./components/accounts/invalidToken";
+import VerificationMessage from "./components/partials/verificationMessage";
 
 class App extends Component {
   state = { toggled: true };
@@ -39,22 +37,11 @@ class App extends Component {
     this.setState({ toggled: toggled });
   };
 
-  async componentDidMount() {
-    const user = getCurrentUser();
-    if (user) await checkUserVerification();
-  }
-
-  async componentDidUpdate() {
-    const user = getCurrentUser();
-    if (user) await checkUserVerification();
-  }
-
   render() {
     const user = getCurrentUser();
     let uv_data;
     if (user) uv_data = getUserVerificationData();
-    // if (user && !uv_data) Logout("");
-    console.log("token", user, "uv_token", uv_data);
+
     return (
       <React.Fragment>
         {/* <Switch> */}
@@ -125,6 +112,7 @@ class App extends Component {
         {user && user.userRole === "RoomOwner" && (
           <React.Fragment>
             <Route path="/RoomOwner" component={NavBar} />
+            <VerificationMessage />
             <Switch>
               <Route path="/logout" component={Logout} />
 
@@ -172,6 +160,7 @@ class App extends Component {
         {user && user.userRole === "Tenant" && (
           <React.Fragment>
             <Route path="/" component={NavBar} />
+            <VerificationMessage />
             <Switch>
               <Route path="/logout" component={Logout} />
 

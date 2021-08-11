@@ -41,17 +41,18 @@ class PreviewProfile extends Component {
                 <div className="col-lg col-md">
                   <p>
                     {profileData.email}{" "}
-                    {(profileData.isEmailActivated && (
-                      <i className="fa fa-check-circle text-success">
-                        {" "}
-                        verified
-                      </i>
-                    )) || (
-                      <i className="fa fa-times-circle text-danger">
-                        {" "}
-                        Not verified
-                      </i>
-                    )}
+                    {profileData.userRole !== "Admin" &&
+                      ((profileData.isEmailActivated && (
+                        <i className="fa fa-check-circle text-success">
+                          {" "}
+                          verified
+                        </i>
+                      )) || (
+                        <i className="fa fa-times-circle text-danger">
+                          {" "}
+                          Not verified
+                        </i>
+                      ))}
                   </p>
                 </div>
               </div>

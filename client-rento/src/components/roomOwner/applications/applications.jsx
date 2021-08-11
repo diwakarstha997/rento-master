@@ -70,7 +70,6 @@ class Applications extends Component {
   };
 
   handlePageChange = (page) => {
-    console.log("Set this page number as current:", page);
     this.setState({ currentPage: page });
   };
 
@@ -79,7 +78,6 @@ class Applications extends Component {
   };
 
   handleSearch = (e) => {
-    console.log(e.currentTarget.value);
     this.setState({
       searchQuery: e.currentTarget.value,
     });
@@ -102,19 +100,15 @@ class Applications extends Component {
       this.setState({ active: v });
       this.renderTableData("cancel");
     }
-
-    console.log(this.state.active);
   };
 
   handleApprove = async (e, lable) => {
-    console.log(lable);
     const { data } = await application.applicationApprove(e);
     this.renderTableData(lable);
     this.setState({ message: data });
   };
 
   handleReject = async (e, lable) => {
-    console.log(lable);
     const { data } = await application.applicationReject(e);
     this.renderTableData(lable);
     this.setState({ message: data });

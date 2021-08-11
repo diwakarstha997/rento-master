@@ -16,7 +16,6 @@ class ApplicationDetail extends Component {
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {
         window.location = "/not-found";
-        console.log(ex.response);
       }
     }
   }

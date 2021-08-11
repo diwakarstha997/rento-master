@@ -96,7 +96,6 @@ class Register extends Form {
 
       window.location = dest;
     } catch (ex) {
-      console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.email = ex.response.data;
@@ -117,7 +116,9 @@ class Register extends Form {
             </div>
 
             <form onSubmit={this.handleSubmit} className="mt-3">
-              <label htmlFor="user-role">You are: </label>
+              <label htmlFor="user-role">
+                You are: <i className="text-danger ">*</i>
+              </label>
               <br />
               <div className="row">
                 <div className="col-lg d-lg-flex justify-content-lg-center">
@@ -155,11 +156,11 @@ class Register extends Form {
                   </div>
                 </div>
               </div>
-              {this.renderInput("name", "Name")}
-              {this.renderInput("email", "Email")}
-              {this.renderInput("phone", "Phone")}
-              {this.renderInput("password", "Password")}
-              {this.renderInput("confirm_password", "Confirm Password")}
+              {this.renderInput("name", "Name", true)}
+              {this.renderInput("email", "Email", true)}
+              {this.renderInput("phone", "Phone", true)}
+              {this.renderInput("password", "Password", true)}
+              {this.renderInput("confirm_password", "Confirm Password", true)}
               {this.renderButton("Register")}
             </form>
 

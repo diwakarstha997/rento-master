@@ -42,7 +42,7 @@ class ViewApplicationModal extends Form {
 
   modalPress = async () => {
     const { edit } = this.props;
-    console.log(edit);
+
     let data = this.state.data;
     data.occupation = edit.occupation;
     data.monthlyIncome = edit.monthlyIncome;
@@ -54,16 +54,12 @@ class ViewApplicationModal extends Form {
       try {
         await application.applicationView2(edit._id);
         this.props.handleView(this.props.lable);
-      } catch (e) {
-        console.log(e);
-      }
+      } catch (e) {}
     }
     this.setState({ show: true, data });
   };
 
-  doSubmit = async () => {
-    console.log("call services");
-  };
+  doSubmit = async () => {};
 
   render() {
     return (

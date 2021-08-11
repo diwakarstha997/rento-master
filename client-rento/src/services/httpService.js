@@ -1,7 +1,7 @@
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:3900/api";
-// axios.defaults.baseURL = "http://192.168.10.9:3900/api";
+// axios.defaults.baseURL = "http://localhost:3900/api";
+axios.defaults.baseURL = "http://192.168.10.13:3900/api";
 
 // handling unexpected error globally
 axios.interceptors.response.use(null, (error) => {
@@ -11,7 +11,6 @@ axios.interceptors.response.use(null, (error) => {
     error.response.status < 500;
 
   if (!expectedError) {
-    console.log("logging the error", error.message);
     alert("An unexpected error occured");
   }
 

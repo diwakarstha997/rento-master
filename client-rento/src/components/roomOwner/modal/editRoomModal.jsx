@@ -1,6 +1,6 @@
 import React from "react";
 import Forms from "../../common/form";
-import { Button, Modal } from "react-bootstrap";
+import { Modal } from "react-bootstrap";
 import Joi from "joi-browser";
 import { getCities } from "../../../services/locationService";
 import { getFacilities } from "../../../services/facilityService";
@@ -99,14 +99,11 @@ class EditRoom extends Forms {
     const checkFacility = facility.filter((f) => f === e.currentTarget.value);
     if (checkFacility.length === 0) {
       data.facility = [...data.facility, e.currentTarget.value];
-      console.log(`${e.currentTarget.value} is added`);
     } else {
       data.facility = facility.filter((f) => f !== e.currentTarget.value);
-      console.log(`${e.currentTarget.value} is removed`);
     }
 
     this.setState({ data });
-    console.log(this.state.data.facility);
   };
 
   handleChecked = (e) => {
@@ -119,7 +116,7 @@ class EditRoom extends Forms {
 
   doSubmit = async () => {
     const { data: roomData } = this.state;
-    const data = await rooms.updateRoom(
+    await rooms.updateRoom(
       this.props.data._id,
       roomData.city,
       roomData.location,
@@ -129,7 +126,6 @@ class EditRoom extends Forms {
       roomData.squareFeet,
       roomData.description
     );
-    // this.props.handleMessage(data);
     this.props.handleClose();
   };
 
@@ -139,7 +135,7 @@ class EditRoom extends Forms {
   };
 
   render() {
-    const { show, handleClose } = this.props;
+    const { show } = this.props;
     if (!this.state.data) return "";
     return (
       <React.Fragment>
@@ -150,19 +146,22 @@ class EditRoom extends Forms {
           <Modal.Body>
             <form onSubmit={this.handleSubmit} className="mt-3">
               <div>
-                {this.renderSelect("city", "City", this.state.cities)}
+                {this.renderSelect("city", "City", this.state.cities, true)}
                 {this.renderNumberInput(
                   "wardNumber",
                   "Ward No.",
+                  true,
                   this.state.data.city ? false : true
                 )}
-                {this.renderInput("location", "Location")}
-                {this.renderNumberInput("squareFeet", "Square Feet")}
-                {this.renderNumberInput("monthlyRent", "Monthly Rent")}
-                {this.renderTextArea("description", "Description")}
+                {this.renderInput("location", "Location", true)}
+                {this.renderNumberInput("squareFeet", "Square Feet", true)}
+                {this.renderNumberInput("monthlyRent", "Monthly Rent", true)}
+                {this.renderTextArea("description", "Description", true)}
 
                 <div className="form-group">
-                  <label htmlFor="facility">Facility</label>
+                  <label htmlFor="facility">
+                    Facility <i className="text-danger">*</i>
+                  </label>
                   {this.state.facilities.map((facility) => (
                     <div key={facility._id} className="form-group">
                       <input

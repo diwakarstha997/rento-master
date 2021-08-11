@@ -10,6 +10,11 @@ class ConfirmDelete extends Component {
 
   handleClose = () => this.setState({ show: false });
 
+  handleClick = () => {
+    this.setState({ show: false });
+    this.props.onClick(this.props.value, this.props.lable);
+  };
+
   render() {
     return (
       <React.Fragment>
@@ -46,11 +51,7 @@ class ConfirmDelete extends Component {
               type="button"
               className="btn-sm btn-danger  mx-2 "
               value={this.props.value}
-              onClick={
-                this.props.lable
-                  ? () => this.props.onClick(this.props.value, this.props.lable)
-                  : this.props.onClick
-              }
+              onClick={this.props.lable ? this.handleClick : this.props.onClick}
             >
               {this.props.reject
                 ? "Reject"

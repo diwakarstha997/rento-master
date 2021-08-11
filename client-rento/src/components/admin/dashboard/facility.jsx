@@ -17,7 +17,6 @@ class Facility extends Component {
   async componentDidMount() {
     const { data: facilities } = await facility.getFacilities();
     this.setState({ facilities });
-    console.log(facilities);
   }
   async componentDidUpdate() {
     const { data: facilities } = await facility.getFacilities();
@@ -28,13 +27,12 @@ class Facility extends Component {
       const { status, data } = await facility.deleteFacility(e.target.value);
       const message = data.name + " Facility was sucessefully deleted ";
       this.setState({ message, undo: data, status });
-      console.log(status);
     } catch (ex) {}
   };
   undoDelete = async () => {
     try {
       const { undo } = this.state;
-      console.log("!");
+
       await facility.addFacility(undo.name, undo.icon);
 
       this.setState({ undo: [], message: "" });

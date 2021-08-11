@@ -62,7 +62,10 @@ userSchema.methods.generateAuthToken = function () {
       userRole: this.userRole,
       verified: this.verified,
     },
-    "rentoUserSecretKey"
+    "rentoUserSecretKey",
+    {
+      expiresIn: "1d",
+    }
   );
 };
 

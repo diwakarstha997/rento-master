@@ -19,9 +19,13 @@ class EmailActivate extends Component {
   };
   render() {
     return (
-      <h1 className={this.state.status === 200 ? "bg-success" : "bg-danger"}>
+      <h3
+        className={`text-center rounded p-4 ${
+          this.state.status === 200 ? "alert-success" : "alert-danger"
+        }`}
+      >
         {this.state.message}
-      </h1>
+      </h3>
     );
   }
 }

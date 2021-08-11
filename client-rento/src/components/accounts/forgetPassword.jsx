@@ -26,7 +26,6 @@ class ForgotPassword extends Form {
       );
       if (data) this.setState({ isValidToken: true });
     } catch (ex) {
-      console.log(ex.response.data);
       window.location = "/not-confirmed";
     }
   }
@@ -82,15 +81,12 @@ class ForgotPassword extends Form {
       );
       window.location = "/login";
     } catch (ex) {
-      console.log(ex);
-      console.log(ex.response.data);
       if (ex.response && ex.response.status === 401) {
         const errors = { ...this.state.errors };
         errors.currentPassword = ex.response.data;
         this.setState({ errors });
       }
       if (ex.response && ex.response.status === 402) {
-        console.log(ex.response.data);
         const errors = { ...this.state.errors };
         errors.newPassword = ex.response.data;
         this.setState({ errors });

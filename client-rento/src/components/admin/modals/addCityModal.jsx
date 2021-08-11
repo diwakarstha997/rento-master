@@ -1,11 +1,12 @@
 import { Button, Modal } from "react-bootstrap";
 import Forms from "../../common/form";
-import Joi, { errors } from "joi-browser";
+import Joi from "joi-browser";
 import city from "../../../services/locationService";
 import Map from "../../common/map";
 
 class AddCityModal extends Forms {
   state = {
+    message: "",
     show: false,
     data: {
       name: "",
@@ -34,7 +35,7 @@ class AddCityModal extends Forms {
   doSubmit = async () => {
     try {
       const { data } = this.state;
-      console.log(data);
+
       const message = await city.addCity(
         data.name,
         data.totalWard,
@@ -57,17 +58,36 @@ class AddCityModal extends Forms {
         data.marker = "";
         return { data };
       });
-    } catch (ex) {}
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        this.setState({ message: ex.response.data });
+      }
+    }
   };
 
-  handleClose = () => this.setState({ show: false });
+  reset = () => {
+    this.setState({
+      message: "",
+      show: false,
+      data: {
+        name: "",
+        totalWard: "",
+        lat: "",
+        lng: "",
+        zoom: "",
+        marker: "",
+      },
+      errors: {},
+    });
+  };
+
+  handleClose = () => this.reset();
 
   handleShow = () => {
     this.setState({ show: true });
   };
 
   handleMapClick = (lng, lat, zoom, marker) => {
-    console.log(lng, lat, zoom, marker);
     const { data } = this.state;
     data.lng = lng;
     data.lat = lat;
@@ -94,9 +114,24 @@ class AddCityModal extends Forms {
             <Modal.Title>Add City</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {this.state.message && (
+              <p className="text-danger alert-danger rounded p-2">
+                {this.state.message}
+              </p>
+            )}
             <form onSubmit={this.handleSubmit} className="mt-3">
               {this.renderInput("name", "City Name", "text", "autoFocus")}
-              {this.renderNumberInput("totalWard", "TotalWard")}
+              {this.renderNumberInput("totalWard", "TotalWard", true)}
+              <p style={{ fontSize: "12px" }}>
+                * Find ward info for cities at{" "}
+                <a
+                  href="https://en.wikipedia.org/wiki/Wards_and_electoral_divisions_of_Nepal"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  wikipedia wardinfo
+                </a>
+              </p>
               <Map handleMapData={this.handleMapClick} />
               {this.state.errors.lat && (
                 <div className="alert alert-danger">

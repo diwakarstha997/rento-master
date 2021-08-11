@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import AddCityModal from "../modals/addCityModal";
 import city from "../../../services/locationService";
 import Message from "./message";
-import ConfirmDelete from "../../common/confirmDelete";
+// import ConfirmDelete from "../../common/confirmDelete";
 import EditModal from "../modals/editModal";
 import Joi from "joi-browser";
 
@@ -16,7 +16,6 @@ class Location extends Component {
   async componentDidMount() {
     const { data: location } = await city.getCities();
     this.setState({ location });
-    console.log(location);
   }
   async componentDidUpdate() {
     const { data: location } = await city.getCities();
@@ -36,7 +35,6 @@ class Location extends Component {
       const { status, data } = await city.deleteCity(e.target.value);
       const message = data.name + " City was sucessefully deleted ";
       this.setState({ message, undo: data, status });
-      console.log(status);
     } catch (ex) {}
   };
   undoDelete = async () => {

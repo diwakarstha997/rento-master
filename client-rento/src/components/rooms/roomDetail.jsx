@@ -58,7 +58,7 @@ class RoomDetail extends Component {
     const user = auth.getCurrentUser();
     let uv_data;
     if (user) uv_data = getUserVerificationData();
-    console.log(user, uv_data);
+
     if (!room) return <h1 className="text-center">Loading</h1>;
     else
       return (

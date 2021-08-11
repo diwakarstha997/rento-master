@@ -2,8 +2,14 @@ const City = require("../models/city");
 
 module.exports = {
   insert: async (req, res) => {
+    const cityName = req.body.name.replace(/ /g, "").toLowerCase();
+
+    const checkCity = await City.findOne({ name: cityName });
+    if (checkCity)
+      return res.status(400).send("City Already Added Choose different city");
+
     const city = new City({
-      name: req.body.name,
+      name: cityName,
       totalWard: req.body.totalWard,
       map: {
         lng: req.body.lng,

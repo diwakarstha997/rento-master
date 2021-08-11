@@ -13,7 +13,6 @@ module.exports = {
     if (checkComplaint)
       return res.status(400).send("Complaint Already Submitted");
 
-    console.log(req.body.roomId);
     const checkRoom = await Room.findOne({
       _id: req.body.roomId,
     });

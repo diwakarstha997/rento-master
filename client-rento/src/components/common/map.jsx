@@ -20,8 +20,11 @@ class Map extends Component {
     const map = new mapboxgl.Map({
       container: this.mapContainer,
       style: "mapbox://styles/mapbox/streets-v11",
-      center: [this.props.mapData.lng, this.props.mapData.lat],
-      zoom: this.props.mapData.zoom,
+      center: [
+        this.props.mapData ? this.props.mapData.lng : 83.8532,
+        this.props.mapData ? this.props.mapData.lat : 28.5168,
+      ],
+      zoom: this.props.mapData ? this.props.mapData.zoom : 5.93,
       // center: [83.8532, 28.5168],
       // zoom: 5.93,
     });
@@ -38,11 +41,9 @@ class Map extends Component {
     map.on("click", (e) => {
       if (this.props.editDisabled) return;
       if (marker) {
-        console.log(e.lngLat);
         marker.setLngLat(e.lngLat);
         // return;
       } else {
-        console.log(e.lngLat);
         marker = new mapboxgl.Marker({ color: "#d02922" })
           .setLngLat(e.lngLat)
           .addTo(map);

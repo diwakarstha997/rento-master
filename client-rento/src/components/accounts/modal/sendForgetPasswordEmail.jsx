@@ -22,7 +22,6 @@ class SendForgetPasswordEmail extends Form {
     try {
       const { data: message } = await forgotPasswordEmail(this.state.data);
       this.setState({ message });
-      console.log("email submitted");
     } catch (ex) {
       if (
         ex.response &&
@@ -51,14 +50,14 @@ class SendForgetPasswordEmail extends Form {
 
     return (
       <React.Fragment>
-        <a
-          className="d-flex d-xl-flex justify-content-center  text-center"
+        <div
+          className="d-flex d-xl-flex justify-content-center  text-center forgot-password"
           style={{ cursor: "pointer" }}
           onClick={this.handleShow}
         >
           <br />
           Forgot password?
-        </a>
+        </div>
 
         <Modal show={show} onHide={this.handleClose}>
           <Modal.Header closeButton>

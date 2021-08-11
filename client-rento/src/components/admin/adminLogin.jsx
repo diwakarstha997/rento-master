@@ -34,7 +34,6 @@ class AdminLogin extends Form {
     }
   };
   render() {
-    console.log(this.props);
     return (
       <div className="py-5" style={{ backgroundColor: "#e9ecef" }}>
         <div className="py-3 mx-auto justify-content-center bg-light col-xl-3 col-lg-4 col-md-5 col-sm-6 col-12">
@@ -53,8 +52,8 @@ class AdminLogin extends Form {
               </p>
             )}
             <form onSubmit={this.handleSubmit} className="mt-3">
-              {this.renderInput("email", "Email", "text", "autoFocus")}
-              {this.renderInput("password", "Password", "password")}
+              {this.renderInput("email", "Email", true, "text", "autoFocus")}
+              {this.renderInput("password", "Password", true, "password")}
               {this.renderButton("Login")}
             </form>
           </div>

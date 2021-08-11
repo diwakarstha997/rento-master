@@ -11,11 +11,9 @@ module.exports = {
       user: req.user._id,
       room: req.body.roomId,
     });
-    console.log("submittedApplication", checkApplication);
     if (checkApplication)
       return res.status(400).send("Application Already Submitted");
 
-    console.log(req.body.roomId);
     const room = await Room.findOne({
       _id: req.body.roomId,
     });
@@ -56,9 +54,7 @@ module.exports = {
       .populate({ path: "room", select: "roomTag" })
       .exec((err, application) => {
         if (err) {
-          console.log(err);
         } else {
-          console.log(application);
           res.send(application);
         }
       });
@@ -76,11 +72,9 @@ module.exports = {
       })
       .exec((err, application) => {
         if (err) {
-          console.log(err);
           if (!application)
             return res.status(404).send("Application not Found");
         } else {
-          console.log(application);
           if (!application)
             return res.status(404).send("Application not Found");
           res.send(application);
@@ -100,9 +94,7 @@ module.exports = {
       })
       .exec((err, application) => {
         if (err) {
-          console.log(err);
         } else {
-          console.log(application);
           if (application.status === "Approved" && room.status === "Inactive")
             return res.send(application);
           application.room = null;
@@ -120,9 +112,7 @@ module.exports = {
       .populate("room")
       .exec((err, application) => {
         if (err) {
-          console.log(err);
         } else {
-          console.log(application);
           res.send(application);
         }
       });
@@ -204,7 +194,6 @@ module.exports = {
 
     const user = await User.findOne({ _id: application.roomOwner });
     if (!user) res.send("505");
-    console.log(user.name, user.phone);
     application.set({
       status: "Approved",
       viewed: "false",

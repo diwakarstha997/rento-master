@@ -40,7 +40,6 @@ class EditProfile extends Form {
         data.email,
         data.phone
       );
-      console.log(value.data);
       this.props.handleActive("preview");
       this.props.message(value.data);
     } catch (ex) {

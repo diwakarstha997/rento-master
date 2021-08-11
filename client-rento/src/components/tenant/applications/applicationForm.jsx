@@ -48,7 +48,8 @@ class ApplicationForm extends Forms {
     additionalComments: Joi.string()
       .min(20)
       .max(500)
-      .required()
+      .allow("")
+      .optional()
       .label("Additional Comments"),
   };
 
@@ -79,7 +80,6 @@ class ApplicationForm extends Forms {
       await application.save(this.state.data, this.state.roomId);
       window.location = "/MyApplications";
     } catch (ex) {
-      console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
         const message = ex.response.data;
         this.setState({ message });
@@ -88,7 +88,7 @@ class ApplicationForm extends Forms {
   };
 
   render() {
-    const { show, handleClose } = this.props;
+    const { show } = this.props;
     return (
       <React.Fragment>
         <Modal show={show} onHide={this.handleModalClose}>
@@ -96,18 +96,20 @@ class ApplicationForm extends Forms {
             <Modal.Title>Room Application Form</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            {this.renderInput("occupation", "Occupation")}
-            {this.renderNumberInput("monthlyIncome", "Monthly Income")}
+            {this.renderInput("occupation", "Occupation", true)}
+            {this.renderNumberInput("monthlyIncome", "Monthly Income", true)}
             {this.renderNumberInput(
               "emergencyContact",
               "Emergency Contact",
+              true,
               false,
               9
             )}
-            {this.renderInput("previousLocation", "Previous Location")}
+            {this.renderInput("previousLocation", "Previous Location", true)}
             {this.renderTextArea(
               "reasonToLeavePreviousLocation",
-              "Reason To Leave Previous Location"
+              "Reason To Leave Previous Location",
+              true
             )}
 
             {this.renderInput("noOfRoomMates", "Number of Roomates")}

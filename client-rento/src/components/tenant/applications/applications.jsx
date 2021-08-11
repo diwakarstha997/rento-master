@@ -24,7 +24,6 @@ class Applications extends Component {
   };
 
   handlePageChange = (page) => {
-    console.log("Set this page number as current:", page);
     this.setState({ currentPage: page });
   };
 
@@ -33,7 +32,6 @@ class Applications extends Component {
   };
 
   handleSearch = (e) => {
-    console.log(e.currentTarget.value);
     this.setState({
       searchQuery: e.currentTarget.value,
     });
@@ -54,7 +52,6 @@ class Applications extends Component {
     const user = getCurrentUser();
     let uv_data;
     if (user) uv_data = getUserVerificationData();
-    console.log(user, uv_data);
 
     if (uv_data.verified === true) {
       const { data: applications } = await application.getTenantApplications();
@@ -127,15 +124,11 @@ class Applications extends Component {
       this.setState({ active: v });
       this.renderTableData("cancel");
     }
-
-    console.log(this.state.active);
   };
 
   handleCancel = async (v, tab) => {
     try {
-      console.log(v, tab + " xys");
       const { data } = await application.cancelApplication(v);
-      console.log(data);
       this.renderTableData(tab);
     } catch (ex) {}
   };
@@ -172,7 +165,6 @@ class Applications extends Component {
   };
 
   render() {
-    const { sortColumn } = this.state;
     const { totalCount, data } = this.getPageData();
     return (
       <React.Fragment>

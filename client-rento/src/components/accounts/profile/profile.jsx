@@ -34,7 +34,6 @@ class Profile extends Component {
 
   render() {
     const user = getCurrentUser();
-    if (this.state.profileData) console.log(this.state.profileData.name);
     return (
       <React.Fragment>
         <div>

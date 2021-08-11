@@ -71,7 +71,6 @@ export function updateRoom(
 }
 
 export function optionalImageUpload(images, roomId) {
-  console.log(images);
   let imagesData = new FormData();
   images.forEach((item) => imagesData.append("file", item));
   return http.post(apiEndpoint + "/image/optionalUpload/" + roomId, imagesData);

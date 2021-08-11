@@ -22,8 +22,6 @@ class Form extends Component {
 
     if (!error) return null;
 
-    console.log(error);
-
     const errors = {};
 
     for (let item of error.details) {
@@ -88,7 +86,7 @@ class Form extends Component {
     if (e.currentTarget.value.length > max) e.preventDefault();
   };
 
-  renderInput(name, label, type = "text", autoFocus = "") {
+  renderInput(name, label, optional, type = "text", autoFocus = "") {
     const { data, errors } = this.state;
 
     return (
@@ -100,10 +98,11 @@ class Form extends Component {
         onChange={this.handleChange}
         error={errors[name]}
         autoFocus={autoFocus}
+        optional={optional}
       />
     );
   }
-  renderNumberInput(name, label, disabled = false, max = 7) {
+  renderNumberInput(name, label, optional, disabled = false, max = 7) {
     const { data, errors } = this.state;
     return (
       <Input
@@ -114,11 +113,12 @@ class Form extends Component {
         onChange={this.handleChange}
         error={errors[name]}
         disabled={disabled}
+        optional={optional}
       />
     );
   }
 
-  renderTextArea(name, label, divClass) {
+  renderTextArea(name, label, optional, divClass) {
     const { data, errors } = this.state;
 
     return (
@@ -129,11 +129,12 @@ class Form extends Component {
         value={data[name]}
         onChange={this.handleChange}
         error={errors[name]}
+        optional={optional}
       />
     );
   }
 
-  renderSelect(name, label, options, handleSelect = "") {
+  renderSelect(name, label, options, optional, handleSelect = "") {
     const { data, errors } = this.state;
 
     return (
@@ -145,6 +146,7 @@ class Form extends Component {
         onChange={this.handleChange}
         error={errors[name]}
         handleSelect={handleSelect}
+        optional={optional}
       />
     );
   }

@@ -1,9 +1,20 @@
 import React from "react";
 
-const Select = ({ name, label, options, handleSelect, error, ...rest }) => {
+const Select = ({
+  name,
+  label,
+  options,
+  handleSelect,
+  error,
+  optional = false,
+  ...rest
+}) => {
   return (
     <div className="form-group mt-2">
-      <label htmlFor="username">{label}</label>
+      <label htmlFor="username">
+        {label}
+        {optional && <i className="text-danger">*</i>}
+      </label>
       <select
         autoFocus
         {...rest}

@@ -14,7 +14,6 @@ class Contact extends Component {
 
   handleOpen = async () => {
     try {
-      console.log("heloow");
       if (this.props.viewed === "false") {
         await application.applicationView(this.props.id);
         if (this.props.handleView) {
@@ -30,11 +29,9 @@ class Contact extends Component {
         marker: roomData.marker,
       };
       this.setState({ mapData });
-      console.log(mapData);
+
       this.setState({ show: true });
-    } catch (error) {
-      console.log(error.respose.data);
-    }
+    } catch (error) {}
   };
 
   handleClose = () => this.setState({ show: false });

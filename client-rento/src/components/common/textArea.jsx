@@ -1,9 +1,19 @@
 import React from "react";
 
-const TextArea = ({ name, label, error, divClass, ...rest }) => {
+const TextArea = ({
+  name,
+  label,
+  error,
+  divClass,
+  optional = false,
+  ...rest
+}) => {
   return (
     <div className="form-group mt-2">
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={name}>
+        {label}
+        {optional && <i className="text-danger">*</i>}
+      </label>
       <textarea
         autoFocus
         {...rest}

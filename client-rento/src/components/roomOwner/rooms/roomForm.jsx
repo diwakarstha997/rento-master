@@ -11,6 +11,7 @@ import Map from "../../common/map";
 
 class RoomForm extends Form {
   state = {
+    message: "",
     cities: [],
     facilities: [],
     dataChildRef: {
@@ -135,11 +136,8 @@ class RoomForm extends Form {
     const checkFacility = facility.filter((f) => f === e.currentTarget.value);
     if (checkFacility.length === 0) {
       data.facility = [...data.facility, e.currentTarget.value];
-      console.log(`${e.currentTarget.value} is added`);
     } else {
       data.facility = facility.filter((f) => f !== e.currentTarget.value);
-      console.log(`${e.currentTarget.value} is removed`);
-      console.log(data.facility);
     }
 
     this.setState({ data });
@@ -150,11 +148,10 @@ class RoomForm extends Form {
       await saveRoom(this.state.data);
       window.location = "/RoomOwner/MyRooms";
     } catch (ex) {
-      console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
-        const errors = { ...this.state.errors };
-        errors.email = ex.response.data;
-        this.setState({ errors });
+        const message = ex.response.data;
+        this.setState({ message });
+        window.scrollTo(0, 0);
       }
     }
   };
@@ -176,7 +173,6 @@ class RoomForm extends Form {
       ) {
         data["image"] = [...data["image"], e.currentTarget.files[i]];
       }
-      console.log(e.currentTarget.files[i]);
     }
 
     if (fileCount === 1 || data["image"].length < 3) {
@@ -204,7 +200,7 @@ class RoomForm extends Form {
     const location = this.state.cities.filter(
       (city) => city.name === this.state.data.city
     );
-    console.log(location);
+
     const mapData = { ...this.state.mapData };
     mapData.lng = location[0]["map"].lng;
     mapData.lat = location[0]["map"].lat;
@@ -216,7 +212,6 @@ class RoomForm extends Form {
   };
 
   handleMapClick = (lng, lat, zoom, marker) => {
-    console.log(lng, lat, zoom, marker);
     const { data } = this.state;
     data.lng = lng;
     data.lat = lat;
@@ -233,23 +228,29 @@ class RoomForm extends Form {
     return (
       <React.Fragment>
         <div className="py-5" style={{ backgroundColor: "#e9ecef" }}>
+          {this.state.message && (
+            <div className="alert-danger p-3">{this.state.message}</div>
+          )}
           <form onSubmit={this.handleSubmit} encType="multipart/form-data">
             <div style={{ margin: "0 5% 0 5%" }}>
-              {this.renderSelect("city", "City", this.state.cities, () =>
+              {this.renderSelect("city", "City", this.state.cities, true, () =>
                 this.handleSelect()
               )}
               {this.renderNumberInput(
                 "wardNumber",
                 "Ward No.",
+                true,
                 this.state.data.city ? false : true
               )}
-              {this.renderInput("location", "Location")}
-              {this.renderNumberInput("squareFeet", "Square Feet")}
-              {this.renderNumberInput("monthlyRent", "Monthly Rent")}
-              {this.renderTextArea("description", "Description")}
+              {this.renderInput("location", "Location", true)}
+              {this.renderNumberInput("squareFeet", "Square Feet", true)}
+              {this.renderNumberInput("monthlyRent", "Monthly Rent", true)}
+              {this.renderTextArea("description", "Description", true)}
 
               <div className="form-group">
-                <label htmlFor="facility">Facility</label>
+                <label htmlFor="facility">
+                  Facility <i className="text-danger">*</i>
+                </label>
                 {this.state.facilities.map((facility) => (
                   <div key={facility._id} className="form-group">
                     <input
@@ -265,7 +266,9 @@ class RoomForm extends Form {
               </div>
 
               <div className="form-group">
-                <label htmlFor="image">Image</label>
+                <label htmlFor="image">
+                  Image <i className="text-danger">*</i>
+                </label>
                 <br />
                 <label className="text-danger" htmlFor="image">
                   *Image must be JPG / PNG, *Only 10 image can be uploaded
@@ -323,7 +326,13 @@ class RoomForm extends Form {
                   </div>
                 ))}
               </div>
-              <div className="border border-dark">
+              <label htmlFor="map">
+                Map <i className="text-danger">*</i>
+              </label>
+              <p className="text-danger">
+                *Please select properly you cannot change location later
+              </p>
+              <div className="border border-dark mb-2">
                 <Map
                   mapData={this.state.mapData}
                   handleMapData={this.handleMapClick}
@@ -341,7 +350,6 @@ class RoomForm extends Form {
               <button
                 type="button"
                 className="btn rento-btn-danger btn-danger ml-2"
-                onClick={() => this.props.history.replace("/RoomOwner/MyRooms")}
               >
                 Cancel
               </button>

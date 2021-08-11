@@ -5,8 +5,16 @@ module.exports = {
     if (!req.body.name)
       return res.status(400).send("Please provide facility name");
 
+    const facilityName = req.body.name.replace(/ /g, "").toLowerCase();
+
+    const checkFacility = await Facility.findOne({ name: facilityName });
+    if (checkFacility)
+      return res
+        .status(400)
+        .send("Facility Already Added Choose different name");
+
     const facility = new Facility({
-      name: req.body.name,
+      name: facilityName,
       icon: req.body.icon,
     });
     await facility.save();

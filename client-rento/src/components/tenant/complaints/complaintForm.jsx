@@ -33,7 +33,6 @@ class ComplaintForm extends Forms {
       await complaint.save(this.state.data, this.state.roomId);
       window.location = "/rooms/" + this.props.roomId;
     } catch (ex) {
-      console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
         errors.exception = ex.response.data;
@@ -72,7 +71,9 @@ class ComplaintForm extends Forms {
                 { _id: 2, name: "Fake Rooms" },
               ])} */}
               <div className="form-group mt-2">
-                <label htmlFor="username">Report Type</label>
+                <label htmlFor="username">
+                  Report Type <i className="text-danger">*</i>
+                </label>
                 <select name="reportType" className="form-control">
                   {this.state.reportOptions.map((option) => (
                     <option key={option._id} value={option.name}>
@@ -86,7 +87,11 @@ class ComplaintForm extends Forms {
                   </div>
                 )}
               </div>
-              {this.renderTextArea("reportDescription", "Report Description")}
+              {this.renderTextArea(
+                "reportDescription",
+                "Report Description",
+                true
+              )}
               {this.state.errors.exception && (
                 <div className="alert alert-danger">
                   {this.state.errors.exception}

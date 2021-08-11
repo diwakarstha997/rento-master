@@ -6,6 +6,7 @@ import React from "react";
 
 class AddFacilityModal extends Form {
   state = {
+    message: "",
     show: false,
     data: {
       name: "",
@@ -16,6 +17,18 @@ class AddFacilityModal extends Form {
   schema = {
     name: Joi.string().required().label("Name"),
     icon: Joi.string().label("Icon"),
+  };
+
+  reset = () => {
+    this.setState({
+      message: "",
+      show: false,
+      data: {
+        name: "",
+        icon: "",
+      },
+      errors: {},
+    });
   };
 
   doSubmit = async () => {
@@ -32,12 +45,19 @@ class AddFacilityModal extends Form {
         data.icon = "";
         return { data };
       });
-    } catch (ex) {}
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        this.setState({ message: ex.response.data });
+      }
+    }
   };
 
-  handleClose = () => this.setState({ show: false });
+  handleClose = () => this.reset();
 
-  handleShow = () => this.setState({ show: true });
+  handleShow = () =>
+    this.setState({
+      show: true,
+    });
 
   render() {
     const { show } = this.state;
@@ -57,9 +77,31 @@ class AddFacilityModal extends Form {
             <Modal.Title>Add Facility</Modal.Title>
           </Modal.Header>
           <Modal.Body>
+            {this.state.message && (
+              <p className="text-danger alert-danger rounded p-2">
+                {this.state.message}
+              </p>
+            )}
             <form onSubmit={this.handleSubmit} className="mt-3">
-              {this.renderInput("name", "Facility Name", "text", "autoFocus")}
-              {this.renderInput("icon", "Icon")}
+              {this.renderInput(
+                "name",
+                "Facility Name",
+                true,
+                "text",
+                "autoFocus"
+              )}
+
+              {this.renderInput("icon", "Icon", true)}
+              <p style={{ fontSize: "12px" }}>
+                * Find Icons at{" "}
+                <a
+                  href="https://fontawesome.com/v4.7/icons/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  fontawesome
+                </a>
+              </p>
               <div className="text-center">
                 {this.renderModalButton(
                   "Add",

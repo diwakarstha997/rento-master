@@ -51,7 +51,6 @@ class EditModal extends Form {
   };
 
   handleClose = () => {
-    console.log(this.props.lable);
     this.setState({ show: false });
   };
 
@@ -92,7 +91,6 @@ class EditModal extends Form {
         data.noOfChildrens
       );
       this.props.handleMessage(message.data, this.props.tab);
-      console.log(message.data);
       // this.props.status(200);
       this.setState({ show: false });
     } catch (ex) {}

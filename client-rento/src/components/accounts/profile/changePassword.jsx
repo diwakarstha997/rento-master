@@ -79,15 +79,12 @@ class ChangePassword extends Form {
       this.props.handleActive("preview");
       this.props.message(value.data);
     } catch (ex) {
-      console.log(ex);
-      console.log(ex.response.data);
       if (ex.response && ex.response.status === 401) {
         const errors = { ...this.state.errors };
         errors.currentPassword = ex.response.data;
         this.setState({ errors });
       }
       if (ex.response && ex.response.status === 400) {
-        console.log(ex.response.data);
         const errors = { ...this.state.errors };
         errors.newPassword = ex.response.data;
         this.setState({ errors });

@@ -72,7 +72,6 @@ class OwnerRoomDetail extends Component {
       const user = await getCurrentUser();
       let uv_data;
       if (user) uv_data = getUserVerificationData();
-      console.log(user, uv_data);
 
       if (uv_data.verified === true) {
         const { status, data } = await rooms.publishRoom(roomId);
@@ -100,7 +99,7 @@ class OwnerRoomDetail extends Component {
 
   render() {
     const { roomData } = this.state;
-    console.log(roomData);
+
     if (!roomData) return <h3>Loading</h3>;
     return (
       <div className="container">

@@ -92,7 +92,7 @@ class ApplicationTable extends Component {
 
   render() {
     const { applications, sortColumn, onSort } = this.props;
-    console.log(applications);
+
     return (
       <Table
         columns={this.columns}

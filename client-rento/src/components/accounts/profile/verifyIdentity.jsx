@@ -79,7 +79,6 @@ class VerifyIdentity extends Form {
       });
       window.scrollTo(0, 0);
     } catch (ex) {
-      console.log("we are here", ex);
       if (ex.response && ex.response.status === 400) {
         const errorMessage = ex.response.data;
         this.setState({ errorMessage });

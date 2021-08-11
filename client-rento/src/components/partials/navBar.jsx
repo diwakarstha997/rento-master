@@ -6,6 +6,7 @@ import {
   mailResend,
 } from "../../services/userService";
 import auth from "./../../services/authService";
+import VerificationMessage from "./verificationMessage";
 
 class NavBar extends Component {
   state = {
@@ -23,13 +24,7 @@ class NavBar extends Component {
     const user = auth.getCurrentUser();
     let uv_data;
     if (user) uv_data = getUserVerificationData();
-    console.log(user, uv_data);
     const userType = this.props.userType;
-
-    const path = this.props.location.pathname;
-    const route = path.split("/");
-    const routeLength = route.length;
-    console.log(route[routeLength]);
 
     return (
       <React.Fragment>
@@ -249,50 +244,6 @@ class NavBar extends Component {
               </nav>
             ))}
         </div>
-        {user && user.userRole !== "Admin" && (
-          <React.Fragment>
-            {uv_data.isEmailActivated === false &&
-              ((this.state.message && (
-                <div className="d-flex justify-content-center mx-auto my-3 alert alert-success text-center admin-alert">
-                  <p className="my-auto">{this.state.message}</p>
-                </div>
-              )) || (
-                <div className="d-flex justify-content-center mx-auto my-3 alert alert-danger text-center admin-alert">
-                  <p className="my-auto">
-                    Please Activate Your Email Address{" "}
-                    <button
-                      className="btn btn-primary"
-                      onClick={this.handleMailResend}
-                    >
-                      Resend
-                    </button>{" "}
-                    verification
-                  </p>
-                </div>
-              ))}
-            {uv_data.verified === false && (
-              <div className="d-flex justify-content-center mx-auto my-3 alert alert-danger text-center admin-alert">
-                <p className="my-auto">
-                  {(uv_data.declined === true &&
-                    "Your documents was declined.") ||
-                    "Your identity is not verified."}{" "}
-                  Please{" "}
-                  <a
-                    className="text-danger"
-                    href={
-                      user.userRole === "Tenant"
-                        ? "/profile/verify"
-                        : "/RoomOwner/profile/verify"
-                    }
-                  >
-                    Click there
-                  </a>{" "}
-                  to verify
-                </p>
-              </div>
-            )}
-          </React.Fragment>
-        )}
       </React.Fragment>
     );
   }

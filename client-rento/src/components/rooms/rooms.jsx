@@ -30,7 +30,6 @@ class Rooms extends Component {
   }
 
   handlePageChange = (page) => {
-    console.log("Set this page number as current:", page);
     this.setState({ currentPage: page });
   };
 
@@ -49,13 +48,11 @@ class Rooms extends Component {
       (facility) => facility.name === f.name
     );
     if (selectedFacility) {
-      console.log(f.name, " removed");
       const selectedFacilities = this.state.selectedFacilities.filter(
         (facility) => facility.name !== f.name
       );
       this.setState({ selectedFacilities });
     } else {
-      console.log(f.name, " added");
       const selectedFacilities = [...this.state.selectedFacilities, f];
       this.setState({ selectedFacilities });
     }
@@ -119,7 +116,7 @@ class Rooms extends Component {
     const priceFilteredRooms = this.roomPriceFilter(facilityFilteredRooms);
 
     const filteredRoom = priceFilteredRooms;
-    console.log(priceFilteredRooms);
+
     const sorted = _.orderBy(
       filteredRoom,
       [this.state.sortColumn.sortPath],
@@ -132,9 +129,8 @@ class Rooms extends Component {
   };
 
   render() {
-    console.log(this.state.rooms);
     const path = this.props.location.pathname;
-    console.log(path);
+
     const { totalCount, data } = this.getPageData();
     return (
       <React.Fragment>
