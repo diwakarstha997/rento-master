@@ -83,11 +83,25 @@ class EditModal extends Form {
               )}
               {this.renderInput("value", `${this.props.vTag}`)}
               <div className="text-center">
-                {this.renderModalButton(
-                  "Add",
-                  "btn-primary",
-                  this.handleSubmits
+                {this.props.nTag === "Facility" ||
+                this.props.nTag === "City" ? (
+                  <React.Fragment>
+                    {this.renderModalButton(
+                      "Edit",
+                      "btn-primary",
+                      this.handleSubmits
+                    )}
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    {this.renderModalButton(
+                      "Add",
+                      "btn-primary",
+                      this.handleSubmits
+                    )}
+                  </React.Fragment>
                 )}
+
                 {this.renderModalButton(
                   "Cancel",
                   "btn-danger",

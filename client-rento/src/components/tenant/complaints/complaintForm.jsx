@@ -11,6 +11,7 @@ class ComplaintForm extends Forms {
       { _id: "", name: "", default: "Select Report Type" },
       { _id: 1, name: "Misleading Pictures" },
       { _id: 2, name: "Fake Rooms" },
+      { _id: 3, name: "Other" },
     ],
     data: {
       reportType: "",
@@ -42,7 +43,11 @@ class ComplaintForm extends Forms {
     }
   };
 
-  handleSelect = () => {};
+  handleSelect = (e) => {
+    let data = this.state.data;
+    data.reportType = e.currentTarget.value;
+    this.setState({ data });
+  };
 
   render() {
     const { show, handleClose } = this.props;
@@ -73,7 +78,11 @@ class ComplaintForm extends Forms {
               ])} */}
               <div className="form-group mt-2">
                 <label htmlFor="username">Report Type</label>
-                <select name="reportType" className="form-control">
+                <select
+                  name="reportType"
+                  className="form-control"
+                  onChange={this.handleSelect}
+                >
                   {this.state.reportOptions.map((option) => (
                     <option key={option._id} value={option.name}>
                       {option.name || option.default}

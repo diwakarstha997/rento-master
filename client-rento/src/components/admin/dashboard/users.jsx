@@ -11,20 +11,16 @@ class Users extends Component {
   };
 
   async componentDidMount() {
+    this.updateTable();
+  }
+  async updateTable() {
     const { data: users } = await user.getVerifyUser();
     this.setState({ users });
-    console.log(users);
-  }
-
-  async componentDidUpdate(prevProps, prevState) {
-    if (prevState.message !== this.state.message) {
-      const { data: users } = await user.getVerifyUser();
-      this.setState({ users });
-    }
   }
 
   setMessage = (m) => {
     this.setState({ message: m });
+    this.updateTable();
   };
   setStatus = (s) => {
     this.setState({ status: s });
@@ -33,13 +29,13 @@ class Users extends Component {
   handleDecline = async (e) => {
     const { data } = await user.declineUser(e.target.value);
     this.setState({ message: data });
-    console.log(data);
+    this.updateTable();
   };
 
   handleVerify = async (e) => {
     const { data } = await user.verifyUser(e.target.value);
     this.setState({ message: data });
-    console.log(data);
+    this.updateTable();
   };
 
   render() {
@@ -63,7 +59,7 @@ class Users extends Component {
                 </tr>
               </thead>
               <tbody>
-                {this.state.users ? (
+                {this.state.users.length !== 0 ? (
                   <React.Fragment>
                     {this.state.users.map((u) => (
                       <tr key={u._id}>
@@ -83,7 +79,7 @@ class Users extends Component {
                     ))}
                   </React.Fragment>
                 ) : (
-                  <p>No user verify request</p>
+                  "No user verify request"
                 )}
               </tbody>
             </table>

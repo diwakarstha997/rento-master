@@ -3,7 +3,9 @@ const Joi = require("Joi");
 
 const complaintSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  userName: String,
   room: { type: mongoose.Schema.Types.ObjectId, ref: "Room" },
+  roomId: String,
   reportType: String,
   reportDescription: String,
   status: {

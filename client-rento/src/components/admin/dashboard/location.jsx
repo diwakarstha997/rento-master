@@ -13,39 +13,22 @@ class Location extends Component {
     status: "",
     undo: [],
   };
+
   async componentDidMount() {
-    const { data: location } = await city.getCities();
-    this.setState({ location });
-    console.log(location);
+    this.updateTable();
   }
-  async componentDidUpdate() {
+
+  async updateTable() {
     const { data: location } = await city.getCities();
     this.setState({ location });
   }
 
   setMessage = (m) => {
     this.setState({ message: m });
+    this.updateTable();
   };
-
   setStatus = (s) => {
     this.setState({ status: s });
-  };
-
-  doDelete = async (e) => {
-    try {
-      const { status, data } = await city.deleteCity(e.target.value);
-      const message = data.name + " City was sucessefully deleted ";
-      this.setState({ message, undo: data, status });
-      console.log(status);
-    } catch (ex) {}
-  };
-  undoDelete = async () => {
-    try {
-      const { undo } = this.state;
-      await city.addCity(undo.name, undo.totalWard);
-
-      this.setState({ undo: [], message: "" });
-    } catch (ex) {}
   };
 
   render() {

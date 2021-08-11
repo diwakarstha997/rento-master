@@ -174,6 +174,11 @@ module.exports = {
     res.send(userData);
   },
 
+  getUserById: async (req, res) => {
+    const userData = await User.findById(req.params.id).select("-password");
+    res.send(userData);
+  },
+
   getTotalUser: async (req, res) => {
     const total = await User.find().countDocuments();
     res.send("" + total);

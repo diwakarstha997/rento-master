@@ -21,6 +21,7 @@ import ProtectedRoute from "./components/common/protectedRoute";
 import ApplicationDetail from "./components/tenant/applications/applicationDetail";
 import AdminDashboard from "./components/admin/adminDashboard";
 import OwnerRoomDetail from "./components/roomOwner/rooms/roomDetail";
+import AdminRoomDetail from "./components/admin/room/adminRoomdetail";
 import Profile from "./components/accounts/profile/profile";
 import EmailActivate from "./components/accounts/emailActivate";
 import {
@@ -233,7 +234,13 @@ class App extends Component {
                 render={(props) => <Logout {...props} user="Admin" />}
               />
               <Route path="/Admin/profile" component={Profile} />
-
+              <Route path="/Admin/rooms/:id" component={AdminRoomDetail} />
+              <Route
+                path="/Admin/dashboard/:id"
+                render={(props) => (
+                  <AdminDashboard {...props} toggled={this.state.toggled} />
+                )}
+              />
               <Route
                 path="/Admin/dashboard"
                 render={(props) => (

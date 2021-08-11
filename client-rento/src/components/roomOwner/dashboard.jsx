@@ -97,12 +97,13 @@ class Dashboard extends Component {
     this.setState({ message: m.data, status: m.status, rooms: userRooms });
   };
 
-  doDelete = async (e) => {
+  doDelete = async (v, lable) => {
     try {
-      const { status, data } = await rooms.deleteRoom(e.target.value);
+      const { status, data } = await rooms.deleteRoom(v);
 
       const { data: userRooms } = await rooms.getRoomsByUser();
       this.setState({ rooms: userRooms });
+      this.renderTableData(lable);
 
       this.setState({ message: data, status });
     } catch (ex) {

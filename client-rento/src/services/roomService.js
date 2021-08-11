@@ -45,6 +45,10 @@ export function deleteRoom(roomId) {
   return http.delete(apiEndpoint + "/deleteRoom/" + roomId);
 }
 
+export function adminRoomDelete(roomId) {
+  return http.delete(apiEndpoint + "/adminRoomDelete/" + roomId);
+}
+
 export function publishRoom(roomId) {
   return http.put(apiEndpoint + "/publishRoom/" + roomId);
 }
@@ -87,6 +91,10 @@ export function getApplicationsForRoom(roomId) {
   return http.get(apiEndpoint + "/roomowner/getApplicationsForRoom/" + roomId);
 }
 
+export function getReportsForRoom(roomId) {
+  return http.get(apiEndpoint + "/roomowner/getReportsForRoom/" + roomId);
+}
+
 const rooms = {
   getRooms,
   getRoomsByUser,
@@ -99,6 +107,9 @@ const rooms = {
   updateRoom,
   optionalImageUpload,
   getApplicationsForRoom,
+  getRoomById,
+  getReportsForRoom,
+  adminRoomDelete,
 };
 
 export default rooms;
