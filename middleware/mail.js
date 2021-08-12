@@ -4,11 +4,11 @@ const jwt = require("jsonwebtoken");
 const transporter = nodemailer.createTransport({
   service: "gmail",
   host: "smtp.gmail.com",
-  port: 587,
+  port: port_number,
   secure: true, // true for 465 port and false for other
   auth: {
-    user: "diwakarshrestha2015@gmail.com",
-    pass: "D9818561977r",
+    user: "email",
+    pass: "password",
   },
 });
 
