@@ -152,7 +152,7 @@ module.exports = {
 
     await application.save();
 
-    res.status(200).send("Application was editted");
+    res.status(200).send("Application was editted and re-sent");
   },
 
   cancel: async (req, res) => {

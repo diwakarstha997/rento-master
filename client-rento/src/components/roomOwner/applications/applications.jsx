@@ -7,6 +7,7 @@ import application from "./../../../services/applicationService";
 import { getUserVerificationData } from "../../../services/userService";
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
+import Message from "../../admin/dashboard/message";
 
 class Applications extends Component {
   state = {
@@ -22,6 +23,7 @@ class Applications extends Component {
     pageSize: 5,
     currentPage: 1,
     count: 0,
+    status: 200,
   };
 
   async componentDidMount() {
@@ -105,13 +107,13 @@ class Applications extends Component {
   handleApprove = async (e, lable) => {
     const { data } = await application.applicationApprove(e);
     this.renderTableData(lable);
-    this.setState({ message: data });
+    this.setState({ message: data, status: 200 });
   };
 
   handleReject = async (e, lable) => {
     const { data } = await application.applicationReject(e);
     this.renderTableData(lable);
-    this.setState({ message: data });
+    this.setState({ message: data, status: 202 });
   };
 
   handleView = (lable) => {
@@ -143,6 +145,10 @@ class Applications extends Component {
           <div className="row" style={{ margin: "0 5% 0 5%" }}>
             <div className="col ">
               <h2>Applications</h2>
+              <Message
+                message={this.state.message}
+                status={this.state.status}
+              />
             </div>
           </div>
           <div
