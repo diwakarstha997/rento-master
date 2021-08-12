@@ -5,6 +5,7 @@ import { getCurrentUser } from "./../../../services/authService";
 import { getUserVerificationData } from "../../../services/userService";
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
+import Message from "../../admin/dashboard/message";
 import _ from "lodash";
 
 class Applications extends Component {
@@ -21,6 +22,7 @@ class Applications extends Component {
     message: "",
     pageSize: 5,
     currentPage: 1,
+    status: 200,
   };
 
   handlePageChange = (page) => {
@@ -128,7 +130,8 @@ class Applications extends Component {
 
   handleCancel = async (v, tab) => {
     try {
-      await application.cancelApplication(v);
+      const { data } = await application.cancelApplication(v);
+      this.setState({ message: data, status: 202 });
       this.renderTableData(tab);
     } catch (ex) {}
   };
@@ -144,7 +147,7 @@ class Applications extends Component {
   };
 
   handleMessage = async (m, tab) => {
-    this.setState({ message: m });
+    this.setState({ message: m, status: 200 });
     this.renderTableData(tab);
   };
 
@@ -171,7 +174,11 @@ class Applications extends Component {
         <div>
           <div className="row" style={{ margin: "0 5% 0 5%" }}>
             <div className="col ">
-              <h2>Applications</h2>
+              <h2>Applications </h2>
+              <Message
+                message={this.state.message}
+                status={this.state.status}
+              />
             </div>
           </div>
           <div
