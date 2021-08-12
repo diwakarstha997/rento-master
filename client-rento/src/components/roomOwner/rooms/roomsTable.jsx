@@ -13,8 +13,10 @@ class RoomTable extends Component {
 
   handleModalChange = (state, path = "") => {
     if (!state) {
+      this.props.updateData();
       this.setState({ path, editModalState: false });
     } else {
+      this.props.updateData();
       this.setState({ path, editModalState: true });
     }
   };
@@ -63,21 +65,26 @@ class RoomTable extends Component {
               lable={this.props.lable}
               className="btn btn-danger btn-sm ml-2"
             />
-            {room.status === "Inactive" ? (
-              <button
-                onClick={() => this.props.onPublish(room._id, this.props.lable)}
-                className="btn btn-success btn-sm ml-2"
-              >
-                Publish
-              </button>
-            ) : (
-              <button
-                onClick={() => this.props.onPublish(room._id, this.props.lable)}
-                className="btn btn-danger btn-sm ml-2"
-              >
-                Hide
-              </button>
-            )}
+            {room.status !== "Blocked" &&
+              (room.status === "Inactive" ? (
+                <button
+                  onClick={() =>
+                    this.props.onPublish(room._id, this.props.lable)
+                  }
+                  className="btn btn-success btn-sm ml-2"
+                >
+                  Publish
+                </button>
+              ) : (
+                <button
+                  onClick={() =>
+                    this.props.onPublish(room._id, this.props.lable)
+                  }
+                  className="btn btn-danger btn-sm ml-2"
+                >
+                  Hide
+                </button>
+              ))}
           </div>
         </React.Fragment>
       ),

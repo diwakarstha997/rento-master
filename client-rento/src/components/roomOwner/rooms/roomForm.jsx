@@ -118,10 +118,10 @@ class RoomForm extends Form {
     }
 
     //image upload validation
-    if (checkInputImage && numberOfImage < 3) {
+    if (checkInputImage && numberOfImage < 1) {
       error.details.push({
         path: ["image"],
-        message: `Please upload at least 3 image `,
+        message: `Please upload at least 1 image `,
       });
     }
 
@@ -175,7 +175,7 @@ class RoomForm extends Form {
       }
     }
 
-    if (fileCount === 1 || data["image"].length < 3) {
+    if (fileCount === 1 || data["image"].length < 1) {
       const errorMessage = this.validateProperty(input);
       if (errorMessage) errors["image"] = errorMessage;
       else delete errors["image"];
@@ -189,8 +189,8 @@ class RoomForm extends Form {
     const data = { ...this.state.data };
     data["image"] = data["image"].filter((img) => img.name !== imageName);
 
-    if (data["image"].length < 3) {
-      errors["image"] = "Please upload at least 3 image";
+    if (data["image"].length < 1) {
+      errors["image"] = "Please upload at least 1 image";
     } else delete errors["image"];
 
     this.setState({ data, errors });

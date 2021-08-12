@@ -22,6 +22,10 @@ class OwnerRoomDetail extends Component {
 
   async componentDidMount() {
     document.title = "Rento | Room Detail";
+    this.pageRerender();
+  }
+
+  async pageRerender() {
     const { data: roomData } = await room.getOwnerRoomDetail(
       this.props.match.params.id
     );
@@ -59,7 +63,7 @@ class OwnerRoomDetail extends Component {
   };
 
   handleImageDelete = async (imagePath) => {
-    if (this.state.roomData.image.length < 4) return;
+    if (this.state.roomData.image.length < 2) return;
     const { data: roomData } = await optionalImageDelete(
       imagePath,
       this.state.roomData._id
@@ -91,6 +95,7 @@ class OwnerRoomDetail extends Component {
 
   handleModalChange = (state) => {
     if (!state) {
+      this.pageRerender();
       this.setState({ editModalState: false });
     } else {
       this.setState({ editModalState: true });
@@ -290,7 +295,7 @@ class OwnerRoomDetail extends Component {
                   className="room-form-img img-fluid"
                   style={{ position: "block" }}
                 />
-                {this.state.roomData.image.length > 3 && (
+                {this.state.roomData.image.length > 1 && (
                   <i
                     className="room-form-img-trash text-danger fa fa-trash pt-3"
                     style={{

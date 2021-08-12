@@ -23,6 +23,7 @@ import AdminDashboard from "./components/admin/adminDashboard";
 import OwnerRoomDetail from "./components/roomOwner/rooms/roomDetail";
 import Profile from "./components/accounts/profile/profile";
 import EmailActivate from "./components/accounts/emailActivate";
+import AdminRoomDetail from "./components/admin/room/adminRoomDetail";
 import { getUserVerificationData } from "./services/userService";
 import ForgotPassword from "./components/accounts/forgetPassword";
 import InvalidToken from "./components/accounts/invalidToken";
@@ -222,6 +223,13 @@ class App extends Component {
                 render={(props) => <Logout {...props} user="Admin" />}
               />
               <Route path="/Admin/profile" component={Profile} />
+              <Route path="/Admin/rooms/:id" component={AdminRoomDetail} />
+              <Route
+                path="/Admin/dashboard/:id"
+                render={(props) => (
+                  <AdminDashboard {...props} toggled={this.state.toggled} />
+                )}
+              />
 
               <Route
                 path="/Admin/dashboard"

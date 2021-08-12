@@ -1,29 +1,13 @@
 import React, { Component } from "react";
 import { NavLink, Link } from "react-router-dom";
 import logo from "../../assets/images/rento-resize-2.png";
-import {
-  getUserVerificationData,
-  mailResend,
-} from "../../services/userService";
 import auth from "./../../services/authService";
-import VerificationMessage from "./verificationMessage";
 
 class NavBar extends Component {
-  state = {
-    message: "",
-  };
-
-  handleMailResend = async () => {
-    const { data } = await mailResend();
-    this.setState({
-      message: data ? "Mail send SuccessFully. Please Check your Mail" : "",
-    });
-  };
-
   render() {
     const user = auth.getCurrentUser();
-    let uv_data;
-    if (user) uv_data = getUserVerificationData();
+    // let uv_data;
+    // if (user) uv_data = getUserVerificationData();
     const userType = this.props.userType;
 
     return (
@@ -59,7 +43,6 @@ class NavBar extends Component {
                     <React.Fragment>
                       <a
                         className="nav-item nav-menu nav-link"
-                        exact
                         href="/RoomOwner/MyRooms"
                       >
                         My Rooms

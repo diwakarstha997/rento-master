@@ -22,6 +22,14 @@ module.exports = {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).send("User already exists !!");
 
+    phone = req.body.phone.replace(/ /g, "");
+
+    if (phone.length !== 10)
+      return res.status(400).send("Enter Valid Phone Number !!");
+
+    let checkPhone = await User.findOne({ phone: phone });
+    if (checkPhone) return res.status(400).send("Phone Already in Use !!");
+
     const userCount = await User.find().countDocuments();
     req.body.userTag = `RR${userCount}`;
 
@@ -74,6 +82,18 @@ module.exports = {
       const decodedUser = jwt.verify(activationToken, "rentoSecretKey");
       if (!decodedUser) return res.status(400).send("something went wrong");
 
+      console.log(decodedUser);
+
+      const token = req.header("x-auth-token");
+      if (token) {
+        const currentUser = jwt.verify(token, "rentoUserSecretKey");
+        if (currentUser) {
+          if (currentUser._id.toString() !== decodedUser._id.toString()) {
+            return res.status(400).send("Invalid Token");
+          }
+        }
+      }
+
       let user = await User.findOne({ email: decodedUser.email });
       user.isEmailActivated = true;
       await user.save();
@@ -100,6 +120,7 @@ module.exports = {
     documentPath = req.customPath + req.files[0].filename;
 
     user.set({
+      declined: false,
       documentImagePath: documentPath,
     });
     await user.save();
@@ -252,6 +273,15 @@ module.exports = {
 
     const user = await User.findOne({ _id: req.body.id });
 
+    phone = req.body.phone.replace(/ /g, "");
+
+    if (phone.length !== 10)
+      return res.status(400).send("Enter Valid Phone Number !!");
+
+    let checkPhone = await User.findOne({ phone: phone });
+    if (checkPhone && checkPhone._id.toString() !== user._id.toString())
+      return res.status(400).send("Phone Already in Use !!");
+
     let emailCheck = await User.findOne({ email: email });
 
     if (emailCheck && emailCheck._id.toString() !== user._id.toString())
@@ -393,5 +423,9 @@ module.exports = {
       .and({ documentImagePath: { $exists: true } })
       .and({ declined: false });
     res.send(value);
+  },
+  getUserById: async (req, res) => {
+    const userData = await User.findById(req.params.id).select("-password");
+    res.send(userData);
   },
 };

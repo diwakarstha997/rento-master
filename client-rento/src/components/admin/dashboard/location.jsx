@@ -14,16 +14,16 @@ class Location extends Component {
     undo: [],
   };
   async componentDidMount() {
-    const { data: location } = await city.getCities();
-    this.setState({ location });
+    this.updateTable();
   }
-  async componentDidUpdate() {
+  async updateTable() {
     const { data: location } = await city.getCities();
     this.setState({ location });
   }
 
   setMessage = (m) => {
     this.setState({ message: m });
+    this.updateTable();
   };
 
   setStatus = (s) => {

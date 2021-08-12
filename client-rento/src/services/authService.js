@@ -44,6 +44,7 @@ export function loginWithJwt(jwt, uv_jwt) {
 
 export function logout() {
   localStorage.removeItem(tokenKey);
+  localStorage.removeItem("uv_token");
 }
 
 export function getCurrentUser() {

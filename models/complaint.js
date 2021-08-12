@@ -16,6 +16,8 @@ const complaintSchema = new mongoose.Schema({
     type: Date,
     default: new Date().toISOString().slice(0, 10),
   },
+  userName: String,
+  roomId: String,
 });
 
 const Complaint = mongoose.model("Complaint", complaintSchema);

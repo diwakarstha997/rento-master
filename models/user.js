@@ -26,7 +26,13 @@ const userSchema = new mongoose.Schema({
     maxlength: 255,
   },
   documentImagePath: String,
-  phone: { type: String, required: true, minlength: 10, maxlength: 10 },
+  phone: {
+    type: String,
+    unique: true,
+    required: true,
+    minlength: 10,
+    maxlength: 10,
+  },
   userRole: {
     type: String,
     required: true,

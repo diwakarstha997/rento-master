@@ -138,6 +138,7 @@ class RoomDetail extends Component {
                                   <Contact
                                     viewed={existingApplication.viewed}
                                     id={existingApplication._id}
+                                    roomId={existingApplication.room._id}
                                     contact={existingApplication.contactNo}
                                   />
                                 )}

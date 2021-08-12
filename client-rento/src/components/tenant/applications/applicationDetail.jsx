@@ -128,12 +128,6 @@ class ApplicationDetail extends Component {
               </div>
 
               <hr />
-
-              {applicationData.room && (
-                <div className="text-right">
-                  <button className="btn rento-btn">Edit</button>
-                </div>
-              )}
             </div>
           </div>
         </div>

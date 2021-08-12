@@ -128,7 +128,7 @@ class Applications extends Component {
 
   handleCancel = async (v, tab) => {
     try {
-      const { data } = await application.cancelApplication(v);
+      await application.cancelApplication(v);
       this.renderTableData(tab);
     } catch (ex) {}
   };

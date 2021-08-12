@@ -2,11 +2,12 @@ import React, { Component } from "react";
 import {
   checkUserVerification,
   getUserVerificationData,
+  mailResend,
 } from "../../services/userService";
 import { getCurrentUser } from "./../../services/authService";
 
 class VerificationMessage extends Component {
-  state = { time: Date.now() };
+  state = { time: Date.now(), message: "" };
 
   componentDidMount() {
     this.interval = setInterval(
@@ -22,6 +23,13 @@ class VerificationMessage extends Component {
   checkVerify = async () => {
     const user = getCurrentUser();
     if (user) await checkUserVerification(user);
+  };
+
+  handleMailResend = async () => {
+    const { data } = await mailResend();
+    this.setState({
+      message: data ? "Mail send SuccessFully. Please Check your Mail" : "",
+    });
   };
 
   render() {

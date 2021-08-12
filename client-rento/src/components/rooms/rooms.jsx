@@ -129,8 +129,6 @@ class Rooms extends Component {
   };
 
   render() {
-    const path = this.props.location.pathname;
-
     const { totalCount, data } = this.getPageData();
     return (
       <React.Fragment>

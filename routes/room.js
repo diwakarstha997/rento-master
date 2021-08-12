@@ -19,6 +19,7 @@ router.get(
   "/RoomOwner/getApplicationsForRoom/:id",
   Room.getApplicationsForRoom
 );
+router.get("/RoomOwner/getReportsForRoom/:id", Room.getReportsForRoom);
 
 router.post(
   "/image/upload",
@@ -41,5 +42,7 @@ router.put(
   Room.publish
 );
 router.delete("/deleteRoom/:id", [auth, validateId], Room.delete);
+
+router.delete("/adminRoomDelete/:id", [auth, validateId], Room.adminRoomDelete);
 
 module.exports = router;

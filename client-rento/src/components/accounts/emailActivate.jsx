@@ -13,7 +13,7 @@ class EmailActivate extends Component {
       this.setState({ message, status: 200 });
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        this.setState({ message: "Invalid Confirmation Link", status: 400 });
+        this.setState({ message: ex.response.data, status: 400 });
       }
     }
   };

@@ -29,10 +29,13 @@ router.get("/createdToday", [auth], User.userCreatedToday);
 router.get("/getVerifyUser", [auth], User.getVerifyUser);
 
 router.put("/verify", [auth], User.verify);
+router.put("/decline", [auth], User.decline);
 
 router.put("/changePassword", User.changePassword);
 router.put("/editProfile", User.editProfileData);
 router.get("/getTotal", [auth], User.getTotalUser);
 router.get("/createdToday", [auth], User.userCreatedToday);
+
+router.get("/:id", [auth], User.getUserById);
 
 module.exports = router;

@@ -14,6 +14,10 @@ export async function register(user) {
   });
 }
 
+export async function getUserById(user) {
+  return await http.get(apiEndpoint + "/" + user);
+}
+
 export function getProfileData() {
   return http.get(apiEndpoint);
 }
@@ -100,6 +104,7 @@ export function declineUser(userId) {
 
 const user = {
   register,
+  getUserById,
   getProfileData,
   getTotalUsers,
   usersCreatedToday,

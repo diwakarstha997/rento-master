@@ -49,6 +49,10 @@ class Dashboard extends Component {
     });
   };
 
+  handleUpdateData = () => {
+    this.renderTableData("all");
+  };
+
   handleSelect = (v) => {
     if (v === "all") {
       this.setState({ active: v });
@@ -238,6 +242,7 @@ class Dashboard extends Component {
                 doDelete={this.doDelete}
                 onPublish={this.onPublish}
                 handleMessage={this.handleMessage}
+                updateData={() => this.handleUpdateData()}
                 lable={this.state.active}
               />
               <div className=" mx-auto d-lg-flex justify-content-lg-center d-md-flex justify-content-md-center ">

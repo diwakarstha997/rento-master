@@ -3,6 +3,7 @@ const upload = require("../middleware/upload");
 const _ = require("lodash");
 const { User } = require("../models/user");
 const { Application } = require("../models/application");
+const { Complaint } = require("../models/complaint");
 
 const fs = require("fs");
 const { promisify } = require("util");
@@ -114,7 +115,7 @@ module.exports = {
   },
 
   findByIdForRoomOwner: async (req, res) => {
-    const room = await Room.findOne({ _id: req.params.id, user: req.user._id });
+    const room = await Room.findOne({ _id: req.params.id });
     if (!room) return res.status(404).send("File not Found");
 
     res.send(room);
@@ -159,8 +160,19 @@ module.exports = {
       return res.status(404).send("Room with applications can't be deleted ");
 
     // const result = await Room.findByIdAndDelete({ _id: req.params.id });
+    await Complaint.deleteMany({ room: room._id });
     room.delete();
 
+    res.status(202).send("Room deleted successfully");
+  },
+
+  adminRoomDelete: async (req, res) => {
+    //delete rooms
+    const room = await Room.findById({ _id: req.params.id });
+    if (!room) return res.status(404).send("Room Already Deleted");
+    await Complaint.deleteMany({ room: room._id });
+
+    room.delete();
     res.status(202).send("Room deleted successfully");
   },
 
@@ -201,6 +213,15 @@ module.exports = {
     })
       .and([{ status: { $ne: "Rejected" } }, { status: { $ne: "Cancelled" } }])
       .countDocuments();
+    if (!count) return res.send("0");
+
+    res.send("" + count);
+  },
+  getReportsForRoom: async (req, res) => {
+    const count = await Complaint.find({
+      room: req.params.id,
+      // roomOwner: req.user._id,
+    }).countDocuments();
     if (!count) return res.send("0");
 
     res.send("" + count);

@@ -70,9 +70,14 @@ class VerifyIdentity extends Form {
     this.setState({ data, errors });
   };
 
-  doSubmit = async () => {
+  handleImageUpload = (e) => {
+    e.preventDefault();
+    if (!this.state.data.image) {
+      this.setState({ errors: { image: "'Image' cannot be empty" } });
+      return;
+    }
     try {
-      await documentUpload(this.state.data);
+      documentUpload(this.state.data);
       this.setState({
         message:
           "Document Uploaded SuccessFully. Document will be reviewed and verified",
@@ -82,6 +87,7 @@ class VerifyIdentity extends Form {
       if (ex.response && ex.response.status === 400) {
         const errorMessage = ex.response.data;
         this.setState({ errorMessage });
+        window.scrollTo(0, 0);
       }
     }
   };
@@ -114,54 +120,59 @@ class VerifyIdentity extends Form {
             >
               <div className="card-body">
                 <div className="form-group">
-                  <form onSubmit={this.handleSubmit}>
-                    <div className="row">
-                      <div className="col-lg mb-4">
-                        <label htmlFor="image">Select Document Image:</label>
-                      </div>
-                      <div className="col-lg">
-                        <input
-                          type="file"
-                          name="image"
-                          accept="image/png, image/gif, image/jpeg"
-                          onChange={this.handleFileChange}
-                        />
-                      </div>
+                  {/* <form onSubmit={this.handleSubmit}> */}
+                  <div className="row">
+                    <div className="col-lg mb-4">
+                      <label htmlFor="image">Select Document Image:</label>
                     </div>
+                    <div className="col-lg">
+                      <input
+                        type="file"
+                        name="image"
+                        accept="image/png, image/gif, image/jpeg"
+                        onChange={this.handleFileChange}
+                      />
+                    </div>
+                  </div>
 
-                    {this.state.errors["image"] && (
-                      <div className="alert alert-danger">
-                        {this.state.errors["image"]}
-                      </div>
-                    )}
-                    <div>
-                      {(this.state.data.image && (
+                  {this.state.errors["image"] && (
+                    <div className="alert alert-danger">
+                      {this.state.errors["image"]}
+                    </div>
+                  )}
+                  <div>
+                    {(this.state.data.image && (
+                      <img
+                        src={URL.createObjectURL(this.state.data.image)}
+                        width="600px"
+                        height="700px"
+                        alt="Document Invalid"
+                        className="img-fluid"
+                      />
+                    )) ||
+                      (this.state.databaseImage && (
                         <img
-                          src={URL.createObjectURL(this.state.data.image)}
+                          src={"/" + this.state.databaseImage}
                           width="600px"
                           height="700px"
-                          alt="Document Invalid"
+                          alt="Document"
                           className="img-fluid"
                         />
-                      )) ||
-                        (this.state.databaseImage && (
-                          <img
-                            src={"/" + this.state.databaseImage}
-                            width="600px"
-                            height="700px"
-                            alt="Document"
-                            className="img-fluid"
-                          />
-                        )) || (
-                          <p className="text-danger">
-                            *Please Upload Document Image to get verified
-                          </p>
-                        )}
-                    </div>
-                    <div className="text-right my-4">
-                      <button className="btn rento-btn">Upload</button>
-                    </div>
-                  </form>
+                      )) || (
+                        <p className="text-danger">
+                          *Please Upload Document Image to get verified
+                        </p>
+                      )}
+                  </div>
+                  <div className="text-right my-4">
+                    <button
+                      className="btn rento-btn"
+                      onClick={this.handleImageUpload}
+                    >
+                      Upload
+                    </button>
+                  </div>
+                  {/* </form> */}
                 </div>
               </div>
             </div>

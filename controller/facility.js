@@ -43,6 +43,6 @@ module.exports = {
       icon: req.body.icon,
     });
     await facility.save();
-    res.status(200).send(facility.name + "was editted");
+    res.status(200).send(facility.name + " was editted");
   },
 };

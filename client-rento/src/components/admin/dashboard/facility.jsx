@@ -15,10 +15,9 @@ class Facility extends Component {
   };
 
   async componentDidMount() {
-    const { data: facilities } = await facility.getFacilities();
-    this.setState({ facilities });
+    this.updateTable();
   }
-  async componentDidUpdate() {
+  async updateTable() {
     const { data: facilities } = await facility.getFacilities();
     this.setState({ facilities });
   }
@@ -27,6 +26,7 @@ class Facility extends Component {
       const { status, data } = await facility.deleteFacility(e.target.value);
       const message = data.name + " Facility was sucessefully deleted ";
       this.setState({ message, undo: data, status });
+      this.updateTable();
     } catch (ex) {}
   };
   undoDelete = async () => {
@@ -35,11 +35,13 @@ class Facility extends Component {
 
       await facility.addFacility(undo.name, undo.icon);
 
+      this.updateTable();
       this.setState({ undo: [], message: "" });
     } catch (ex) {}
   };
   setMessage = (m) => {
     this.setState({ message: m });
+    this.updateTable();
   };
   setStatus = (s) => {
     this.setState({ status: s });
@@ -77,7 +79,11 @@ class Facility extends Component {
                       <i className={`fa ${f.icon}`}></i>
                     </td>
                     <td>
-                      <ConfirmDelete value={f._id} onClick={this.doDelete} />
+                      <ConfirmDelete
+                        className="btn-danger btn-sm ml-2 float-right"
+                        value={f._id}
+                        onClick={this.doDelete}
+                      />
                       <EditModal
                         edit={f}
                         message={this.setMessage}

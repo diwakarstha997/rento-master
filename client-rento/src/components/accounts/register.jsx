@@ -97,9 +97,8 @@ class Register extends Form {
       window.location = dest;
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
-        const errors = { ...this.state.errors };
-        errors.email = ex.response.data;
-        this.setState({ errors });
+        const message = ex.response.data;
+        this.setState({ message });
       }
     }
   };
@@ -113,6 +112,9 @@ class Register extends Form {
               <h5 className="text-center">
                 <strong>Create an account.</strong>
               </h5>
+              {this.state.message && (
+                <div className="alert-danger p-3">{this.state.message}</div>
+              )}
             </div>
 
             <form onSubmit={this.handleSubmit} className="mt-3">
@@ -158,9 +160,14 @@ class Register extends Form {
               </div>
               {this.renderInput("name", "Name", true)}
               {this.renderInput("email", "Email", true)}
-              {this.renderInput("phone", "Phone", true)}
-              {this.renderInput("password", "Password", true)}
-              {this.renderInput("confirm_password", "Confirm Password", true)}
+              {this.renderNumberInput("phone", "Phone", true, false, 9)}
+              {this.renderInput("password", "Password", true, "password")}
+              {this.renderInput(
+                "confirm_password",
+                "Confirm Password",
+                true,
+                "password"
+              )}
               {this.renderButton("Register")}
             </form>
 
