@@ -5,8 +5,8 @@ import { getCurrentUser } from "./../../../services/authService";
 import { getUserVerificationData } from "../../../services/userService";
 import { paginate } from "../../../utils/paginate";
 import Pagination from "../../common/pagination";
-import Message from "../../admin/dashboard/message";
 import _ from "lodash";
+import Message from "../../admin/dashboard/message";
 
 class Applications extends Component {
   state = {

@@ -11,10 +11,10 @@ class AddCityModal extends Forms {
     data: {
       name: "",
       totalWard: "",
-      lat: "",
-      lng: "",
-      zoom: "",
-      marker: "",
+      // lat: "",
+      // lng: "",
+      // zoom: "",
+      // marker: "",
     },
     errors: {},
   };
@@ -26,10 +26,10 @@ class AddCityModal extends Forms {
       .max(200)
       .required()
       .label("TotalWard"),
-    lat: Joi.string().required().label("Map"),
-    lng: Joi.string().required().label("Map"),
-    zoom: Joi.string().required().label("Map"),
-    marker: Joi.array().required().label("Map"),
+    // lat: Joi.string().required().label("Map"),
+    // lng: Joi.string().required().label("Map"),
+    // zoom: Joi.string().required().label("Map"),
+    // marker: Joi.array().required().label("Map"),
   };
 
   doSubmit = async () => {
@@ -39,10 +39,10 @@ class AddCityModal extends Forms {
       const message = await city.addCity(
         data.name,
         data.totalWard,
-        data.lng,
-        data.lat,
-        data.zoom,
-        data.marker
+        // data.lng,
+        // data.lat,
+        // data.zoom,
+        // data.marker
       );
       this.props.message(message.data);
       this.props.status(200);
@@ -132,12 +132,12 @@ class AddCityModal extends Forms {
                   wikipedia wardinfo
                 </a>
               </p>
-              <Map handleMapData={this.handleMapClick} />
+              {/* <Map handleMapData={this.handleMapClick} />
               {this.state.errors.lat && (
                 <div className="alert alert-danger">
                   {this.state.errors.lat}
                 </div>
-              )}
+              )} */}
               <div className="text-center">
                 {this.renderModalButton(
                   "Add",

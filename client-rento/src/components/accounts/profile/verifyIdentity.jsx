@@ -3,6 +3,8 @@ import Joi from "joi-browser";
 import Form from "../../common/form";
 import { documentUpload, getProfileData } from "../../../services/userService";
 
+const imageServer = "http://localhost:3000";
+
 class VerifyIdentity extends Form {
   state = {
     databaseImage: "no image",
@@ -70,14 +72,14 @@ class VerifyIdentity extends Form {
     this.setState({ data, errors });
   };
 
-  handleImageUpload = (e) => {
+  handleImageUpload = async (e) => {
     e.preventDefault();
     if (!this.state.data.image) {
       this.setState({ errors: { image: "'Image' cannot be empty" } });
       return;
     }
     try {
-      documentUpload(this.state.data);
+      await documentUpload(this.state.data);
       this.setState({
         message:
           "Document Uploaded SuccessFully. Document will be reviewed and verified",
@@ -152,7 +154,7 @@ class VerifyIdentity extends Form {
                     )) ||
                       (this.state.databaseImage && (
                         <img
-                          src={"/" + this.state.databaseImage}
+                          src={imageServer + "/" + this.state.databaseImage}
                           width="600px"
                           height="700px"
                           alt="Document"

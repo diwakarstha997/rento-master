@@ -7,7 +7,7 @@ import application from "../../../services/applicationService";
 class Contact extends Component {
   state = {
     show: false,
-    mapData: "",
+    // mapData: "",
   };
 
   async componentDidMount() {}
@@ -22,13 +22,13 @@ class Contact extends Component {
       }
 
       const { data: roomData } = await getRoomById(this.props.roomId);
-      const mapData = {
-        lng: roomData.lng,
-        lat: roomData.lat,
-        zoom: roomData.zoom,
-        marker: roomData.marker,
-      };
-      this.setState({ mapData });
+      // const mapData = {
+      //   lng: roomData.lng,
+      //   lat: roomData.lat,
+      //   zoom: roomData.zoom,
+      //   marker: roomData.marker,
+      // };
+      // this.setState({ mapData });
 
       this.setState({ show: true });
     } catch (error) {}
@@ -59,9 +59,9 @@ class Contact extends Component {
                 +977-{this.props.contact}
               </a>
             </div>
-            <div className="border border-dark">
+            {/* <div className="border border-dark">
               <Map mapData={this.state.mapData} editDisabled={true} />
-            </div>
+            </div> */}
           </Modal.Body>
         </Modal>
       </React.Fragment>

@@ -37,6 +37,7 @@ module.exports = async function () {
     });
     await cities.save();
   } catch (ex) {
+    console.log(ex);
     process.exit();
   }
 };

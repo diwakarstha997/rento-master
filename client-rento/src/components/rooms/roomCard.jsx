@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-// import img from "";
+const imageServer = process.env.REACT_APP_IMAGE_SERVER;
 
 class RoomCard extends Component {
   state = { item: "", mouseHover: false };
@@ -30,7 +30,11 @@ class RoomCard extends Component {
                 this.setState({ item: "", mouseHover: false })
               }
             >
-              <img src={`/${item.image[0]}`} height="100px" alt="rento-room" />
+              <img
+                src={`${imageServer}/${item.image[0]}`}
+                height="100px"
+                alt="rento-room"
+              />
 
               <div className="card-body">
                 <p

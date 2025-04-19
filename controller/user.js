@@ -338,7 +338,7 @@ module.exports = {
     if (user.isEmailActivated) return res.send("Email Already verified");
 
     const mailOptions = activationMailOption(user._id, user.email);
-    sendRentoMail(mailOptions);
+    await sendRentoMail(mailOptions);
 
     res.send("mail send Successfully");
   },

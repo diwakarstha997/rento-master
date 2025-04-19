@@ -17,12 +17,12 @@ class RoomForm extends Form {
     dataChildRef: {
       city: "wardNumber",
     },
-    mapData: {
-      lng: 83.8532,
-      lat: 28.5168,
-      zoom: 5.93,
-      marker: "",
-    },
+    // mapData: {
+    //   lng: 83.8532,
+    //   lat: 28.5168,
+    //   zoom: 5.93,
+    //   marker: "",
+    // },
     data: {
       city: "",
       wardNumber: "",
@@ -33,10 +33,10 @@ class RoomForm extends Form {
       squareFeet: "",
       description: "",
       image: [],
-      lat: "",
-      lng: "",
-      zoom: "",
-      marker: "",
+      // lat: "",
+      // lng: "",
+      // zoom: "",
+      // marker: "",
       imagePath: [],
     },
     errors: {},
@@ -76,10 +76,10 @@ class RoomForm extends Form {
       .label("Square Feet"),
     description: Joi.string().max(500).required().label("Description"),
     image: Joi.label("Image"),
-    lat: Joi.string().required().label("Map"),
-    lng: Joi.string().required().label("Map"),
-    zoom: Joi.string().required().label("Map"),
-    marker: Joi.array().required().label("Map"),
+    // lat: Joi.string().required().label("Map"),
+    // lng: Joi.string().required().label("Map"),
+    // zoom: Joi.string().required().label("Map"),
+    // marker: Joi.array().required().label("Map"),
     imagePath: Joi,
   };
 
@@ -201,28 +201,28 @@ class RoomForm extends Form {
       (city) => city.name === this.state.data.city
     );
 
-    const mapData = { ...this.state.mapData };
-    mapData.lng = location[0]["map"].lng;
-    mapData.lat = location[0]["map"].lat;
-    mapData.zoom = location[0]["map"].zoom;
-    mapData.marker = "";
+    // const mapData = { ...this.state.mapData };
+    // mapData.lng = location[0]["map"].lng;
+    // mapData.lat = location[0]["map"].lat;
+    // mapData.zoom = location[0]["map"].zoom;
+    // mapData.marker = "";
 
-    this.setState({ mapData });
-    this.setState({ mapRender: true });
+    // this.setState({ mapData });
+    // this.setState({ mapRender: true });
   };
 
-  handleMapClick = (lng, lat, zoom, marker) => {
-    const { data } = this.state;
-    data.lng = lng;
-    data.lat = lat;
-    data.zoom = zoom;
-    data.marker = [marker.lng, marker.lat];
-    this.setState({ data });
-  };
+  // handleMapClick = (lng, lat, zoom, marker) => {
+  //   const { data } = this.state;
+  //   data.lng = lng;
+  //   data.lat = lat;
+  //   data.zoom = zoom;
+  //   data.marker = [marker.lng, marker.lat];
+  //   this.setState({ data });
+  // };
 
-  handleRenderControl = () => {
-    this.setState({ mapRender: false });
-  };
+  // handleRenderControl = () => {
+  //   this.setState({ mapRender: false });
+  // };
 
   render() {
     return (
@@ -326,6 +326,7 @@ class RoomForm extends Form {
                   </div>
                 ))}
               </div>
+{/*               
               <label htmlFor="map">
                 Map <i className="text-danger">*</i>
               </label>
@@ -344,7 +345,7 @@ class RoomForm extends Form {
                 <div className="alert alert-danger">
                   {this.state.errors.lat}
                 </div>
-              )}
+              )} */}
 
               <button className="btn rento-btn btn-primary">Save</button>
               <button

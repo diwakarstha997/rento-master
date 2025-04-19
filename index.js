@@ -1,6 +1,7 @@
 require("express-async-errors");
 const express = require("express");
 const cors = require("cors");
+require("dotenv/config"); 
 
 const auth = require("./routes/auth");
 const facility = require("./routes/facility");
@@ -32,5 +33,5 @@ app.use("/api/complaint", complaint);
 //error handler middleware
 app.use(error);
 
-const port = process.env.PORT || 3900;
+const port = process.env.PORT;
 app.listen(port, () => console.log(`listening to port: ${port}`));

@@ -26,7 +26,16 @@ class RoomDetail extends Component {
       const { data: room } = await getRoomById(this.props.match.params.id);
       const { data: facilities } = await getFacilities();
       const { data: rooms } = await getRooms();
-      this.setState({ room, rooms, facilities });
+
+      const similarRooms = rooms.filter(
+        (similarRoom) =>
+          similarRoom._id !== room._id &&
+          similarRoom.monthlyRent <= room.monthlyRent &&
+          similarRoom.city === room.city &&
+          similarRoom.squareFeet >= room.squareFeet - 50 &&
+          similarRoom.squareFeet <= room.squareFeet + 50
+      );
+      this.setState({ room, rooms: similarRooms, facilities });
       this.checkExistingApplication();
     } catch (ex) {
       if (ex.response && ex.response.status === 404)
@@ -287,12 +296,7 @@ class RoomDetail extends Component {
 
               <hr />
               <h1>Similar Rooms</h1>
-              <RoomCard
-                items={this.state.rooms}
-                onClick={this.handleRoomClick}
-              />
-              <hr />
-              <h1>Nearby Rooms</h1>
+              {this.state.rooms.length === 0 && "No Similar rooms around"}
               <RoomCard
                 items={this.state.rooms}
                 onClick={this.handleRoomClick}

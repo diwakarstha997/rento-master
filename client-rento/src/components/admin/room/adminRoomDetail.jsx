@@ -7,12 +7,14 @@ import Map from "../../common/map";
 import complaint from "../../../services/complaintService";
 import HandleComplaint from "../modals/complaintHandleModal";
 
+const imageServer = "http://localhost:3000";
+
 class AdminRoomDetail extends Component {
   state = {
     roomData: "",
     facilities: "",
     message: "",
-    mapData: "",
+    // mapData: "",
     reportCount: 3,
     value: 7,
     complaints: "",
@@ -250,7 +252,7 @@ class AdminRoomDetail extends Component {
                     style={{ position: "relative" }}
                   >
                     <img
-                      src={"/" + img}
+                      src={imageServer + "/" + img}
                       alt={img}
                       className="room-form-img img-fluid"
                       style={{ position: "block" }}
@@ -273,9 +275,9 @@ class AdminRoomDetail extends Component {
             {/* ADD Image */}
           </div>
         </div>
-        <div className="border border-dark">
+        {/* <div className="border border-dark">
           <Map mapData={this.state.mapData} editDisabled={true} />
-        </div>
+        </div> */}
       </div>
     );
   }

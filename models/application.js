@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Joi = require("Joi");
+const Joi = require("joi");
 
 const applicationSchema = new mongoose.Schema({
   applicationTag: String,
@@ -41,8 +41,8 @@ function validateApplication(application) {
     monthlyIncome: Joi.string().min(100).max(1000000).required(),
     emegencyContact: Joi.string().min(10).max(10).required(),
     previousLocation: Joi.string().min(3).max(255).required(),
-    reasonToLeavePreviousLocation: Joi.string().min(20).max(500).required(),
-    additionalComments: Joi.string().min(150).max(500).required(),
+    reasonToLeavePreviousLocation: Joi.string().max(500).required(),
+    additionalComments: Joi.string().max(500).required(),
   });
   return schema.validate(application);
 }

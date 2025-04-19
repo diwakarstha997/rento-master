@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Button, Modal } from "react-bootstrap";
 
+const imageServer = process.env.REACT_APP_IMAGE_SERVER;
+
 class ViewVerify extends Component {
   state = {
     show: false,
@@ -9,7 +11,9 @@ class ViewVerify extends Component {
   handleShow = () => this.setState({ show: true });
 
   handleClose = () => this.setState({ show: false });
+  
   render() {
+    console.log(imageServer);
     return (
       <React.Fragment>
         <Button
@@ -27,7 +31,7 @@ class ViewVerify extends Component {
           <Modal.Body>
             <img
               className="d-block w-100"
-              src={`/${this.props.data}`}
+              src={`${imageServer}/${this.props.data}`}
               style={{ height: 600 }}
               alt="Document"
             />

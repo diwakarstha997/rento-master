@@ -1,2 +1,4 @@
 node_modules/
 client-rento/node_modules/
+.env
+client-rento/.env

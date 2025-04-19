@@ -1,33 +1,51 @@
 import React, { Component } from "react";
 import { Redirect, Route, Switch } from "react-router-dom";
+
+// Parital
 import NavBar from "./components/partials/navBar";
 import Footer from "./components/partials/footer";
+import VerificationMessage from "./components/partials/verificationMessage";
+
+// static components
 import Home from "./components/static/home";
 import About from "./components/static/about";
 import Contacts from "./components/static/contacts";
 import NotFound from "./components/static/notFound";
-import AdminLogin from "./components/admin/adminLogin";
+
+// public pages imports
+import Rooms from "./components/rooms/rooms";
+import RoomDetail from "./components/rooms/roomDetail";
+
+// account realated imports
 import Login from "./components/accounts/login";
 import Register from "./components/accounts/register";
 import Logout from "./components/accounts/logout";
-import Rooms from "./components/rooms/rooms";
-import RoomDetail from "./components/rooms/roomDetail";
+import Profile from "./components/accounts/profile/profile";
+import EmailActivate from "./components/accounts/emailActivate";
+import ForgotPassword from "./components/accounts/forgetPassword";
+import InvalidToken from "./components/accounts/invalidToken";
+
+// protected routes esssential
+import ProtectedRoute from "./components/common/protectedRoute";
+
+// admin imports
+import AdminLogin from "./components/admin/adminLogin";
+import AdminDashboard from "./components/admin/adminDashboard";
+import AdminRoomDetail from "./components/admin/room/adminRoomDetail";
+
+// room owner imports
 import Dashboard from "./components/roomOwner/dashboard";
 import RoomForm from "./components/roomOwner/rooms/roomForm";
 import RoomOwnerApplications from "./components/roomOwner/applications/applications";
-import TenantApplications from "./components/tenant/applications/applications";
-import { getCurrentUser } from "./services/authService";
-import ProtectedRoute from "./components/common/protectedRoute";
-import ApplicationDetail from "./components/tenant/applications/applicationDetail";
-import AdminDashboard from "./components/admin/adminDashboard";
 import OwnerRoomDetail from "./components/roomOwner/rooms/roomDetail";
-import Profile from "./components/accounts/profile/profile";
-import EmailActivate from "./components/accounts/emailActivate";
-import AdminRoomDetail from "./components/admin/room/adminRoomDetail";
+
+// tenant imports
+import TenantApplications from "./components/tenant/applications/applications";
+import ApplicationDetail from "./components/tenant/applications/applicationDetail";
+
+// service provider imports
+import { getCurrentUser } from "./services/authService";
 import { getUserVerificationData } from "./services/userService";
-import ForgotPassword from "./components/accounts/forgetPassword";
-import InvalidToken from "./components/accounts/invalidToken";
-import VerificationMessage from "./components/partials/verificationMessage";
 
 class App extends Component {
   state = { toggled: true };
@@ -37,6 +55,7 @@ class App extends Component {
     else toggled = false;
     this.setState({ toggled: toggled });
   };
+  
 
   render() {
     const user = getCurrentUser();

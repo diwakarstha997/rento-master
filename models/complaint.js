@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Joi = require("Joi");
+const Joi = require("joi");
 
 const complaintSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
@@ -25,7 +25,7 @@ const Complaint = mongoose.model("Complaint", complaintSchema);
 function validateComplaint(complaint) {
   const schema = Joi.object({
     reportType: Joi.string().required(),
-    reportDescription: Joi.string().min(20).max(150).required(),
+    reportDescription: Joi.string().max(150).required(),
   });
   return schema.validate(complaint);
 }

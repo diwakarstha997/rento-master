@@ -23,7 +23,6 @@ class ComplaintForm extends Forms {
   schema = {
     reportType: Joi.string().required().label("Report Type"),
     reportDescription: Joi.string()
-      .min(20)
       .max(150)
       .required()
       .label("Report Description"),

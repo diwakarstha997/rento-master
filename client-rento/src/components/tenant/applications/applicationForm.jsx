@@ -41,12 +41,10 @@ class ApplicationForm extends Forms {
       .label("Emergency Contact"),
     previousLocation: Joi.string().required().label("Previous Location"),
     reasonToLeavePreviousLocation: Joi.string()
-      .min(20)
       .max(500)
       .required()
       .label("Reason to Leave"),
     additionalComments: Joi.string()
-      .min(20)
       .max(500)
       .allow("")
       .optional()

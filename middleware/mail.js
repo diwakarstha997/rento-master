@@ -2,13 +2,11 @@ const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: "smtp.gmail.com",
-  port: port_number,
-  secure: true, // true for 465 port and false for other
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT,
   auth: {
-    user: "email",
-    pass: "password",
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS,
   },
 });
 
@@ -17,7 +15,7 @@ module.exports.sendRentoMail = async (mailOptions) => {
     await transporter.sendMail(mailOptions);
     return true;
   } catch (error) {
-    return false;
+    return error;
   }
 };
 
@@ -25,7 +23,7 @@ module.exports.activationMailOption = (userId, email) => {
   const token = jwt.sign({ _id: userId, email: email }, "rentoSecretKey", {
     expiresIn: "1d",
   });
-  const url = `http://localhost:3000/activation/${token}`;
+  const url = `${process.env.CLIENT_URL}/activation/${token}`;
   return (mailOptions = {
     from: "Rento no-reply@gmail.com",
     to: email,
@@ -46,7 +44,7 @@ module.exports.forgotPasswordMailOption = (userId, email, secretCode) => {
       expiresIn: "1d",
     }
   );
-  const url = `http://localhost:3000/forgotPassword/${token}`;
+  const url = `${process.env.CLIENT_URL}/forgotPassword/${token}`;
   return (mailOptions = {
     from: "Rento no-reply@gmail.com",
     to: email,

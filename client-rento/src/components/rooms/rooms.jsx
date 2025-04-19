@@ -66,7 +66,6 @@ class Rooms extends Component {
 
   matchFacilities = (searchedFacilities, roomFacilities) => {
     let count = 0;
-    if (searchedFacilities.length === roomFacilities.length) {
       searchedFacilities.forEach((facility1) =>
         roomFacilities.forEach((facility2) => {
           if (facility2 === facility1.name) {
@@ -74,7 +73,6 @@ class Rooms extends Component {
           }
         })
       );
-    }
     return count;
   };
 
@@ -83,8 +81,8 @@ class Rooms extends Component {
       ? rooms
       : (rooms = rooms.filter(
           (room) =>
-            this.state.selectedFacilities.length ===
-            this.matchFacilities(this.state.selectedFacilities, room.facility)
+          this.matchFacilities(this.state.selectedFacilities, room.facility) > 0
+            
         ));
   };
 

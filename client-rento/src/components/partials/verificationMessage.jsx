@@ -33,7 +33,7 @@ class VerificationMessage extends Component {
   };
 
   render() {
-    this.checkVerify();
+    // this.checkVerify();
 
     const user = getCurrentUser();
     let uv_data;

@@ -4,7 +4,7 @@ const multer = require("multer");
 
 var storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, `./Client-Rento/public/${req.customPath}`);
+    callback(null, `./client-rento/public/${req.customPath}`);
   },
   filename: (req, file, callback) => {
     const match = ["image/png", "image/jpeg"];
@@ -15,6 +15,7 @@ var storage = multer.diskStorage({
     }
 
     var filename = `${Date.now()}-Rento-${file.originalname}`;
+    console.log(filename);
     callback(null, filename);
   },
 });

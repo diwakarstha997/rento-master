@@ -10,13 +10,15 @@ import EditRoom from "../modal/editRoomModal";
 import Map from "../../common/map";
 import { getUserVerificationData } from "../../../services/userService";
 
+const imageServer = process.env.REACT_APP_IMAGE_SERVER;
+
 class OwnerRoomDetail extends Component {
   state = {
     roomData: "",
     facilities: [],
     message: "",
     editModalState: false,
-    mapData: "",
+    // mapData: "",
     applicationCount: "",
   };
 
@@ -33,14 +35,14 @@ class OwnerRoomDetail extends Component {
     const { data: count } = await room.getApplicationsForRoom(
       this.props.match.params.id
     );
-    const mapData = {
-      lng: roomData.lng,
-      lat: roomData.lat,
-      zoom: roomData.zoom,
-      marker: roomData.marker,
-    };
+    // const mapData = {
+    //   lng: roomData.lng,
+    //   lat: roomData.lat,
+    //   zoom: roomData.zoom,
+    //   marker: roomData.marker,
+    // };
     const { data: facilities } = await getFacilities();
-    this.setState({ mapData, roomData, facilities, applicationCount: count });
+    this.setState({ roomData, facilities, applicationCount: count });
   }
 
   handleImageUpload = async (e) => {
@@ -290,7 +292,7 @@ class OwnerRoomDetail extends Component {
                 style={{ position: "relative" }}
               >
                 <img
-                  src={"/" + img}
+                  src={imageServer + "/" + img}
                   alt={img}
                   className="room-form-img img-fluid"
                   style={{ position: "block" }}
@@ -343,9 +345,9 @@ class OwnerRoomDetail extends Component {
             )}
           </div>
         </div>
-        <div className="border border-dark">
+        {/* <div className="border border-dark">
           <Map mapData={this.state.mapData} editDisabled={true} />
-        </div>
+        </div> */}
       </div>
     );
   }
